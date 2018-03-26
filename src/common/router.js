@@ -72,9 +72,14 @@ export const getRouterData = (app) => {
     },
 
 
+    // '/home': {
+    //   component: dynamicWrapper(app, ['member'], () => import('../routes/Dashboard/Home')),
+    // },
+
     '/home': {
-      component: dynamicWrapper(app, ['member'], () => import('../routes/Dashboard/Home')),
+      component: dynamicWrapper(app, ['member'], () => import('../routes/Dashboard/AcesHome')),
     },
+
 
     '/member/add': {
       component: dynamicWrapper(app, ['member'], () => import('../routes/Member/Add')),
@@ -151,15 +156,15 @@ export const getRouterData = (app) => {
     },
 
     // 系统配置
-    '/system/main': {
-      component: dynamicWrapper(app, ['gym', 'member', 'manage'], () => import('../routes/System/Main')),
+    '/system/noticeManage': {
+      component: dynamicWrapper(app, ['system'], () => import('../routes/System/NoticeManage')),
     },
-    '/system/teacher': {
-      component: dynamicWrapper(app, ['gym', 'member'], () => import('../routes/System/Teacher')),
+    '/system/noticeAdd': {
+      component: dynamicWrapper(app, ['system'], () => import('../routes/System/NoticeAdd')),
     },
-    '/system/member': {
-      component: dynamicWrapper(app, ['gym', 'member'], () => import('../routes/System/Member')),
-    },
+
+
+
 
     '/exception/403': {
       component: dynamicWrapper(app, [], () => import('../routes/Exception/403')),

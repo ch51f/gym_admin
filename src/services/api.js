@@ -38,6 +38,67 @@ export async function upyun(params) {
   })
 }
 
+
+// 通知列表
+export async function notice_query(params){
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/notice/list`, {
+    body: stringify(params)
+  })
+}
+
+
+// 已发布的通知列表
+export async function notice_query_release(params){
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/notice/release`, {
+    body: stringify(params)
+  })
+}
+// 添加通知
+export async function notice_add(params){
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/notice/add`, {
+    body: stringify(params)
+  })
+}
+// 更新通知
+export async function notice_update(params){
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/notice/update`, {
+    body: stringify(params)
+  })
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // 获取健身房信息
 export async function gym_get_config(params) {
   params = setToken(params);
@@ -119,36 +180,6 @@ export async function worker_add(params) {
 export async function worker_update(params) {
   params = setToken(params);
   return requestApi(`${GYM_URL}admin/v1/worker/update`, {
-    body: stringify(params)
-  })
-}
-
-
-// 通知列表
-export async function notice_query(params){
-  params = setToken(params);
-  return requestApi(`${GYM_URL}admin/v1/notice/list`, {
-    body: stringify(params)
-  })
-}
-// 已发布的通知列表
-export async function notice_query_release(params){
-  params = setToken(params);
-  return requestApi(`${GYM_URL}admin/v1/notice/release`, {
-    body: stringify(params)
-  })
-}
-// 添加通知
-export async function notice_add(params){
-  params = setToken(params);
-  return requestApi(`${GYM_URL}admin/v1/notice/add`, {
-    body: stringify(params)
-  })
-}
-// 更新通知
-export async function notice_update(params){
-  params = setToken(params);
-  return requestApi(`${GYM_URL}admin/v1/notice/update`, {
     body: stringify(params)
   })
 }

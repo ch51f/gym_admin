@@ -101,9 +101,9 @@ class BasicLayout extends React.PureComponent {
   getPageTitle() {
     const { routerData, location } = this.props;
     const { pathname } = location;
-    let title = '健身房后台';
+    let title = '艾思女子运动馆';
     if (routerData[pathname] && routerData[pathname].name) {
-      title = `${routerData[pathname].name} -健身房后台`;
+      title = `${routerData[pathname].name} -艾思女子运动馆`;
     }
     return title;
   }
@@ -195,7 +195,7 @@ class BasicLayout extends React.PureComponent {
               links={[]}
               copyright={
                 <div>
-                  Copyright <Icon type="copyright" /> 2018 世界上最牛掰的健身房后台
+                  Copyright <Icon type="copyright" /> 2018 艾思女子运动馆
                 </div>
               }
             />

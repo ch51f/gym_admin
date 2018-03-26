@@ -12,68 +12,62 @@ const menuData = [
     name: '添加会员',
     path: 'add',
   }, {
-    name: '入场记录',
-    path: 'checkin',
-  }, {
     name: '会员管理',
-    path: 'manage',
-  }, {
-    name: '会员查询',
     path: 'search',
   }, {
-    name: '会员转移',
-    path: 'transfer',
+    name: '上课记录',
+    path: '',
   }, {
-    name: '会员统计',
-    path: 'statistics',
+    name: '体测录入',
+    path: '',
   }]
+},
+{
+  name: '充值管理',
+  icon: 'book',
+  path: 'pay',
+  children: [{
+    name: '会员充值',
+    path: ''
+  }, {
+    name: '充值记录',
+    path: ''
+  }] 
 },
 {
   name: '私教管理',
   icon: 'form',
   path: 'teacher',
   children: [{
-    name: '添加私教',
-    path: 'add',
-  }, {
-    name: '私教查询',
+    name: '教练管理',
     path: 'search',
   }, {
-    name: '私教统计',
-    path: 'statistics',
+    name: '教练请假',
+    path: '',
+  }]
+},
+{
+  name: '课程管理',
+  path: 'manage',
+  icon: 'book',
+  children: [{
+    name: '购买课程',
+    path: '',
+  }, {
+    name: '购课记录',
+    path: '',
+  }, {
+    name: '课程管理',
+    path: '',
   }]
 },
 {
   name: '后勤管理',
-  path: 'manage',
-  icon: 'book',
-  children: [{
-    name: '操课管理',
-    path: 'lesson',
-  }, {
-    name: '员工管理',
-    path: 'worker',
-  }, {
-    name: '通知管理',
-    path: 'notice',
-  }, {
-    name: '反馈管理',
-    path: 'feedback',
-  }]
-},
-{
-  name: '系统配置',
   path: 'system',
   icon: 'setting',
   children: [{
-    name: '基础配置',
-    path: 'main',
-  }, {
-    name: '体测私教',
-    path: 'teacher',
-  }, {
-    name: '会籍会员',
-    path: 'member',
+    name: '通知管理',
+    path: 'noticeManage',
   }]
 },
 {

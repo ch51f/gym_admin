@@ -20,4 +20,4 @@ export const PAY_METHODS = ['刷卡', '支付宝', '微信', '现金', '其他']
 
 export const LESSON_SUBSCRIBE_STATUS = ['正常', '已上完', '未上完'];
 
-export const NOTICE_STATUS = ['正常发布', '草稿', '下架'];
+export const NOTICE_STATUS = ['正常发布', '草稿', '删除'];

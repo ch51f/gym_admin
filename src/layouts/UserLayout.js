@@ -9,15 +9,15 @@ import { getRoutes } from '../utils/utils';
 
 const links = [];
 
-const copyright = <div>Copyright <Icon type="copyright" /> 2018 世界上最牛掰的健身房后台</div>;
+const copyright = <div>Copyright <Icon type="copyright" /> 2018 艾思女子运动馆</div>;
 
 class UserLayout extends React.PureComponent {
   getPageTitle() {
     const { routerData, location } = this.props;
     const { pathname } = location;
-    let title = '健身房后台';
+    let title = '艾思女子运动馆';
     if (routerData[pathname] && routerData[pathname].name) {
-      title = `${routerData[pathname].name} - 健身房后台`;
+      title = `${routerData[pathname].name} - 艾思女子运动馆`;
     }
     return title;
   }
@@ -30,10 +30,9 @@ class UserLayout extends React.PureComponent {
             <div className={styles.header}>
               <Link to="/">
                 <img alt="logo" className={styles.logo} src={logo} />
-                <span className={styles.title}>健身房管理后台</span>
+                <span className={styles.title}>艾思女子运动馆</span>
               </Link>
             </div>
-            <div className={styles.desc}>世界上最牛掰的健身房后台</div>
           </div>
           {
             getRoutes(match.path, routerData).map(item =>
