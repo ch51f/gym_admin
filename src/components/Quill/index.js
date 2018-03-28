@@ -6,7 +6,7 @@ import 'react-quill/dist/quill.snow.css';
 import {isJsonString} from '../../utils/utils';
 import {dataURI2Blob} from '../../utils/dataUri2Blob';
 
-@connect(({system, gym}) => ({
+@connect(({system}) => ({
   notice: system.notice,
 }))
 export default class Section extends Component {
@@ -20,7 +20,7 @@ export default class Section extends Component {
 
   setData() {
     let value = {ops: []}
-    let {content, gym_company_config, notice} = this.props;
+    let {content, notice} = this.props;
     if(content == 'notice') {
       if(isJsonString(notice.content)) {
         value = JSON.parse(notice.content);
@@ -28,12 +28,6 @@ export default class Section extends Component {
         value = {ops: [{insert: ""}]}
       }
     }
-    console.log(value)
-
-     // this.props.dispatch({
-    //   type: 'login/upload',
-    //   payload: {ext: dataURL2Blob(dataUri).type.split('/')[1],sizes: '50_50',file: dataURL2Blob(dataUri)}
-    // })
 
     this.setState({value: value})
   }
@@ -118,12 +112,8 @@ export default class Section extends Component {
 	render() {
     let value = {ops: [{insert: ""}]}
 		let {theme, readOnly} = this.state;
-    let {content, gym_company_config, notice} = this.props;
-    if(content == 'gym') {
-      if(isJsonString(gym_company_config.gym_desc)) {
-        value = JSON.parse(gym_company_config.gym_desc);
-      }
-    } else if(content == 'notice') {
+    let {content, notice} = this.props;
+    if(content == 'notice') {
       if(isJsonString(notice.content)) {
         value = JSON.parse(notice.content);
       }

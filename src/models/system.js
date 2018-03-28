@@ -1,5 +1,5 @@
 import {routerRedux} from 'dva/router';
-import {notice_query} from '../services/api';
+import {notice_query, notice_add, notice_update} from '../services/api';
 import {PAGE_SIZE} from '../config';
 import {message} from 'antd';
 
@@ -27,7 +27,25 @@ export default {
 			} else {
 				message.error(res.error);
 			}
-		}
+		},
+		*addNotice({payload}, {call, put}) {
+			const res = yield call(notice_add, payload);
+			if(res.status === 0) {
+				message.success("添加通知成功")
+				yield put(routerRedux.push('/system/noticeManage'));
+			} else {
+				message.error(res.error);
+			}
+		},
+		*updateNotice({payload}, {call, put}) {
+			const res = yield call(notice_update, payload);
+			if(res.status === 0) {
+				message.success("编辑通知成功")
+				yield put(routerRedux.push('/system/noticeManage'));
+			} else {
+				message.error(res.error);
+			}
+		},
 	},
 	reducers: {
 		// 设置通知列表

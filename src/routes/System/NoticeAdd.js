@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'dva';
-import {Card, Form, Input, Select, Button, Radio, Upload, Icon} from 'antd';
+import {Card, Form, Input, Select, Button, Radio, Upload, Icon, message} from 'antd';
 import _ from 'lodash';
 import {FORM_ITEM_LAYOUT, FORM_ITEM_BUTTON} from '../../config';
 
@@ -22,7 +22,41 @@ export default class Page extends Component {
 	state = {
     logo: false
   }
+  componentDidMount() {
+    var editor = UE.getEditor('content', {
+      //工具栏 
+      toolbars: [['fullscreen', 'source', '|', 'undo', 'redo', '|', 'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|', 'rowspacingtop', 'rowspacingbottom', 'lineheight', '|', 'customstyle', 'paragraph', 'fontfamily', 'fontsize', '|', 'directionalityltr', 'directionalityrtl', 'indent', '|', 'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase', '|', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|', 'simpleupload', 'horizontal', 'date', 'time', ]] , 
+      lang:"zh-cn",
+      //字体 
+      'fontfamily':[
+        { label:'',name:'songti',val:'宋体,SimSun'}, 
+        { label:'',name:'kaiti',val:'楷体,楷体_GB2312, SimKai'}, 
+        { label:'',name:'yahei',val:'微软雅黑,Microsoft YaHei'}, 
+        { label:'',name:'heiti',val:'黑体, SimHei'}, 
+        { label:'',name:'lishu',val:'隶书, SimLi'}, 
+        { label:'',name:'andaleMono',val:'andale mono'}, 
+        { label:'',name:'arial',val:'arial, helvetica,sans-serif'}, 
+        { label:'',name:'arialBlack',val:'arial black,avant garde'}, 
+        { label:'',name:'comicSansMs',val:'comic sans ms'}, 
+        { label:'',name:'impact',val:'impact,chicago'}, 
+        { label:'',name:'timesNewRoman',val:'times new roman'} 
+      ], 
+      //字号 
+      'fontsize':[10, 11, 12, 14, 16, 18, 20, 24, 36], 
+      enableAutoSave : false, 
+      autoHeightEnabled : false, 
+      initialFrameHeight: this.props.height, 
+      initialFrameWidth: '100%',
+      readonly:this.props.disabled 
+    }); 
 
+    var me = this; 
+    editor.ready( function( ueditor ) {
+      var value = me.props.value?me.props.value:'<p></p>'; 
+      editor.setContent(value); 
+    });
+  }
+  
   upload = (info) => {
     this.setState({logo: true});
     info.call = this.callback.bind(this);
@@ -40,7 +74,41 @@ export default class Page extends Component {
   }
 
 	handleSubmit = (e) => {
+    e.preventDefault();
+    let {form, dispatch} = this.props;
+    const {logoUrl} = this.state;
+    form.validateFieldsAndScroll((err, values) => {
+      console.log(err);
+      console.log(values);
+      console.log(logoUrl);
+      if(!logoUrl) message.error("请上传封面图");
+      if(!err) {
+        let params = {
+          cover: logoUrl,
+          title: values.title,
+          status: values.status,
+        }
+        if(values.type == 1) {
+          params.content_url = values.content_url;
+        } else {
+          params.content = values.conten;
+          params.content_html = values.content_html;
+        }
 
+        if(values.item_id) {
+          params.item_id = values.item_id;
+          this.props.dispatch({
+            type: 'system/updateNotice',
+            payload: params,
+          })
+        } else {
+          this.props.dispatch({
+            type: 'system/addNotice',
+            payload: params,
+          })
+        }
+      }
+    })
 	}
 	onRichChange = (value, html, val) => {
 		const {form, dispatch} = this.props;
@@ -81,6 +149,7 @@ export default class Page extends Component {
     const submitting = notice.id ? submitting_up : submitting_add;
     let title = "添加通知";
     if(notice.id) title = "编辑通知";
+    if(!logoUrl && notice.cover) this.setState({logoUrl: notice.cover});
 
     const UploadLogoButton = (
       <div>
@@ -92,6 +161,9 @@ export default class Page extends Component {
     return (
       <PageHeaderLayout title={title}>
         <Card bordered={false}>
+        <script id="content" name="content" type="text/plain">
+                  
+             </script>
           <Form onSubmit={this.handleSubmit}>
             {getFieldDecorator('item_id', {
               initialValue: notice.id,
@@ -137,7 +209,7 @@ export default class Page extends Component {
             </FormItem>
             <FormItem {...FORM_ITEM_LAYOUT} label="通知内容" style={{display: getFieldValue('type') == 0 ? 'block' : 'none'}}>
               {getFieldDecorator('content', {
-                initialValue: notice.content,
+                initialValue: notice.content || 'test',
                 rules: [{
                   required: getFieldValue('type') == 0 ? true : false,
                   message: '请输入通知内容', transform: (value) => {
@@ -146,13 +218,19 @@ export default class Page extends Component {
                 }]
               })(
                 <div>
-                <RichText change={this.onRichChange} content={"notice"} />
-                <TextArea style={{ minHeight: 32, display: 'none' }} placeholder="通知内容" rows={4} />
+                  <RichText change={this.onRichChange} content={"notice"} />
+                  <TextArea style={{ minHeight: 32, display: 'none' }} placeholder="通知内容" rows={4} />
                 </div>
               )}
             </FormItem> 
-            <FormItem {...FORM_ITEM_LAYOUT} label="URL地址" style={{display: getFieldValue('type') == 1 ? 'block' : 'none'}}>
+            <FormItem {...FORM_ITEM_LAYOUT} label="通知内容html" style={{ display: 'none' }}>
               {getFieldDecorator('content_html', {
+              })(
+                <TextArea  />
+              )}
+            </FormItem>
+            <FormItem {...FORM_ITEM_LAYOUT} label="URL地址" style={{display: getFieldValue('type') == 1 ? 'block' : 'none'}}>
+              {getFieldDecorator('content_url', {
                 initialValue: notice.content_html,
                 rules: [{
                   required: getFieldValue('type') == 1 ? true : false, 

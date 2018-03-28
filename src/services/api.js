@@ -74,15 +74,6 @@ export async function notice_query(params){
     body: stringify(params)
   })
 }
-
-
-// 已发布的通知列表
-export async function notice_query_release(params){
-  params = setToken(params);
-  return requestApi(`${GYM_URL}admin/v1/notice/release`, {
-    body: stringify(params)
-  })
-}
 // 添加通知
 export async function notice_add(params){
   params = setToken(params);

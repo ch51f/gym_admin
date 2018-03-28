@@ -32,7 +32,7 @@ export default class Page extends Component {
         let params = {
           title: values.title,
           content: values.content,
-          content_html: values.content_html   ,
+          content_html: values.content_html,
           status: values.status,
         }
         if(values.item_id) {

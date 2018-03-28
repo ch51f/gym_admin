@@ -7,6 +7,7 @@ import FastClick from 'fastclick';
 import './rollbar';
 import onError from './error';
 
+
 import './index.less';
 // 1. Initialize
 const app = dva({

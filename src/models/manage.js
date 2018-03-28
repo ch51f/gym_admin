@@ -1,5 +1,5 @@
 import { routerRedux } from 'dva/router';
-import {lesson_query, lesson_add, lesson_update, worker_query, worker_query_leaved, worker_add, worker_update, notice_query, notice_query_release, notice_add, notice_update, feedback_query, feedback_reply, feedback_add, feedback_delete} from '../services/api';
+import {lesson_query, lesson_add, lesson_update, worker_query, worker_query_leaved, worker_add, worker_update, notice_query, notice_add, notice_update, feedback_query, feedback_reply, feedback_add, feedback_delete} from '../services/api';
 import {PAGE_SIZE} from '../config';
 import { message } from 'antd';
 
@@ -136,20 +136,20 @@ export default {
 			}
 		},
 		// 已发布通知列表
-		*getReleaseNoticeList({payload}, {call, put}) {
-			const res = yield call(notice_query_release, payload);
+		// *getReleaseNoticeList({payload}, {call, put}) {
+		// 	const res = yield call(notice_query_release, payload);
 
-			if(res.status === 0) {
-				res.data.page_info.pageSize = payload.page_size;
-				res.data.page_info.total = res.data.count;
-				yield put({
-					type: 'setReleaseNoticeList',
-					payload: res.data,
-				})
-			} else {
-				message.error(res.error);
-			}
-		},
+		// 	if(res.status === 0) {
+		// 		res.data.page_info.pageSize = payload.page_size;
+		// 		res.data.page_info.total = res.data.count;
+		// 		yield put({
+		// 			type: 'setReleaseNoticeList',
+		// 			payload: res.data,
+		// 		})
+		// 	} else {
+		// 		message.error(res.error);
+		// 	}
+		// },
 		// 新增通知
 		*addNotice({payload}, {call, put}) {
 			const res = yield call(notice_add, payload);
