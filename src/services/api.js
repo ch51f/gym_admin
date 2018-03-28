@@ -39,6 +39,34 @@ export async function upyun(params) {
 }
 
 
+
+
+
+// Body_Check - 根据用户 id 获取体测数据
+export async function body_check_query_by_id(params){
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/body_check/by_user_id`, {
+    body: stringify(params)
+  })
+}
+
+// Body_Check - 添加体测数据
+export async function body_check_add(params){
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/body_check/add`, {
+    body: stringify(params)
+  })
+}
+// Body_Check - 更新体测数据
+export async function body_check_update(params){
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/body_check/update`, {
+    body: stringify(params)
+  })
+}
+
+
+
 // 通知列表
 export async function notice_query(params){
   params = setToken(params);

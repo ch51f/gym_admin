@@ -10,6 +10,8 @@ export default {
 			list: [],
 			pagination: {},
 		},
+
+		notice: {},
 	},
 	effects: {
 		// 获取通知列表

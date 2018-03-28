@@ -1,5 +1,9 @@
 import { routerRedux } from 'dva/router';
-import {queryMemberConfig, queryMember, addMember, updateMember, checkinMember, findMember, queryCheckin, randomCard, queryHomeCheckin, buyCard, queryCard, transferMember, pauseMember, calcleMember, tMember, cancleMember, activeMember, queryStatisticsUser} from '../services/api';
+import {queryMemberConfig, queryMember, addMember, updateMember, checkinMember, findMember, queryCheckin, randomCard, queryHomeCheckin, buyCard, queryCard, transferMember, pauseMember, calcleMember, tMember, cancleMember, activeMember, queryStatisticsUser,
+  body_check_query_by_id,
+  body_check_add,
+  body_check_update,
+} from '../services/api';
 import { message } from 'antd';
 import _ from 'lodash';
 
@@ -44,6 +48,8 @@ export default {
     manage_flag: false,
 
     statistics: {},
+
+    body_check: {},
   },
 
   effects: {
@@ -346,6 +352,25 @@ export default {
       } else {
         message.error(res.error);
       }
+    },
+    *queryBodyCheckById({payload}, {call, put}) {
+      const res = yield call(body_check_query_by_id, payload);
+      if(res.status === 0) {
+        if(res.data.items) {
+          yield put({
+            type: 'setConfig',
+            payload: {body_check: res.data.items}
+          });
+        }
+      }
+    },
+    *addBodyCheck({payload}, {call, put}) {
+      const res = yield call(body_check_add, payload);
+      console.log(res);
+    },
+    *updateBodyCheck({payload}, {call, put}) {
+      const res = yield call(body_check_update, payload);
+      console.log(res);
     }
   },
 
@@ -448,14 +473,14 @@ export default {
       }
     },
     setQuickMember(state, {payload}) {
-        let {user} = payload
+      let {user} = payload
       return {
         ...state,
         quickMember: [user],
       }
     },
     setQuickMembers(state, {payload}) {
-        let {items} = payload
+      let {items} = payload
       return {
         ...state,
         quickMember: items,

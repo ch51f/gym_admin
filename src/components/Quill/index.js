@@ -6,10 +6,8 @@ import 'react-quill/dist/quill.snow.css';
 import {isJsonString} from '../../utils/utils';
 import {dataURI2Blob} from '../../utils/dataUri2Blob';
 
-@connect(({manage, gym}) => ({
-  notice: manage.notice,
-
-  gym_company_config: gym.gym_company_config,
+@connect(({system, gym}) => ({
+  notice: system.notice,
 }))
 export default class Section extends Component {
   state = {
@@ -23,13 +21,7 @@ export default class Section extends Component {
   setData() {
     let value = {ops: []}
     let {content, gym_company_config, notice} = this.props;
-    if(content == 'gym') {
-      if(isJsonString(gym_company_config.desc)) {
-        value = JSON.parse(gym_company_config.desc);
-      } else {
-        value = {ops: [{insert: ""}]}
-      }
-    } else if(content == 'notice') {
+    if(content == 'notice') {
       if(isJsonString(notice.content)) {
         value = JSON.parse(notice.content);
       } else {

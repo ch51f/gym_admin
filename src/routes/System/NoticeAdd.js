@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from 'dva';
-import {Card, Form, Input, Select, Button} from 'antd';
+import {Card, Form, Input, Select, Button, Upload, Icon} from 'antd';
 import _ from 'lodash';
+import {FORM_ITEM_LAYOUT, FORM_ITEM_BUTTON} from '../../config';
 
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import {NOTICE_STATUS} from '../../config';
@@ -13,11 +14,30 @@ const {Option} = Select;
 const {TextArea} = Input;
 
 @connect(({loading, system}) => ({
-
+  notice: system.notice
 }))
-@form.create()
+@Form.create()
 export default class Page extends Component {
-	state = {}
+	state = {
+    logo: false
+  }
+
+  upload = (info) => {
+    this.setState({logo: true});
+    info.call = this.callback.bind(this);
+    this.props.dispatch({
+      type: 'login/upload',
+      payload: info
+    })
+  }
+
+  callback(img) {
+    this.setState({
+      logo: false,
+      logoUrl: img.host + img.url,
+    })
+  }
+
 	handleSubmit = (e) => {
 
 	}
@@ -54,28 +74,19 @@ export default class Page extends Component {
 	}
 
 	render() {
+    let {logoUrl, logo} = this.state;
     const {form, submitting_add, submitting_up, notice} = this.props;
     const {getFieldDecorator} = form;
     const submitting = notice.id ? submitting_up : submitting_add;
-    const f_i_l = {
-      labelCol: {
-        xs: {span: 24},
-        sm: {span: 7},
-      },
-      wrapperCol: {
-        xs: {span: 24},
-        sm: {span: 12},
-        md: {span: 10},
-      },
-    };
-    const s_l = {
-      wrapperCol: {
-        xs: {span: 24, offset: 0},
-        sm: {span: 10, offset: 7},
-      },
-    };
     let title = "添加通知";
     if(notice.id) title = "编辑通知";
+
+    const UploadLogoButton = (
+      <div>
+        <Icon type={logo ? 'loading' : 'plus'} />
+        <div className="ant-upload-text">上传</div>
+      </div>
+    )
 
     return (
       <PageHeaderLayout title={title}>
@@ -86,7 +97,19 @@ export default class Page extends Component {
             })(
               <input style={{display: 'none'}} />
             )}
-            <FormItem {...f_i_l} label="通知标题">
+            <FormItem {...FORM_ITEM_LAYOUT} label="通知封面">
+              <Upload
+                name="gym_logo"
+                listType="picture-card"
+                className="avatar-uploader"
+                showUploadList={false}
+                action="http//v0.api.upyun.com"
+                customRequest={this.upload}
+              >
+                {logoUrl ? <img src={logoUrl} height={200} width={200} alt="" /> : UploadLogoButton}
+              </Upload>
+            </FormItem>
+            <FormItem {...FORM_ITEM_LAYOUT} label="通知标题">
               {getFieldDecorator('title', {
                 initialValue: notice.title,
                 rules: [{
@@ -98,7 +121,7 @@ export default class Page extends Component {
                 <Input placeholder="通知标题" />
               )}
             </FormItem>
-            <FormItem {...f_i_l} label="通知内容">
+            <FormItem {...FORM_ITEM_LAYOUT} label="通知内容">
               {getFieldDecorator('content', {
                 initialValue: notice.content,
                 rules: [{
@@ -113,13 +136,13 @@ export default class Page extends Component {
                 </div>
               )}
             </FormItem> 
-            <FormItem {...f_i_l} label="通知内容html" style={{ display: 'none' }}>
+            <FormItem {...FORM_ITEM_LAYOUT} label="通知内容html" style={{ display: 'none' }}>
               {getFieldDecorator('content_html', {
               })(
                 <TextArea  />
               )}
             </FormItem>
-            <FormItem {...f_i_l} label="通知状态">
+            <FormItem {...FORM_ITEM_LAYOUT} label="通知状态">
               {getFieldDecorator('status', {
                 initialValue: parseInt(notice.status || 1),
                 rules: [{
@@ -134,7 +157,7 @@ export default class Page extends Component {
               )}
             </FormItem>
 
-            <FormItem {...s_l}>
+            <FormItem {...FORM_ITEM_BUTTON}>
               <Button type="primary" htmlType="submit" loading={submitting}>
                 提交
               </Button>

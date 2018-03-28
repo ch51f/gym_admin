@@ -70,16 +70,14 @@ export const getRouterData = (app) => {
     '/': {
       component: dynamicWrapper(app, ['user', 'login'], () => import('../layouts/BasicLayout')),
     },
-
-
-    // '/home': {
-    //   component: dynamicWrapper(app, ['member'], () => import('../routes/Dashboard/Home')),
-    // },
-
+    // 首页
     '/home': {
       component: dynamicWrapper(app, ['member'], () => import('../routes/Dashboard/AcesHome')),
     },
-
+    // 提测录入
+    '/member/physical': {
+      component: dynamicWrapper(app, ['member', 'manage'], () => import('../routes/Member/Physical')),
+    },
 
     '/member/add': {
       component: dynamicWrapper(app, ['member'], () => import('../routes/Member/Add')),

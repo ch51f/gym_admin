@@ -19,7 +19,7 @@ const menuData = [
     path: '',
   }, {
     name: '体测录入',
-    path: '',
+    path: 'physical',
   }]
 },
 {
