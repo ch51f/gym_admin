@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'dva';
-import {Card, Form, Input, Select, Button, Upload, Icon} from 'antd';
+import {Card, Form, Input, Select, Button, Radio, Upload, Icon} from 'antd';
 import _ from 'lodash';
 import {FORM_ITEM_LAYOUT, FORM_ITEM_BUTTON} from '../../config';
 
@@ -12,6 +12,7 @@ import {dataURL2Blob} from '../../utils/img';
 const FormItem = Form.Item;
 const {Option} = Select;
 const {TextArea} = Input;
+const {Group} = Radio;
 
 @connect(({loading, system}) => ({
   notice: system.notice
@@ -76,7 +77,7 @@ export default class Page extends Component {
 	render() {
     let {logoUrl, logo} = this.state;
     const {form, submitting_add, submitting_up, notice} = this.props;
-    const {getFieldDecorator} = form;
+    const {getFieldDecorator, getFieldValue} = form;
     const submitting = notice.id ? submitting_up : submitting_add;
     let title = "添加通知";
     if(notice.id) title = "编辑通知";
@@ -121,11 +122,25 @@ export default class Page extends Component {
                 <Input placeholder="通知标题" />
               )}
             </FormItem>
-            <FormItem {...FORM_ITEM_LAYOUT} label="通知内容">
+            <FormItem {...FORM_ITEM_LAYOUT} label="内容类型">
+               {getFieldDecorator('type', {
+                initialValue: '0',
+                rules: [{
+                  required: true, message: '选择内容类型'
+                }]
+              })(
+                <Group>
+                  <Radio value="0">内容</Radio>
+                  <Radio value="1">网页</Radio>
+                </Group>
+              )}
+            </FormItem>
+            <FormItem {...FORM_ITEM_LAYOUT} label="通知内容" style={{display: getFieldValue('type') == 0 ? 'block' : 'none'}}>
               {getFieldDecorator('content', {
                 initialValue: notice.content,
                 rules: [{
-                  required: true, message: '请输入通知内容', transform: (value) => {
+                  required: getFieldValue('type') == 0 ? true : false,
+                  message: '请输入通知内容', transform: (value) => {
                     return _.trim(value);
                   }
                 }]
@@ -136,10 +151,17 @@ export default class Page extends Component {
                 </div>
               )}
             </FormItem> 
-            <FormItem {...FORM_ITEM_LAYOUT} label="通知内容html" style={{ display: 'none' }}>
+            <FormItem {...FORM_ITEM_LAYOUT} label="URL地址" style={{display: getFieldValue('type') == 1 ? 'block' : 'none'}}>
               {getFieldDecorator('content_html', {
+                initialValue: notice.content_html,
+                rules: [{
+                  required: getFieldValue('type') == 1 ? true : false, 
+                  message: '请输入通知内容', transform: (value) => {
+                    return _.trim(value);
+                  }
+                }]
               })(
-                <TextArea  />
+                <Input placeholder="请输入url"  />
               )}
             </FormItem>
             <FormItem {...FORM_ITEM_LAYOUT} label="通知状态">
