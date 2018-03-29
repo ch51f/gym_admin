@@ -134,6 +134,9 @@ export function getRoutes(path, routerData) {
 }
 
 
+export function unix(unix, format="YYYY-MM-DD") {
+  return moment.unix(unix).format(format);
+}
 
 // 将str时间转换为moment
 export function setMoment(str, format='YYYYMMDD') {

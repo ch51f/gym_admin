@@ -1,0 +1,46 @@
+.box {display: flex;}
+.box-v {flex-direction: column; }
+.box-row {flex-flow: row wrap;}
+.flex-1 {flex: 1;}
+.flex-2 {flex: 2;}
+.flex-3 {flex: 3;}
+.flex-4 {flex: 4;}
+
+.noticeList {
+  .noticeItem {
+    .box;
+
+    .noticeHd {
+      border: 1px solid #ddd;
+      height: 152px;
+      margin-right: 10px;
+      width: 352px;
+      img {
+        width: 350px;
+        height: 150px;
+      }
+    }
+    .noticeCon {
+      .flex-1;
+      .box;
+      .box-v;
+    }
+    .noticeTitle {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      .flex-1;
+    }
+    .noticeFd {
+      .box;
+      .noticeSub {
+        .flex-1;
+      }
+      .noticeHandle {
+        width: 80px;
+        padding-right: 10px;
+        text-align: right;
+      }
+    }
+  }
+}

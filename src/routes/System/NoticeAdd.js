@@ -6,7 +6,7 @@ import {FORM_ITEM_LAYOUT, FORM_ITEM_BUTTON} from '../../config';
 
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import {NOTICE_STATUS} from '../../config';
-import RichText from '../../components/Quill';
+import BraftEditor from '../../components/BraftEditor';
 import {dataURL2Blob} from '../../utils/img';
 
 const FormItem = Form.Item;
@@ -21,40 +21,6 @@ const {Group} = Radio;
 export default class Page extends Component {
 	state = {
     logo: false
-  }
-  componentDidMount() {
-    var editor = UE.getEditor('content', {
-      //工具栏 
-      toolbars: [['fullscreen', 'source', '|', 'undo', 'redo', '|', 'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|', 'rowspacingtop', 'rowspacingbottom', 'lineheight', '|', 'customstyle', 'paragraph', 'fontfamily', 'fontsize', '|', 'directionalityltr', 'directionalityrtl', 'indent', '|', 'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase', '|', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|', 'simpleupload', 'horizontal', 'date', 'time', ]] , 
-      lang:"zh-cn",
-      //字体 
-      'fontfamily':[
-        { label:'',name:'songti',val:'宋体,SimSun'}, 
-        { label:'',name:'kaiti',val:'楷体,楷体_GB2312, SimKai'}, 
-        { label:'',name:'yahei',val:'微软雅黑,Microsoft YaHei'}, 
-        { label:'',name:'heiti',val:'黑体, SimHei'}, 
-        { label:'',name:'lishu',val:'隶书, SimLi'}, 
-        { label:'',name:'andaleMono',val:'andale mono'}, 
-        { label:'',name:'arial',val:'arial, helvetica,sans-serif'}, 
-        { label:'',name:'arialBlack',val:'arial black,avant garde'}, 
-        { label:'',name:'comicSansMs',val:'comic sans ms'}, 
-        { label:'',name:'impact',val:'impact,chicago'}, 
-        { label:'',name:'timesNewRoman',val:'times new roman'} 
-      ], 
-      //字号 
-      'fontsize':[10, 11, 12, 14, 16, 18, 20, 24, 36], 
-      enableAutoSave : false, 
-      autoHeightEnabled : false, 
-      initialFrameHeight: this.props.height, 
-      initialFrameWidth: '100%',
-      readonly:this.props.disabled 
-    }); 
-
-    var me = this; 
-    editor.ready( function( ueditor ) {
-      var value = me.props.value?me.props.value:'<p></p>'; 
-      editor.setContent(value); 
-    });
   }
   
   upload = (info) => {
@@ -91,7 +57,7 @@ export default class Page extends Component {
         if(values.type == 1) {
           params.content_url = values.content_url;
         } else {
-          params.content = values.conten;
+          params.content = values.content;
           params.content_html = values.content_html;
         }
 
@@ -110,37 +76,17 @@ export default class Page extends Component {
       }
     })
 	}
-	onRichChange = (value, html, val) => {
-		const {form, dispatch} = this.props;
-		if(_.trim(val) == "") {
-			form.setFieldsValue({content: ''})
-		} else {
-			let contents = JSON.parse(value).ops; 
-			for(let i =0, item; item = contents[i]; i++) {
-				if(typeof(item.insert) == "object") {
-					if(item.insert.image && item.insert.image.indexOf('http') == -1) {
-						dispatch({
-							type: 'login/upload', 
-							payload: {
-								ext: dataURL2Blob(item.insert.image).type.split('/')[1], 
-								sizes: '100_100', 
-								file: dataURL2Blob(item.insert.image), 
-								call: (img) => {
-									let temp = item.insert.image; 
-									item.insert.image = img.host + img.url; 
-									console.log(contents) 
-									form.setFieldsValue({content: JSON.stringify({ops: contents})}) 
-									form.setFieldsValue({content_html: html.replace(temp, img.host + img.url)}) 
-								} 
-							} 
-						}) 
-					} 
-				} 
-			} 
-			form.setFieldsValue({content: value})
+  change = (html, empty) => {
+    const {form, dispatch} = this.props;
+    if(empty) {
+      form.setFieldsValue({content: ''})
+      form.setFieldsValue({content_html: ""})
+    } else {
+      form.setFieldsValue({content: html})
       form.setFieldsValue({content_html: html})
-		}
-	}
+    }
+
+  }
 
 	render() {
     let {logoUrl, logo} = this.state;
@@ -161,9 +107,6 @@ export default class Page extends Component {
     return (
       <PageHeaderLayout title={title}>
         <Card bordered={false}>
-        <script id="content" name="content" type="text/plain">
-                  
-             </script>
           <Form onSubmit={this.handleSubmit}>
             {getFieldDecorator('item_id', {
               initialValue: notice.id,
@@ -179,7 +122,7 @@ export default class Page extends Component {
                 action="http//v0.api.upyun.com"
                 customRequest={this.upload}
               >
-                {logoUrl ? <img src={logoUrl} height={200} width={200} alt="" /> : UploadLogoButton}
+                {logoUrl ? <img src={logoUrl} height={150} width={350} alt="" /> : UploadLogoButton}
               </Upload>
             </FormItem>
             <FormItem {...FORM_ITEM_LAYOUT} label="通知标题">
@@ -218,7 +161,7 @@ export default class Page extends Component {
                 }]
               })(
                 <div>
-                  <RichText change={this.onRichChange} content={"notice"} />
+                  <BraftEditor change={this.change} content={notice.content} />
                   <TextArea style={{ minHeight: 32, display: 'none' }} placeholder="通知内容" rows={4} />
                 </div>
               )}

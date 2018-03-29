@@ -32,6 +32,10 @@ export default {
 			const res = yield call(notice_add, payload);
 			if(res.status === 0) {
 				message.success("添加通知成功")
+				yield put({
+					type: 'set',
+					payload: {notice: {}}
+				})
 				yield put(routerRedux.push('/system/noticeManage'));
 			} else {
 				message.error(res.error);
@@ -41,6 +45,10 @@ export default {
 			const res = yield call(notice_update, payload);
 			if(res.status === 0) {
 				message.success("编辑通知成功")
+				yield put({
+					type: 'set',
+					payload: {notice: {}}
+				})
 				yield put(routerRedux.push('/system/noticeManage'));
 			} else {
 				message.error(res.error);
@@ -48,6 +56,13 @@ export default {
 		},
 	},
 	reducers: {
+		// 基本设置
+		set(state, {payload}) {
+			 return {
+			 	...state,
+			 	...payload,
+			 }
+		},
 		// 设置通知列表
 		setNoticeList(state, {payload}) {
 			const {items, page_info} = payload;

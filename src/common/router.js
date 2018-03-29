@@ -107,19 +107,32 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['member'], () => import('../routes/Member/CheckIn')),
     },
 
-    // 私教管理
-    '/teacher/add': {
-      component: dynamicWrapper(app, ['manage', 'teacher', 'member'], () => import('../routes/Teacher/Add')),
+    // 教练管理
+    '/teacher/worker': {
+      component: dynamicWrapper(app, ['worker'], () => import('../routes/Teacher/Worker')),
     },
-    '/teacher/search': {
-      component: dynamicWrapper(app, ['manage', 'teacher', 'member'], () => import('../routes/Teacher/Search')),
+    '/teacher/workerAdd': {
+      component: dynamicWrapper(app, ['worker'], () => import('../routes/Teacher/WorkerAdd')),
     },
-    '/teacher/statistics': {
-      component: dynamicWrapper(app, ['member'], () => import('../routes/Teacher/Statistics')),
+    '/teacher/askLeave': {
+      component: dynamicWrapper(app, ['worker'], () => import('../routes/Teacher/AskLeave')),
     },
-    '/teacher/change': {
-      component: dynamicWrapper(app, ['teacher', 'manage', 'member'], () => import('../routes/Teacher/ChangeTeacher')),
+    '/teacher/askLeaveAdd': {
+      component: dynamicWrapper(app, ['worker'], () => import('../routes/Teacher/AskLeaveAdd')),
     },
+
+    // '/teacher/add': {
+    //   component: dynamicWrapper(app, ['manage', 'teacher', 'member'], () => import('../routes/Teacher/Add')),
+    // },
+    // '/teacher/search': {
+    //   component: dynamicWrapper(app, ['manage', 'teacher', 'member'], () => import('../routes/Teacher/Search')),
+    // },
+    // '/teacher/statistics': {
+    //   component: dynamicWrapper(app, ['member'], () => import('../routes/Teacher/Statistics')),
+    // },
+    // '/teacher/change': {
+    //   component: dynamicWrapper(app, ['teacher', 'manage', 'member'], () => import('../routes/Teacher/ChangeTeacher')),
+    // },
 
     // 后勤管理
     '/manage/lesson': {
@@ -152,6 +165,9 @@ export const getRouterData = (app) => {
     '/manage/addFeedback': {
       component: dynamicWrapper(app, ['manage', 'member'], () => import('../routes/Manage/AddFeedback')),
     },
+
+
+
 
     // 系统配置
     '/system/noticeManage': {

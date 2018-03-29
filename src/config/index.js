@@ -11,7 +11,7 @@ export const LESSON_STATUS = ['正常', '下架', '删除'];
 
 // export const WORKER_TYPE = ['经理', '教练', '销售顾问', '其他'];
 export const WORKER_TYPE = ['经理', '普通员工'];
-export const WORKER_STATUS = ['正常', '离职'];
+export const WORKER_STATUS = ['在职', '离职'];
 
 export const CARD_STATUS = ['未激活', '使用中', '暂停中', '销卡', '未激活'];
 export const CARD_UNIT = ['年', '月', '日', '次'];

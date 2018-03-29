@@ -66,6 +66,29 @@ export async function body_check_update(params){
 }
 
 
+// 查询员工列表
+export async function worker_query(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/worker/list`, {
+    body: stringify(params)
+  })
+}
+// 添加员工列表
+export async function worker_add(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/worker/add`, {
+    body: stringify(params)
+  })
+}
+// 更新员工列表
+export async function worker_update(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/worker/update`, {
+    body: stringify(params)
+  })
+}
+
+
 
 // 通知列表
 export async function notice_query(params){
@@ -174,34 +197,7 @@ export async function lesson_update(params) {
 
 
 
-// 查询员工列表
-export async function worker_query(params) {
-  params = setToken(params);
-  return requestApi(`${GYM_URL}admin/v1/worker/list`, {
-    body: stringify(params)
-  })
-}
-// 查询离职员工列表
-export async function worker_query_leaved(params) {
-  params = setToken(params);
-  return requestApi(`${GYM_URL}admin/v1/worker/list/leaved`, {
-    body: stringify(params)
-  })
-}
-// 添加员工列表
-export async function worker_add(params) {
-  params = setToken(params);
-  return requestApi(`${GYM_URL}admin/v1/worker/add`, {
-    body: stringify(params)
-  })
-}
-// 更新员工列表
-export async function worker_update(params) {
-  params = setToken(params);
-  return requestApi(`${GYM_URL}admin/v1/worker/update`, {
-    body: stringify(params)
-  })
-}
+
 
 
 

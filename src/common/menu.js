@@ -40,10 +40,10 @@ const menuData = [
   path: 'teacher',
   children: [{
     name: '教练管理',
-    path: 'search',
+    path: 'worker',
   }, {
     name: '教练请假',
-    path: '',
+    path: 'askLeave',
   }]
 },
 {
