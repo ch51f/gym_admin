@@ -7,7 +7,6 @@ import {FORM_ITEM_LAYOUT, FORM_ITEM_BUTTON} from '../../config';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import {NOTICE_STATUS} from '../../config';
 import BraftEditor from '../../components/BraftEditor';
-import {dataURL2Blob} from '../../utils/img';
 
 const FormItem = Form.Item;
 const {Option} = Select;
@@ -161,7 +160,7 @@ export default class Page extends Component {
                 }]
               })(
                 <div>
-                  <BraftEditor change={this.change} content={notice.content} />
+                  <BraftEditor change={this.change} content={notice.content} placeholder="请输入通知内容" />
                   <TextArea style={{ minHeight: 32, display: 'none' }} placeholder="通知内容" rows={4} />
                 </div>
               )}
