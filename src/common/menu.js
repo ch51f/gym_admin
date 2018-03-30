@@ -25,13 +25,13 @@ const menuData = [
 {
   name: '充值管理',
   icon: 'book',
-  path: 'pay',
+  path: 'buy',
   children: [{
     name: '会员充值',
-    path: ''
+    path: 'memberBuy'
   }, {
     name: '充值记录',
-    path: ''
+    path: 'memberBuySearch'
   }] 
 },
 {
@@ -48,17 +48,17 @@ const menuData = [
 },
 {
   name: '课程管理',
-  path: 'manage',
+  path: 'lesson',
   icon: 'book',
   children: [{
     name: '购买课程',
-    path: '',
+    path: 'lessonBuy',
   }, {
     name: '购课记录',
-    path: '',
+    path: 'lessonBuySearch',
   }, {
     name: '课程管理',
-    path: '',
+    path: 'lessonSearch',
   }]
 },
 {

@@ -31,11 +31,7 @@ export default class Page extends Component {
 	 handleListChange = (current, pageSize) => {
     this.query(current, pageSize);
   }
-	//添加通知方法 
-	addNotice = () => {
-    this.props.history.push('/system/noticeAdd');
-	}
-	updateNotice = (item) => {
+	updateNotice = (item = {}) => {
 		this.props.dispatch({
 			type: 'system/set',
 			payload: {
@@ -56,7 +52,7 @@ export default class Page extends Component {
 			<PageHeaderLayout title="通知管理">
 				<Card bordered={false}>
 					<div style={{'marginBottom': '20px', 'textAlign': 'right'}}>
-            <Button icon="plus" type="primary" onClick={() => this.addNotice()}>添加通知</Button>
+            <Button icon="plus" type="primary" onClick={() => this.updateNotice()}>添加通知</Button>
           </div>
           <List 
           	className={style.noticeList}

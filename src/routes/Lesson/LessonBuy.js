@@ -11,8 +11,8 @@ const {TextArea } = Input;
 const {Option} = Select;
 
 @Form.create()
-@connect(({loading, worker, member}) => ({
-  submitting: loading.effects['member/addCard'],
+@connect(({loading, worker, lesson}) => ({
+  submitting: loading.effects['lesson/buy'],
 
   worker_data: worker.worker_data,
 }))
@@ -43,7 +43,7 @@ export default class Page extends Component {
     let {submitting, form, worker_data} = this.props;
     const {getFieldDecorator, getFieldValue} = form;
     return(
-      <PageHeaderLayout title="会员充值">
+      <PageHeaderLayout title="购买课程">
         <Card bordered={false}>
           <Form onSubmit={this.handleSubmit}>
             <FormItem {...FORM_ITEM_LAYOUT} label="会员">
@@ -55,6 +55,70 @@ export default class Page extends Component {
                 <Input placeholder="会员ID、手机号码、名字" />
               )}
             </FormItem>
+
+            <FormItem {...FORM_ITEM_LAYOUT} label="购买课程">
+              {getFieldDecorator('lesson_id', {
+                rules: [{
+                  required: true, message: '请选择课程'
+                }]
+              })(
+                <Select placeholder="购买课程"></Select>
+              )}
+            </FormItem>
+
+            <FormItem {...FORM_ITEM_LAYOUT} label="课程价格">
+              <Col span={4}>
+                <FormItem>
+                  {getFieldDecorator('p_0', {
+                  })(
+                    <InputNumber placeholder="普通价格" min={0} precision={2} />
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={4}>
+                <FormItem>
+                  {getFieldDecorator('p_1', {
+                  })(
+                    <InputNumber placeholder="白银会员" min={0} precision={2} />
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={4}>
+                <FormItem>
+                  {getFieldDecorator('p_2', {
+                  })(
+                    <InputNumber placeholder="黄金价格" min={0} precision={2} />
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={4}>
+                <FormItem>
+                  {getFieldDecorator('p_3', {
+                  })(
+                    <InputNumber placeholder="砖石价格" min={0} precision={2} />
+                  )}
+                </FormItem>
+              </Col>
+              <Col span={4}>
+                <FormItem>
+                  {getFieldDecorator('p_4', {
+                  })(
+                    <InputNumber placeholder="至尊价格" min={0} precision={2} />
+                  )}
+                </FormItem>
+              </Col>
+            </FormItem>
+
+            <FormItem {...FORM_ITEM_LAYOUT} label="购买数量">
+              {getFieldDecorator('num', {
+                rules: [{
+                  required: true, message: '请输入数量'
+                }]
+              })(
+                <InputNumber min={0} precision={0} />
+              )}
+            </FormItem>
+
             <FormItem {...FORM_ITEM_LAYOUT} label="充值金额">
               {getFieldDecorator('price', {
                 rules: [{

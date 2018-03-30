@@ -8,10 +8,6 @@ export default class Section extends Component {
     htmlContent: ''
   }
 
-  componentDidUpdate() {
-    let {content} = this.props;
-    this.editorInstance.setContent(content)
-  }
 
 
   uploadFn = (param) => {
