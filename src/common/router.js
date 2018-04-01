@@ -78,6 +78,9 @@ export const getRouterData = (app) => {
     '/member/physical': {
       component: dynamicWrapper(app, ['member', 'manage'], () => import('../routes/Member/Physical')),
     },
+    '/member/lesson': {
+      component: dynamicWrapper(app, ['member', 'manage'], () => import('../routes/Member/Lesson')),
+    },
 
     '/member/add': {
       component: dynamicWrapper(app, ['member'], () => import('../routes/Member/Add')),
@@ -91,21 +94,11 @@ export const getRouterData = (app) => {
     '/member/add/card': {
       component: dynamicWrapper(app, ['member', 'manage'], () => import('../routes/Member/AddCard')),
     },
-    '/member/manage': {
-      component: dynamicWrapper(app, ['member', 'manage'], () => import('../routes/Member/Manage')),
-    },
+
     '/member/search': {
       component: dynamicWrapper(app, ['member', 'manage'], () => import('../routes/Member/Search')),
     },
-    '/member/transfer': {
-      component: dynamicWrapper(app, ['member', 'manage'], () => import('../routes/Member/Transfer')),
-    },
-    '/member/statistics': {
-      component: dynamicWrapper(app, ['member'], () => import('../routes/Member/Statistics')),
-    },
-    '/member/checkin': {
-      component: dynamicWrapper(app, ['member'], () => import('../routes/Member/CheckIn')),
-    },
+
 
     // 充值管理
     '/buy/memberBuy': {
@@ -150,6 +143,18 @@ export const getRouterData = (app) => {
     '/system/noticeAdd': {
       component: dynamicWrapper(app, ['system'], () => import('../routes/System/NoticeAdd')),
     },
+
+    // 系统配置
+    '/gym/main': {
+      component: dynamicWrapper(app, ['gym', 'member', 'manage'], () => import('../routes/System/Main')),
+    },
+    '/gym/teacher': {
+      component: dynamicWrapper(app, ['gym', 'member'], () => import('../routes/System/Teacher')),
+    },
+    '/gym/member': {
+      component: dynamicWrapper(app, ['gym', 'member'], () => import('../routes/System/Member')),
+    },
+
 
 
 

@@ -1,5 +1,5 @@
 import {routerRedux} from 'dva/router';
-import {worker_query, worker_add, worker_update} from '../services/api';
+import {worker_query, worker_add, worker_update, rank_info} from '../services/api';
 import {message} from 'antd';
 
 export default {
@@ -9,6 +9,10 @@ export default {
       list: [],
     },
     worker: {},
+
+    ranks: [],
+
+    
   },
   effects: {
     // 获取员工列表
@@ -54,6 +58,19 @@ export default {
         message.error(res.error);
       }
     },
+
+    *rank({payload}, {call, put}) {
+      const res = yield call(rank_info, payload);
+
+      if(res.status === 0) {
+        yield put({
+          type: "set",
+          payload: {ranks: res.data},
+        })
+      } else {
+        message.error(res.error);
+      }
+    }
   }, 
   reducers: {
     set(state, {payload}) {

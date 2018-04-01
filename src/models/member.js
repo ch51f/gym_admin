@@ -359,7 +359,7 @@ export default {
         if(res.data.items) {
           yield put({
             type: 'setConfig',
-            payload: {body_check: res.data.items}
+            payload: {body_check: res.data.items[0]}
           });
         }
       }
@@ -367,10 +367,16 @@ export default {
     *addBodyCheck({payload}, {call, put}) {
       const res = yield call(body_check_add, payload);
       console.log(res);
+      if(res.status === 0) {
+        message.success("新增体测信息成功");
+      }
     },
     *updateBodyCheck({payload}, {call, put}) {
       const res = yield call(body_check_update, payload);
       console.log(res);
+      if(res.status === 0) {
+        message.success("更新体测信息成功");
+      }
     }
   },
 

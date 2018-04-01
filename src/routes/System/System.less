@@ -1,3 +1,29 @@
+@import "~antd/lib/style/themes/default.less";
+@import "../../utils/utils.less";
+
+.sysLabelBox {
+  .clearfix;
+  overflow: hidden;
+  .sysLabelItem {
+    float: left;
+    background-color: #f2f2f2;
+    padding: 10px 30px 10px 10px;
+    position: relative;
+    line-height: 1;
+    margin: 5px 5px 5px 0;
+    z-index: 1;
+    word-wrap: break-word;
+    word-break: break-all;
+    .sysLabelClose {
+      color: #f20;
+      position: absolute;
+      right: 5px;
+      top: 10px;
+      cursor: pointer;
+    }
+  }
+}
+
 .box {display: flex;}
 .box-v {flex-direction: column; }
 .box-row {flex-flow: row wrap;}

@@ -16,7 +16,7 @@ const menuData = [
     path: 'search',
   }, {
     name: '上课记录',
-    path: '',
+    path: 'lesson',
   }, {
     name: '体测录入',
     path: 'physical',
@@ -68,6 +68,21 @@ const menuData = [
   children: [{
     name: '通知管理',
     path: 'noticeManage',
+  }]
+},
+{
+  name: '系统设置',
+  path: 'gym',
+  icon: 'setting',
+  children: [{
+    name: '基础配置',
+    path: 'main',
+  }, {
+    name: '体测私教',
+    path: 'teacher',
+  }, {
+    name: '会籍会员',
+    path: 'member',
   }]
 },
 {

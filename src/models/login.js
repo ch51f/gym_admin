@@ -10,6 +10,7 @@ export default {
   state: {
     status: undefined,
     msg: '未知错误',
+
   },
 
   effects: {
@@ -110,7 +111,7 @@ export default {
         console.log(2)
         console.log(response)
       }
-    }
+    },
   },
 
   reducers: {

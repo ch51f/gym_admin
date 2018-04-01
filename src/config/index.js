@@ -24,6 +24,8 @@ export const NOTICE_STATUS = ['正常发布', '草稿', '删除'];
 
 export const ASK_LEAVE_REASON = ['休息', '临时有事', '生病', '上体验课', '其他'];
 
+export const LESSON_TYPE = ['私教课', '小团体课', '训练营'];
+
 export const FORM_ITEM_LAYOUT = {
   labelCol: {
     xs: {span: 24}, 

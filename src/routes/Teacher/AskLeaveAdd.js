@@ -40,7 +40,6 @@ const defaultCheckedList = [];
 export default class Page extends Component {
   state = {
     checkedList: [
-        <br />
     ],
     indeterminate: true,
     checkAll: false,

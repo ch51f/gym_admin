@@ -21,6 +21,21 @@ export async function login(params) {
   });
 }
 
+export async function gym_info(params) {
+  return requestApi(`${GYM_URL}admin/v1/basic/gym_info`, {
+    body: stringify(params)
+  });
+}
+
+export async function rank_info(params) {
+  console.log(123)
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/basic/rank_info`, {
+    body: stringify(params)
+  });
+}
+
+
 export async function upyun_sign(params) {
   params = setToken(params);
   return requestApi(`${GYM_URL}admin/v1/basic/upyun_sign`, {
@@ -37,6 +52,8 @@ export async function upyun(params) {
     body: params
   })
 }
+
+
 
 
 
@@ -169,6 +186,35 @@ export async function gym_update_member(params) {
     body: stringify(params, {arrayFormat: 'repeat'})
   })
 }
+
+
+// Acesgirl_Lesson - 添加课程
+export async function acesgirl_lesson_add(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/acesgirl/lesson/add`, {
+    body: stringify(params)
+  })
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

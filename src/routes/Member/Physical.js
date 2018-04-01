@@ -28,13 +28,13 @@ export default class Page extends Component {
     this.queryWorker();
   }
   queryWorker() {
-    const {dispatch} = this.props;
-    dispatch({
-      type: 'manage/getWorkerList',
-      payload: {
-        department: 1
-      }
-    })
+    // const {dispatch} = this.props;
+    // dispatch({
+    //   type: 'manage/getWorkerList',
+    //   payload: {
+    //     department: 1
+    //   }
+    // })
   }
 
   // 获取会员autoComplete数据
@@ -68,7 +68,7 @@ export default class Page extends Component {
         } else {
           this.props.dispatch({
             type: 'member/addBodyCheck',
-            payload: _.assign(values, {worker_id: 1})
+            payload: _.assign(values)
           })
         }
       }
@@ -108,26 +108,13 @@ export default class Page extends Component {
     const title = "体测录入";
 
     let submitting = body_check.user_id ? submitting_add : submitting_upd;
-
+    console.log(body_check)
     return (
       <PageHeaderLayout title={title}>
         <Card bordered={false}>
           <Form onSubmit={this.handleSubmit}>
-            <FormItem  {...FORM_ITEM_LAYOUT} label="教练">
-              {getFieldDecorator('worker_id', {
-                initialValue: '',
-                rules: [{
-                  required: true, message: '请选择私人教练'
-                }]
-              })(
-                <Select>
-                  {worker_data.list.map((item, i) => {return (<Option key={`worker_${i}`} value={item.id}>{item.worker_name}</Option>)})}
-                </Select> 
-              )}
-            </FormItem>
             <FormItem {...FORM_ITEM_LAYOUT} label="会员">
               {getFieldDecorator('user_id', {
-                initialValue: '',
                 rules: [{
                   required: true, message: "请选择会员"
                 }]
@@ -142,7 +129,7 @@ export default class Page extends Component {
             </FormItem>
             <FormItem {...FORM_ITEM_LAYOUT} label="身高">
               {getFieldDecorator('check_height', {
-                initialValue: '',
+                initialValue: body_check.check_height || "",
                 rules: [{
                   required: true, message: "请输入身高"
                 }]
@@ -152,7 +139,7 @@ export default class Page extends Component {
             </FormItem>
             <FormItem {...FORM_ITEM_LAYOUT} label="体重">
               {getFieldDecorator('check_weight', {
-                initialValue: '',
+                initialValue: body_check.check_weight || "",
                 rules: [{
                   required: true, message: "请输入体重"
                 }]
@@ -162,7 +149,7 @@ export default class Page extends Component {
             </FormItem>
             <FormItem {...FORM_ITEM_LAYOUT} label="体脂">
               {getFieldDecorator('check_bmi', {
-                initialValue: '',
+                initialValue: body_check.check_bmi || "",
                 rules: [{
                   required: true, message: "请输入体脂"
                 }]
@@ -172,7 +159,7 @@ export default class Page extends Component {
             </FormItem>
             <FormItem {...FORM_ITEM_LAYOUT} label="新陈代谢">
               {getFieldDecorator('check_XCDX', {
-                initialValue: '',
+                initialValue: body_check.check_XCDX || "",
                 rules: [{
                   required: true, message: "请输入新陈代谢"
                 }]
@@ -180,19 +167,9 @@ export default class Page extends Component {
                 <Input placeholder="新陈代谢" />
               )}
             </FormItem>
-            <FormItem {...FORM_ITEM_LAYOUT} label="肌肉含量">
-              {getFieldDecorator('check_JRHL', {
-                initialValue: '',
-                rules: [{
-                  required: true, message: "请输入肌肉含量"
-                }]
-              })(
-                <Input placeholder="肌肉含量" />
-              )}
-            </FormItem>
             <FormItem {...FORM_ITEM_LAYOUT} label="胸围">
               {getFieldDecorator('check_XW', {
-                initialValue: '',
+                initialValue: body_check.check_XW || "",
                 rules: [{
                   required: true, message: "请输入胸围"
                 }]
@@ -202,7 +179,7 @@ export default class Page extends Component {
             </FormItem>
             <FormItem {...FORM_ITEM_LAYOUT} label="腰围">
               {getFieldDecorator('check_YW', {
-                initialValue: '',
+                initialValue: body_check.check_YW || "",
                 rules: [{
                   required: true, message: "请输入腰围"
                 }]
@@ -212,7 +189,7 @@ export default class Page extends Component {
             </FormItem>
             <FormItem {...FORM_ITEM_LAYOUT} label="上臂围">
               {getFieldDecorator('check_STW', {
-                initialValue: '',
+                initialValue: body_check.check_STW || "",
                 rules: [{
                   required: true, message: "请输入上臂围"
                 }]
@@ -222,7 +199,7 @@ export default class Page extends Component {
             </FormItem>
             <FormItem {...FORM_ITEM_LAYOUT} label="大腿围">
               {getFieldDecorator('check_DTW', {
-                initialValue: '',
+                initialValue: body_check.check_DTW || "",
                 rules: [{
                   required: true, message: "请输入大腿围"
                 }]
@@ -232,7 +209,7 @@ export default class Page extends Component {
             </FormItem>
             <FormItem {...FORM_ITEM_LAYOUT} label="小腿围">
               {getFieldDecorator('check_XTW', {
-                initialValue: '',
+                initialValue: body_check.check_XTW || "",
                 rules: [{
                   required: true, message: "请输入小腿围"
                 }]
