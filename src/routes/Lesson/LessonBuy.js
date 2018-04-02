@@ -3,6 +3,7 @@ import {connect} from 'dva';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import {Card, Form, Input, Radio, AutoComplete, Button, Select, InputNumber, Col, Row} from 'antd';
 import {FORM_ITEM_LAYOUT, FORM_ITEM_BUTTON} from '../../config';
+import {getPriceY} from '../../utils/utils';
 
 const AutoOption = AutoComplete.Option;
 const FormItem = Form.Item;
@@ -11,15 +12,31 @@ const {TextArea } = Input;
 const {Option} = Select;
 
 @Form.create()
-@connect(({loading, worker, lesson}) => ({
-  submitting: loading.effects['lesson/buy'],
+@connect(({loading, worker, lesson, member}) => ({
+  submitting: loading.effects['lesson/addBuy'],
+
+  member_flag: member.member_flag,
+  members: member.members,
+  member: member.member,
 
   worker_data: worker.worker_data,
+
+  search_lists: lesson.search_lists,
+
+  detail: lesson.detail,
 }))
 export default class Page extends Component {
   state ={}
   componentWillMount() {
+    this.query();
     this.queryWorker();
+  }
+
+  query() {
+    this.props.dispatch({
+      type: 'lesson/search_list',
+      payload: {}
+    })
   }
 
   queryWorker() {
@@ -34,83 +51,118 @@ export default class Page extends Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       console.log(err, values)
       if(!err) {
-
+        this.props.dispatch({
+          type: 'lesson/addBuy',
+          payload: values
+        })
       }
     })
   }
 
+  change = (val) => {
+
+    this.props.dispatch({
+      type: 'lesson/detail',
+      payload: {item_id: val, show_price: 1}
+    })
+  }
+
+  // 获取会员autoComplete数据
+  getUser = () => {
+    const {member_flag, members, member} = this.props;
+    let res = [];
+
+    if(member_flag) {
+      if(member.id) {
+        res.push(member);
+      } else {
+        res = members;
+      }
+    }
+
+    return res;
+  }
+
+  handleSelect = (value) => {
+    this.props.dispatch({
+      type: 'member/queryBodyCheckById',
+      payload: {
+        user_id: value
+      }
+    });
+  }
+
+  handleSearch = (value) => {
+    if(value == "") return false;
+    this.props.dispatch({
+      type: 'member/query',
+      payload: {
+        code: value
+      }
+    })
+  }
+
+  renderOption(item) {
+    let txt = `${item.user_name}（${item.card_id}，${item.gender == "f" ? "女" : "男"}），电话：${item.tel}`;
+    return (
+      <AutoOption key={item.id} text={item.id}>{txt}</AutoOption>
+    )
+  }
+
+  renderPrice(item, i) {
+    return (
+      <Col span={6} key={`price_${i}`}> 
+        <Input defaultValue={`${item.price_name}:${getPriceY(item.price)}`} disabled={true}  />
+      </Col>
+    )
+  }
+
   render() {
-    let {submitting, form, worker_data} = this.props;
+    let {submitting, form, worker_data, search_lists, detail} = this.props;
+    const users = this.getUser();
+    let prices = [];
+    if(detail.prices) prices = detail.prices;
     const {getFieldDecorator, getFieldValue} = form;
     return(
       <PageHeaderLayout title="购买课程">
         <Card bordered={false}>
           <Form onSubmit={this.handleSubmit}>
             <FormItem {...FORM_ITEM_LAYOUT} label="会员">
-              {getFieldDecorator('member_id', {
+              {getFieldDecorator('user_id', {
                 rules: [{
                   required: true, message: '请选择会员'
                 }]
               })(
-                <Input placeholder="会员ID、手机号码、名字" />
+                <AutoComplete
+                  dataSource={users.map(this.renderOption.bind(this))}
+                  onSelect={this.handleSelect.bind(this)}
+                  onSearch={this.handleSearch}
+                  placeholder="输入会员卡号 / 电话 / 名字"
+                />
               )}
             </FormItem>
 
             <FormItem {...FORM_ITEM_LAYOUT} label="购买课程">
-              {getFieldDecorator('lesson_id', {
+              {getFieldDecorator('item_id', {
                 rules: [{
                   required: true, message: '请选择课程'
                 }]
               })(
-                <Select placeholder="购买课程"></Select>
+                <Select placeholder="购买课程" onChange={this.change}>
+                  {search_lists.map((item, i) => {
+                    return (<Option key={i} value={item.id}>{item.lesson_name}</Option>)
+                  })}
+                </Select>
               )}
             </FormItem>
-
+            {detail.prices ?
             <FormItem {...FORM_ITEM_LAYOUT} label="课程价格">
-              <Col span={4}>
-                <FormItem>
-                  {getFieldDecorator('p_0', {
-                  })(
-                    <InputNumber placeholder="普通价格" min={0} precision={2} />
-                  )}
-                </FormItem>
-              </Col>
-              <Col span={4}>
-                <FormItem>
-                  {getFieldDecorator('p_1', {
-                  })(
-                    <InputNumber placeholder="白银会员" min={0} precision={2} />
-                  )}
-                </FormItem>
-              </Col>
-              <Col span={4}>
-                <FormItem>
-                  {getFieldDecorator('p_2', {
-                  })(
-                    <InputNumber placeholder="黄金价格" min={0} precision={2} />
-                  )}
-                </FormItem>
-              </Col>
-              <Col span={4}>
-                <FormItem>
-                  {getFieldDecorator('p_3', {
-                  })(
-                    <InputNumber placeholder="砖石价格" min={0} precision={2} />
-                  )}
-                </FormItem>
-              </Col>
-              <Col span={4}>
-                <FormItem>
-                  {getFieldDecorator('p_4', {
-                  })(
-                    <InputNumber placeholder="至尊价格" min={0} precision={2} />
-                  )}
-                </FormItem>
-              </Col>
+              {prices.map((item, i) => this.renderPrice(item, i))}
             </FormItem>
+            :null}
 
             <FormItem {...FORM_ITEM_LAYOUT} label="购买数量">
-              {getFieldDecorator('num', {
+              {getFieldDecorator('count', {
                 rules: [{
                   required: true, message: '请输入数量'
                 }]
@@ -119,104 +171,18 @@ export default class Page extends Component {
               )}
             </FormItem>
 
-            <FormItem {...FORM_ITEM_LAYOUT} label="充值金额">
-              {getFieldDecorator('price', {
-                rules: [{
-                  required: true, message: '请输入充值金额'
-                }]
-              })(
-                <InputNumber min={0} precision={2} />
-              )}
-            </FormItem>
-            <FormItem {...FORM_ITEM_LAYOUT} label="支付方式">
-              {getFieldDecorator('pay_method', {
-                rules: [{
-                  required: true,
-                  message: '请选择支付方式'
-                }]
-              })(
-                <RadioGroup>
-                  <Radio value="0">刷卡</Radio> 
-                  <Radio value="1">微信</Radio> 
-                  <Radio value="2">支付宝</Radio> 
-                  <Radio value="3">现金</Radio> 
-                  <Radio value="4">其他</Radio> 
-                  <Radio value="5">综合</Radio>
-                </RadioGroup>
-              )}
-            </FormItem>
-            <FormItem {...FORM_ITEM_LAYOUT} label="支付组合" style={{display: getFieldValue('pay_method') == 5 ? "block" : 'none'}}>
-              <Col span={4}>
-                <FormItem>
-                  {getFieldDecorator('by_card', {
-                  })(
-                    <InputNumber placeholder="刷卡" min={0} precision={2} />
-                  )}
-                </FormItem>
-              </Col>
-              <Col span={4}>
-                <FormItem>
-                  {getFieldDecorator('by_wechat', {
-                  })(
-                    <InputNumber placeholder="微信" min={0} precision={2} />
-                  )}
-                </FormItem>
-              </Col>
-              <Col span={4}>
-                <FormItem>
-                  {getFieldDecorator('by_alipay', {
-                  })(
-                    <InputNumber placeholder="支付宝" min={0} precision={2} />
-                  )}
-                </FormItem>
-              </Col>
-              <Col span={4}>
-                <FormItem>
-                  {getFieldDecorator('by_cash', {
-                  })(
-                    <InputNumber placeholder="现金" min={0} precision={2} />
-                  )}
-                </FormItem>
-              </Col>
-              <Col span={4}>
-                <FormItem>
-                  {getFieldDecorator('by_other', {
-                  })(
-                    <InputNumber placeholder="其他" min={0} precision={2} />
-                  )}
-                </FormItem>
-              </Col>
-            </FormItem>
-            <FormItem {...FORM_ITEM_LAYOUT} label="其他支付方式备注" style={{display: ((getFieldValue('by_other') && getFieldValue('by_other')>0 && getFieldValue('pay_method') == 5 ) || (getFieldValue('pay_method') == 4 )) ? "block" : "none"}}>
-              {getFieldDecorator('by_other_txt', {
-              })(
-                <Input placeholder="填写其他支付方式备注" />
-              )}
-            </FormItem>
-            <FormItem {...FORM_ITEM_LAYOUT} label="充值顾问">
-              {getFieldDecorator('worker_id', {
-                rules: [{
-                  required: true,
-                  message: '请选择会籍顾问'
-                }]
-              })(
-                <Select placeholder="教练列表">
-                  {worker_data.list.map((item, i) => {
-                    return (<Option key={i} value={item.id}>{item.worker_name}</Option>)
-                  })}
-                </Select>
-              )}
-            </FormItem>
             <FormItem {...FORM_ITEM_LAYOUT} label="备注">
-                {getFieldDecorator('note', {
-                })(
-                  <TextArea placeholder="备注" autosize={{ minRows: 2, maxRows: 6 }} />
-                )}
-              </FormItem>
+              {getFieldDecorator('note', {
+              })(
+                <TextArea placeholder="备注" autosize={{ minRows: 2, maxRows: 6 }} />
+              )}
+            </FormItem>
+            <FormItem {...FORM_ITEM_BUTTON}>
+              <Button type="primary" htmlType="submit" loading={submitting}>
+                提交
+              </Button>
+            </FormItem>
           </Form>
-          <FormItem {...FORM_ITEM_BUTTON}>
-                <Button type="primary" htmlType="submit" loading={submitting} >提交</Button>
-              </FormItem>
         </Card>
       </PageHeaderLayout>
     )

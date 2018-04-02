@@ -107,8 +107,8 @@ export default class Page extends Component {
     const users = this.getUser();
     const title = "体测录入";
 
-    let submitting = body_check.user_id ? submitting_add : submitting_upd;
     console.log(body_check)
+    let submitting = body_check.user_id ? submitting_add : submitting_upd;
     return (
       <PageHeaderLayout title={title}>
         <Card bordered={false}>

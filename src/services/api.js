@@ -197,6 +197,46 @@ export async function acesgirl_lesson_add(params) {
 }
 
 
+// Acesgirl_Lesson - 课程列表
+export async function acesgirl_lesson_list(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/acesgirl/lesson/list`, {
+    body: stringify(params)
+  })
+}
+
+
+// Acesgirl_Lesson - 课程管理界面的课程列表
+export async function acesgirl_lesson_list_home(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/acesgirl/lesson/list/home`, {
+    body: stringify(params)
+  })
+}
+
+// Acesgirl_Lesson - 购买记录
+export async function acesgirl_lesson_buy_list(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/acesgirl/lesson/buy/list`, {
+    body: stringify(params)
+  })
+}
+
+// Acesgirl_Lesson - 购买课程
+export async function acesgirl_lesson_buy(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/acesgirl/lesson/buy`, {
+    body: stringify(params)
+  })
+}
+
+// Acesgirl_Lesson - 课程详情
+export async function acesgirl_lesson_detail(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/acesgirl/lesson/detail`, {
+    body: stringify(params)
+  })
+}
 
 
 

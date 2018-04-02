@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
 import {connect} from 'dva';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import {Card, Form, Input, Radio, TimePicker, Checkbox, AutoComplete, Button, Select, InputNumber, DatePicker, Col, Row, Upload, Icon} from 'antd';
+import {Card, Form, Input, Radio, TimePicker, Checkbox, AutoComplete, Button, Select, InputNumber, DatePicker, Col, Row, Upload, Icon, message} from 'antd';
 import {FORM_ITEM_LAYOUT, FORM_ITEM_BUTTON, LESSON_TYPE, LESSON_STATUS, DAY_OF_WEEK} from '../../config';
 import _ from 'lodash';
 
-import {uuid} from '../../utils/utils';
+import moment from 'moment';
+import {uuid, getPriceF} from '../../utils/utils';
 import {getOperatorId} from '../../utils/load';
 
 const CheckboxGroup = Checkbox.Group;
@@ -35,6 +36,9 @@ export default class Page extends Component {
     flag: false,
     checkedList: [],
     imgs: [],
+
+    id: 1,
+    time_box: [],
   }
   componentWillMount() {
     this.queryWorker();
@@ -88,6 +92,14 @@ export default class Page extends Component {
     });
   }
 
+  getCovers = (imgs) => {
+    let arr = [];
+    for(let i = 0, item; item = imgs[i]; i++) {
+      arr.push(item.url);
+    }
+    return arr.join(",");
+  }
+
   getTeacherName = (id) => {
     let {worker_data} = this.props;
     for(let i = 0, item; item = worker_data.list[i]; i++) {
@@ -101,7 +113,7 @@ export default class Page extends Component {
     let {getFieldValue} = form;
     let arr = [];
     for(let i = 0, item; item = ranks[i]; i++) {
-      arr.push(getFieldValue(`price_${item.id}`));
+      arr.push(getPriceF(getFieldValue(`price_${item.id}`)));
       // console.log(getFieldValue(`price_${item.id}`));
     }
     return arr.join(',');
@@ -110,11 +122,20 @@ export default class Page extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
-      // console.log(err)
       console.log(values)
       if(!err) {
+        let {imgs, time_box} = this.state;
+        if(imgs.length < 1) {
+          message.warning("请上传封面图");
+          return false;
+        }
+        if(values.lesson_type != 0 && time_box.length == 0) {
+          message.warning("请添加课程时间");
+          return false;
+        }
+
         let params = {
-          covers: 'http://acesgirl.test.upcdn.net/2018_3/bf9df11ef90266de53c85bc51b16e8c6_600_600.jpg',
+          covers: this.getCovers(imgs),
           gym_id: getOperatorId(),
           item_uuid: uuid(32, 16),
           lesson_name: values.lesson_name,
@@ -126,6 +147,30 @@ export default class Page extends Component {
           rank_type_id: values.rank_type_id,
           rank_prices: this.getPrices(),
         }
+        if(values.lesson_type == 2) {
+          params['camp_lesson_valid_date_begin'] = values.camp_lesson_valid_date[0].format("YYYYMMDD");
+          params['camp_lesson_valid_date_end'] = values.camp_lesson_valid_date[1].format("YYYYMMDD");
+        }
+        if(values.lesson_type != 0) {
+          params['group_lesson_user_min'] = values.group_lesson_user_min;
+          params['group_lesson_user_max'] = values.group_lesson_user_max;
+        }
+        if(values.lesson_type != 0) {
+          let day_of_weeks = [];
+          let time_begins = [];
+          let time_ends = [];
+          for(let i =0, item; item = time_box[i]; i++) {
+            day_of_weeks.push(item['week'] == 0 ? 7 : item['week']);
+            time_begins.push(item['begin_time'].format("HHmm"));
+            time_ends.push(item['end_time'].format("HHmm"));
+          }
+          params['day_of_weeks'] = day_of_weeks.join(',');
+          params['time_begins'] = time_begins.join(',');
+          params['time_ends'] = time_ends.join(',');
+        }
+
+
+
         console.log(params);
 
         this.props.dispatch({
@@ -148,6 +193,41 @@ export default class Page extends Component {
     })
   }
 
+  addTime = () => {
+    let {getFieldValue} = this.props.form;
+    let begin_time = getFieldValue('begin_time');
+    let end_time = getFieldValue('end_time');
+    let week = getFieldValue('week');
+
+    if(!week && week != 0) {
+      message.warning("请选择星期");
+      return false;
+    }
+    if(!begin_time) {
+      message.warning("请选择开始时间");
+      return false;
+    }
+    if(!end_time) {
+      message.warning("请选择结束时间");
+      return false;
+    }
+
+    if(!end_time.isAfter(begin_time)) {
+      message.warning("结束时间必须大于开始时间")
+      return false;
+    }
+    let {time_box, id} = this.state;
+    
+    let params = {
+      id,
+      week,
+      begin_time,
+      end_time,
+    }
+    time_box.push(params);
+    this.setState({time_box, id: ++id});
+  }
+
   _renderPrice(item, i) {
     let {getFieldDecorator} = this.props.form;
     return (
@@ -163,8 +243,23 @@ export default class Page extends Component {
     )
   }
 
+  handleRemove(id) {
+    let {time_box} = this.state;
+    _.remove(time_box, function(n) {
+      return n.id == id;
+    })
+    this.setState({time_box});
+  }
+
+  renderTimeBox(item, i) {
+    console.log(item)
+    return (
+      <div key={`time_${i}`}>{DAY_OF_WEEK[item.week]} {item.begin_time.format(format)} - {item.end_time.format(format)} <Icon type="close" onClick={this.handleRemove.bind(this, item.id)} /></div>
+    )
+  }
+
   render() {
-    let {imgs, flag} = this.state;
+    let {imgs, flag, time_box} = this.state;
     let {submitting, form, worker_data, ranks} = this.props;
     const {getFieldDecorator, getFieldValue} = form;
     console.log(ranks)
@@ -235,33 +330,65 @@ export default class Page extends Component {
               )}
             </FormItem>
             <FormItem {...FORM_ITEM_LAYOUT} label="有效日期" style={{display: getFieldValue('lesson_type') == 2 ? 'block' : 'none'}}>
-              {getFieldDecorator('camp_lesson_valid_date')(
+              {getFieldDecorator('camp_lesson_valid_date', {
+                rules: [{
+                  required: getFieldValue('lesson_type') == 2 ? true : false,
+                  message: '请选择有效日期'
+                }]
+              })(
                 <RangePicker format="YYYY-MM-DD" />
               )}
             </FormItem>
+
+
+
             <FormItem {...FORM_ITEM_LAYOUT} label="课程时间" style={{display: getFieldValue('lesson_type') != 0 ? 'block' : 'none'}}>
-              <InputGroup compact>
-                <Select placeholder="星期" style={{width: '100px'}}>
-                  {DAY_OF_WEEK.map((item, i) => {
-                    return (<Option key={`DAY_OF_WEEK_${i}`} value={i}>{item}</Option>)
-                  })}
-                </Select>
-                <TimePicker format={format} style={{width: '100px'}} placeholder="开始时间" />
-                <Input style={{ width: 30, pointerEvents: 'none', backgroundColor: '#fff' }} placeholder="~" disabled /> 
-                <TimePicker format={format} style={{width: '100px'}} placeholder="结束时间" />
-                <Button >添加</Button>
-              </InputGroup>
+              <div>
+                <InputGroup compact>
+                  {getFieldDecorator('week')(
+                    <Select placeholder="星期" style={{width: '100px'}}>
+                      {DAY_OF_WEEK.map((item, i) => {
+                        return (<Option key={`DAY_OF_WEEK_${i}`} value={i}>{item}</Option>)
+                      })}
+                    </Select>
+                  )}
+                  {getFieldDecorator('begin_time')(
+                    <TimePicker format={format} style={{width: '100px'}} placeholder="开始时间" />
+                  )}
+                  <Input style={{ width: 30, pointerEvents: 'none', backgroundColor: '#fff' }} placeholder="~" disabled /> 
+                  {getFieldDecorator('end_time')(
+                    <TimePicker format={format} style={{width: '100px'}} placeholder="结束时间" />
+                  )}
+                  <Button onClick={this.addTime.bind(this)} >添加</Button>
+                </InputGroup>
+                <div>
+                  {time_box.map((item, i) => this.renderTimeBox(item, i))}
+                </div>
+              </div>
             </FormItem>
+
+
+
             <FormItem {...FORM_ITEM_LAYOUT} label="课程价格">
               {ranks.map((item, i) => this._renderPrice(item, i))}
             </FormItem>
-            <FormItem {...FORM_ITEM_LAYOUT} label="课程人数" style={{display: getFieldValue('lesson_type') == 1 ? 'block' : 'none'}}>
+            <FormItem {...FORM_ITEM_LAYOUT} label="课程人数" style={{display: getFieldValue('lesson_type') != 0 ? 'block' : 'none'}}>
               <InputGroup compact>
-                {getFieldDecorator('group_lesson_user_min')(
+                {getFieldDecorator('group_lesson_user_min', {
+                  rules: [{
+                    required: getFieldValue('lesson_type') != 0 ? true : false,
+                    message: '请选择课程人数'
+                  }]
+                })(
                   <Input id="group_lesson_user_min" style={{ width: 100, textAlign: 'center' }} placeholder="最少" /> 
                 )}
                 <Input style={{ width: 30, borderLeft: 0, pointerEvents: 'none', backgroundColor: '#fff' }} placeholder="~" disabled /> 
-                {getFieldDecorator('group_lesson_user_max', )(
+                {getFieldDecorator('group_lesson_user_max', {
+                  rules: [{
+                    required: getFieldValue('lesson_type') != 0 ? true : false,
+                    message: '请选择课程人数'
+                  }]
+                })(
                   <Input id="group_lesson_user_max" style={{ width: 100, textAlign: 'center', borderLeft: 0 }} placeholder="最多" />
                 )}
               </InputGroup>

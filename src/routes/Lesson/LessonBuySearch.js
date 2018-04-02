@@ -10,14 +10,24 @@ const InputGroup = Input.Group;
 
 @Form.create()
 @connect(({loading, worker, lesson}) => ({
-  submitting: loading.effects['lesson/add'],
+  submitting: loading.effects['lesson/buy_list'],
 
   worker_data: worker.worker_data,
+
+  buy_lists: lesson.buy_lists,
 }))
 export default class Page extends Component {
   state ={}
   componentWillMount() {
+    this.query();
     this.queryWorker();
+  }
+
+  query() {
+    this.props.dispatch({
+      type: 'lesson/buy_list',
+      payload: {}
+    })
   }
 
   queryWorker() {
@@ -48,7 +58,7 @@ export default class Page extends Component {
   }
 
   render() {
-    let {submitting, form, worker_data} = this.props;
+    let {submitting, form, worker_data, buy_lists} = this.props;
     const {getFieldDecorator} = form;
 
     const f_i_l = {
@@ -101,7 +111,6 @@ export default class Page extends Component {
       dataIndex: 'y_price',
       key: 'y_price'
     }];
-    let loading = true;
 
     return(
       <PageHeaderLayout title="购买记录">
@@ -156,7 +165,7 @@ export default class Page extends Component {
           </Form>
 
           <div>
-            <Table rowKey={record => record.id} dataSource={[]} columns={col} loading={loading} onChange={this.handleTableChange} />
+            <Table rowKey={record => record.id} dataSource={buy_lists} columns={col} loading={submitting} onChange={this.handleTableChange}  pagination={false} />
           </div>
         </Card>
       </PageHeaderLayout>
