@@ -82,6 +82,24 @@ export async function body_check_update(params){
   })
 }
 
+// User - 充值
+export async function recharge(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/user/recharge`, {
+    body: stringify(params, {arrayFormat: 'repeat'})
+  })
+}
+
+
+// User - 充值记录
+export async function recharge_list(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/user/recharge/list`, {
+    body: stringify(params)
+  })
+}
+
+
 
 // 查询员工列表
 export async function worker_query(params) {

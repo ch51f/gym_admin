@@ -3,6 +3,8 @@ import {connect} from 'dva';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import {Card, Form, Row, Col, Table, Input,  Button, Select, InputNumber} from 'antd';
 import {FORM_ITEM_LAYOUT, FORM_ITEM_BUTTON} from '../../config';
+import {getPriceY, getPriceF} from '../../utils/utils';
+import moment from 'moment';
 
 const FormItem = Form.Item;
 const {Option} = Select;
@@ -68,48 +70,60 @@ export default class Page extends Component {
 
     const col = [{
       title: '会员号',
-      dataIndex: 'id',
-      key: 'id'
+      dataIndex: 'card_id',
+      key: 'card_id'
     }, {
       title: '姓名',
-      dataIndex: 'name',
-      key: 'name'
+      dataIndex: 'user_name',
+      key: 'user_name'
     }, {
       title: '购买课程',
-      dataIndex: 'lesson_id',
-      key: 'lesson_id'
+      dataIndex: 'lesson_name',
+      key: 'lesson_name'
     }, {
       title: '课程教练',
-      dataIndex: 'worker_id',
-      key: 'worker_id'
+      dataIndex: 'teacher_name',
+      key: 'teacher_name'
     }, {
       title: '课程单价',
-      dataIndex: 'price',
-      key: 'price'
+      dataIndex: 'lesson_price',
+      key: 'lesson_price',
+      render(val) {
+        return getPriceY(val)
+      }
     }, {
       title: '购买数量',
-      dataIndex: 'num',
-      key: 'num'
+      dataIndex: ' total_count',
+      key: 'total_count'
     }, {
       title: '购买总价',
-      dataIndex: 'total',
-      key: 'total'
+      dataIndex: 'user_price',
+      key: 'user_price',
+      render(val) {
+        return getPriceY(val)
+      }
     }, {
       title: '购买时间',
-      dataIndex: 'time',
-      key: 'time'
+      dataIndex: 'create_ts',
+      key: 'create_ts',
+      render(val) {
+        return val ? moment(val * 1000).format('YYYY-MM-DD') : "-"
+      }
     }, {
       title: '累计购买',
-      dataIndex: 'a_price',
-      key: 'a_price'
+      dataIndex: 'total_count_sum',
+      key: 'total_count_sum'
     }, {
       title: '剩余课时',
-      dataIndex: 'a_z_price',
-      key: 'a_z_price'
+      dataIndex: 'left_count',
+      key: 'left_count'
     }, {
       title: '账户余额',
-      dataIndex: 'y_price',
-      key: 'y_price'
+      dataIndex: 'balance',
+      key: 'balance',
+      render(val) {
+        return getPriceY(val)
+      }
     }];
 
     return(

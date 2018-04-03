@@ -3,6 +3,8 @@ import {queryMemberConfig, queryMember, addMember, updateMember, checkinMember, 
   body_check_query_by_id,
   body_check_add,
   body_check_update,
+  recharge,
+  recharge_list,
 } from '../services/api';
 import { message } from 'antd';
 import _ from 'lodash';
@@ -50,6 +52,11 @@ export default {
     statistics: {},
 
     body_check: {},
+
+    recharge_data: {
+      list: [],
+      pagination: {},
+    }
   },
 
   effects: {
@@ -381,7 +388,33 @@ export default {
       if(res.status === 0) {
         message.success("更新体测信息成功");
       }
-    }
+    },
+
+    *recharge({payload}, {call, put}) {
+      const res = yield call(recharge, payload);
+      if(res.status === 0) {
+        message.success("充值成功");
+        yield put(routerRedux.push('/buy/memberBuySearch'));
+      } else {
+        message.error(res.error);
+      }
+    },
+
+    *recharge_list({payload}, {call, put}) {
+      const res = yield call(recharge_list, payload);
+
+      console.log(res)
+      if(res.status === 0) {
+        res.data.page_info.pageSize = payload.page_size;
+        res.data.page_info.total = res.data.count;
+        yield put({
+          type: 'changeRechargeList',
+          payload: res.data
+        });
+      } else {
+        message.error(res.error);
+      }
+    },
   },
 
   reducers: {
@@ -389,6 +422,20 @@ export default {
       return{
         ...state,
         ...payload
+      }
+    },
+    changeRechargeList(state, {payload}) {
+
+      return {
+        ...state,
+        recharge_data: {
+          list: payload.items,
+          pagination: {
+            total: payload.page_info.total,
+            pageSize: payload.page_info.pageSize,
+            current: payload.page_info.current_page,
+          }
+        },
       }
     },
     changeSearchList(state, {payload}) {
