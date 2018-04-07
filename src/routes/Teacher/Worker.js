@@ -27,11 +27,14 @@ export default class Page extends Component {
   // 跳转到编辑或新增
   goAddWorker = (record = {}) => {
     let {dispatch, history} = this.props;
-    let arr = record.teacher_type.split("");
-    if(arr.length > 2) {
-      record.is_private_teacher = arr[arr.length - 1];
-      record.is_group_teacher = arr[arr.length - 2];
+    if(record.teacher_type) {
+      let arr = record.teacher_type.split("");
+      if(arr.length > 2) {
+        record.is_private_teacher = arr[arr.length - 1];
+        record.is_group_teacher = arr[arr.length - 2];
+      }
     }
+    console.log(record)
     dispatch({
       type: 'worker/set',
       payload: {worker: record},

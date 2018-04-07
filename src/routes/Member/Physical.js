@@ -8,7 +8,7 @@ const AutoOption = AutoComplete.Option;
 const FormItem = Form.Item;
 const {Option} = Select;
 
-@connect(({loading, member, manage}) => ({
+@connect(({loading, member}) => ({
   submitting_add: loading.effects['member/addBodyCheck'],
   submitting_upd: loading.effects['member/updateBodyCheck'],
 
@@ -17,31 +17,22 @@ const {Option} = Select;
   member_flag: member.member_flag,
   members: member.members,
   member: member.member,
-
-  worker_data: manage.worker_data,
 }))
 @Form.create()
 export default class Page extends Component {
   state = {}
-
-  componentDidMount(){
-    this.queryWorker();
-  }
-  queryWorker() {
-    // const {dispatch} = this.props;
-    // dispatch({
-    //   type: 'manage/getWorkerList',
-    //   payload: {
-    //     department: 1
-    //   }
-    // })
+  componentDidMount(){}
+  componentWillUnmount() {
+    this.props.dispatch({
+      type: 'member/setConfig', 
+      payload: {body_check: {}} 
+    })
   }
 
   // 获取会员autoComplete数据
   getUser = () => {
     const {member_flag, members, member} = this.props;
     let res = [];
-
     if(member_flag) {
       if(member.id) {
         res.push(member);
@@ -49,7 +40,6 @@ export default class Page extends Component {
         res = members;
       }
     }
-
     return res;
   }
 
@@ -58,7 +48,7 @@ export default class Page extends Component {
     e.preventDefault();
     const {form, dispatch, body_check} = this.props;
     form.validateFieldsAndScroll((err, values) => {
-      console.log(err, values);
+      // console.log(err, values);
       if(!err) {
         if(body_check.user_id) {
           this.props.dispatch({
@@ -75,6 +65,7 @@ export default class Page extends Component {
     })
   }
 
+  // 获取会员体测信息
   handleSelect = (value) => {
     this.props.dispatch({
       type: 'member/queryBodyCheckById',
@@ -84,6 +75,7 @@ export default class Page extends Component {
     });
   }
 
+  // 会员查询
   handleSearch = (value) => {
     if(value == "") return false;
     this.props.dispatch({
@@ -94,6 +86,7 @@ export default class Page extends Component {
     })
   }
 
+  // 渲染会员option
   renderOption(item) {
     let txt = `${item.user_name}（${item.card_id}，${item.gender == "f" ? "女" : "男"}），电话：${item.tel}`;
     return (
@@ -102,15 +95,14 @@ export default class Page extends Component {
   }
 
   render() {
-    const {form, submitting_add, submitting_upd, body_check, worker_data} = this.props;
+    const {form, submitting_add, submitting_upd, body_check} = this.props;
     const {getFieldDecorator} = form;
     const users = this.getUser();
-    const title = "体测录入";
 
-    console.log(body_check)
+    // console.log(body_check)
     let submitting = body_check.user_id ? submitting_add : submitting_upd;
     return (
-      <PageHeaderLayout title={title}>
+      <PageHeaderLayout title="体测录入">
         <Card bordered={false}>
           <Form onSubmit={this.handleSubmit}>
             <FormItem {...FORM_ITEM_LAYOUT} label="会员">

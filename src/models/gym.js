@@ -41,11 +41,11 @@ export default {
 				yield put({
 					type: 'setGymInfo',
 					payload: res.data,
-				})
-      	message.success('提交成功');
+				}) 
+				message.success('提交成功'); 
 			} else {
-      	message.error(res.error);
-			}
+				message.error(res.error); 
+			} 
 		},
 		// 保存私教相关信
 		*TeacherForm({payload}, {call, put}) {
@@ -55,10 +55,10 @@ export default {
 				yield put({
 					type: 'setGymInfo',
 					payload: res.data,
-				})
-      	message.success('提交成功');
+				}) 
+				message.success('提交成功');
 			} else {
-      	message.error(res.error);
+				message.error(res.error);
 			}
 		},
 		// 保存会员相关信息
@@ -76,7 +76,7 @@ export default {
 				})
       			message.success('提交成功');
 			} else {
-      	message.error(res.error);
+				message.error(res.error);
 			}
 		},
 	},

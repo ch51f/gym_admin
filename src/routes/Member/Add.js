@@ -28,7 +28,7 @@ export default class Page extends PureComponent {
           <div>
             <Steps current={this.getCurrentStep()} className={styles.steps}>
               <Step title="填写会员信息" />
-              <Step title="填写卡片信息" />
+              <Step title="填写充值信息" />
             </Steps>
             <Switch>
               {

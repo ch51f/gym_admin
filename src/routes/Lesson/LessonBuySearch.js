@@ -17,17 +17,26 @@ const InputGroup = Input.Group;
   worker_data: worker.worker_data,
 
   buy_lists: lesson.buy_lists,
+  search_lists: lesson.search_lists,
 }))
 export default class Page extends Component {
   state ={}
   componentWillMount() {
     this.query();
     this.queryWorker();
+    this.queryLesson();
   }
 
   query() {
     this.props.dispatch({
       type: 'lesson/buy_list',
+      payload: {}
+    })
+  }
+
+  queryLesson() {
+    this.props.dispatch({
+      type: 'lesson/search_list',
       payload: {}
     })
   }
@@ -60,7 +69,7 @@ export default class Page extends Component {
   }
 
   render() {
-    let {submitting, form, worker_data, buy_lists} = this.props;
+    let {submitting, form, worker_data, buy_lists, search_lists} = this.props;
     const {getFieldDecorator} = form;
 
     const f_i_l = {
@@ -141,10 +150,10 @@ export default class Page extends Component {
               <Col span="12">
                 <FormItem {...f_i_l} label="选择课程">
                   {getFieldDecorator('lesson_id')(
-                    <Select placeholder="课程列表"> 
-                      {worker_data.list.map((item, i) => {
-                        return (<Option key={i} value={item.id}>{item.worker_name}</Option>) 
-                      })} 
+                    <Select placeholder="购买课程" onChange={this.change}>
+                      {search_lists.map((item, i) => {
+                        return (<Option key={i} value={item.id}>{item.lesson_name}</Option>)
+                      })}
                     </Select>
                   )}
                 </FormItem>

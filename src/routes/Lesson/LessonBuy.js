@@ -32,6 +32,13 @@ export default class Page extends Component {
     this.queryWorker();
   }
 
+  componentWillUnmount() {
+    this.props.dispatch({
+      type: 'lesson/set',
+      payload: {detail: {}}
+    })
+  }
+
   query() {
     this.props.dispatch({
       type: 'lesson/search_list',

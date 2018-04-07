@@ -307,21 +307,6 @@ export default class Page extends Component {
         			<Search ref="income_level" placeholder="输入自定义来源"onSearch={value => this.handleAdd(value, 2)} enterButton="添加" />
         			{income_levels.length>0?this._renderBox(income_levels,"income_levels"):null}
         		</FormItem>
-        		<FormItem {...f_i_l} label="卡类配置">
-        			<div>
-        			<InputGroup compact>
-        				<Input placeholder="名称" ref="card_name" style={{ width: '20%' }} />
-        				<Input placeholder="数量" ref="amount" style={{ width: '20%' }} />
-        				<Select placeholder="单位" onSelect={(value) => this.setState({unit: value})} style={{ width: '20%' }}>
-                  {CARD_UNIT.map((item, i) => {return(<Option value={i} key={`card_unit_${i}`}>{item}</Option>)})}
-        				</Select>
-        				<Button type="primary" onClick={this.handleAddCard.bind(this)}>
-        					添加
-        				</Button>
-        			</InputGroup>
-        			</div>
-        			{cards.length>0?this._renderCardBox(cards,"cards"):null}
-        		</FormItem>
         		<FormItem
       				{...s_l}
       			>

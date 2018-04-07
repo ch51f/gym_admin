@@ -174,7 +174,7 @@ export default class Page extends Component {
             <FormItem {...FORM_ITEM_LAYOUT} label="教练类型">
               {getFieldDecorator('is_private_teacher', {
                 valuePropName: 'checked',
-                initialValue: worker.is_private_teacher ? true : false,
+                initialValue: worker.is_private_teacher == 1 ? true : false,
               })(
                 <Checkbox>私人教练</Checkbox>
               )}
@@ -182,7 +182,7 @@ export default class Page extends Component {
             <FormItem {...FORM_ITEM_BUTTON}>
               {getFieldDecorator('is_group_teacher', {
                 valuePropName: 'checked',
-                initialValue: worker.is_group_teacher ? true : false,
+                initialValue: worker.is_group_teacher == 1 ? true : false,
               })(
                 <Checkbox>小团体课教练</Checkbox>
               )}

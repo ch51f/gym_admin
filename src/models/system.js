@@ -10,7 +10,6 @@ export default {
 			list: [],
 			pagination: {},
 		},
-
 		notice: {},
 	},
 	effects: {
@@ -28,6 +27,7 @@ export default {
 				message.error(res.error);
 			}
 		},
+		// 新增通知
 		*addNotice({payload}, {call, put}) {
 			const res = yield call(notice_add, payload);
 			if(res.status === 0) {
@@ -41,6 +41,7 @@ export default {
 				message.error(res.error);
 			}
 		},
+		// 编辑通知
 		*updateNotice({payload}, {call, put}) {
 			const res = yield call(notice_update, payload);
 			if(res.status === 0) {

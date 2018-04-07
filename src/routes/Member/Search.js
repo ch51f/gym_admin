@@ -1,10 +1,10 @@
 import React, {Component, Fragment} from 'react';
 import { connect } from 'dva';
-import { Table, Row, Col, Card, Form, Select, Button, DatePicker } from 'antd';
+import { Table, Row, Col, Card, Form, Input, Select, Button, DatePicker } from 'antd';
 import moment from 'moment';
 
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import {getGender, getAge, getDateStr} from '../../utils/utils';
+import {getGender, getAge, getDateStr, getPriceY} from '../../utils/utils';
 import {CARD_STATUS, PAGE_SIZE} from '../../config';
 
 const FormItem = Form.Item;
@@ -12,17 +12,19 @@ const Option = Select.Option;
 const RangePicker = DatePicker.RangePicker;
 
 @Form.create()
-@connect(({member, manage, loading}) => ({
+@connect(({member, lesson, worker, loading}) => ({
   loading: loading.effects['member/search'],
 
   member_data: member.member_data,
 
-  worker_data: manage.worker_data,
+  worker_data: worker.worker_data,
+  search_lists: lesson.search_lists,
 }))
 export default class Page extends Component {
   state = {}
   componentDidMount() {
     this.queryWorker();
+    this.queryLesson();
     this.query();
   }
   componentWillUnmount() {
@@ -32,6 +34,12 @@ export default class Page extends Component {
         worker_data: {
           list: [],
         }
+      }
+    })
+    this.props.dispatch({
+      type: 'lesson/set',
+      payload: {
+        search_lists: [],
       }
     })
   }
@@ -44,6 +52,12 @@ export default class Page extends Component {
         target_page,
         page_size,
       }
+    })
+  }
+  queryLesson() {
+    this.props.dispatch({
+      type: 'lesson/search_list',
+      payload: {}
     })
   }
   queryWorker() {
@@ -64,15 +78,12 @@ export default class Page extends Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if(!err) {
         let params = {}
-        if(values.status) params.status = values.status;
-        if(values.worker_id) params.worker_id = values.worker_id;
-        if(values.subscribe_time) {
-          params.subscribe_time_start = values.subscribe_time[0].format('YYYYMMDD');
-          params.subscribe_time_end = values.subscribe_time[1].format('YYYYMMDD');
-        }
-        if(values.valid_time) {
-          params.valid_time_start = values.valid_time[0].format('YYYYMMDD');
-          params.valid_time_end = values.valid_time[1].format('YYYYMMDD');
+        if(values.code) params.code = values.code;
+        if(values.lesson_id) params.lesson_id = values.lesson_id;
+        if(values.teacher_id) params.teacher_id = values.teacher_id;
+        if(values.date) {
+          params.date_begin = values.date[0].format('YYYYMMDD');
+          params.date_end = values.date[1].format('YYYYMMDD');
         }
 
         this.query(params)
@@ -109,7 +120,7 @@ export default class Page extends Component {
   }
 
   render() {
-    const {worker_data, loading, member_data} = this.props;
+    const {worker_data, loading, member_data, search_lists} = this.props;
     const {list, pagination} = member_data;
     const {getFieldDecorator} = this.props.form;
 
@@ -117,6 +128,12 @@ export default class Page extends Component {
       worker_data.list.unshift({
         id: "",
         worker_name: '全部'
+      })
+    }
+    if(search_lists.length > 0 &&search_lists[0].id != "") {
+      search_lists.unshift({
+        id: "",
+        lesson_name: '全部'
       })
     }
 
@@ -159,53 +176,41 @@ export default class Page extends Component {
       dataIndex: 'tel',
       key: 'tel',
     }, {
-      title: '会籍顾问',
-      dataIndex: 'worker_name',
-      key: 'worker_name',
+      title: '购买课程',
+      dataIndex: 'lesson_names',
+      key: 'lesson_names',
     }, {
       title: '私人教练',
-      dataIndex: 'teachers',
-      key: 'teachers',
+      dataIndex: 'teacher_names',
+      key: 'teacher_names',
+    }, {
+      title: '充值总额',
+      dataIndex: 'total_amount',
+      key: 'total_amount',
       render(val) {
-        let names = "";
-        for(let i = 0; i < val.length; i++) {
-          names += val[i].name + " ";
-        }
-        return names;
+        return val ? getPriceY(val) : "-"
       }
     }, {
-      title: '入会日期',
-      dataIndex: 'subscribe_time',
-      key: 'subscribe_time',
+      title: '充值余额',
+      dataIndex: 'balance',
+      key: 'balance',
       render(val) {
-        return val && val > 0 ? getDateStr(val) : "-"
+        return val ? getPriceY(val) : "-"
       }
     }, {
-      title: '到期时间',
-      dataIndex: 'available_time_end',
-      key: 'available_time_end',
+      title: '最近上课',
+      dataIndex: 'last_attend_date',
+      key: 'last_attend_date',
       render(val) {
-        return val && val > 0 ? getDateStr(val) : "-"
+        return val && val > 0 ? getDateStr(val) : '-'
       }
     }, {
-      title: '入场次数',
-      dataIndex: 'checkin_count',
-      key: 'cnt',
-    }, {
-      title: '最近入场',
-      dataIndex: 'last_checkin_ts',
-      key: 'last',
+      title: '注册日期',
+      dataIndex: 'create_ts',
+      key: 'create_ts',
       render(val) {
         return val ? moment(val * 1000).format('YYYY-MM-DD') : "-"
       }
-    }, {
-      title: '操作',
-      width: '100px',
-      render: (val, record) => (
-        <Fragment>
-          <a href="javascript:;" onClick={() => this.editUser(record)}>编辑</a>
-        </Fragment>
-      )
     }]
 
 
@@ -213,61 +218,53 @@ export default class Page extends Component {
       <PageHeaderLayout title="会员查询">
       	<Card bordered={false}>
       		<Form layout="horizontal" onSubmit={this.handleSubmit}>
-      			<Row>
-      				<Col span="12">
-      					<FormItem
-      						{...f_i_l} 
-      						label="会员状态"
-      					>
-                  {getFieldDecorator('status')(
-                    <Select placeholder="会员状态">
-                      {CARD_STATUS.map((status, key) => {return (<Option key={`card_status_${key}`} value={key}>{status}</Option>)})}
-                    </Select>
+            <Row>
+              <Col span="12">
+                <FormItem {...f_i_l} label="会员">
+                  {getFieldDecorator('code')(
+                    <Input placeholder="会员ID、手机号码、名字" />
                   )}
-      					</FormItem>
-      				</Col>
-      				<Col span="12">
-      					<FormItem 
-      						{...f_i_l} 
-      						label="会籍顾问"
-      					>
-                  {getFieldDecorator('worker_id', {
+                </FormItem>
+              </Col>
+              <Col span="12">
+                <FormItem {...f_i_l} label="选择课程">
+                  {getFieldDecorator('lesson_id', {
                     initialValue: "",
                   })(
-        						<Select placeholder="会籍顾问">
+                    <Select placeholder="购买课程" onChange={this.change}>
+                      {search_lists.map((item, i) => {
+                        return (<Option key={i} value={item.id}>{item.lesson_name}</Option>)
+                      })}
+                    </Select>
+                  )}
+                </FormItem>
+              </Col>
+              <Col span="12">
+                <FormItem {...f_i_l} label="上课时间">
+                  {getFieldDecorator('date')(
+                    <RangePicker format="YYYY-MM-DD" />
+                  )}
+                </FormItem>
+              </Col>
+              <Col span="12">
+                <FormItem {...f_i_l} label="选择教练">
+                  {getFieldDecorator('teacher_id', {
+                    initialValue: "",
+                  })(
+                    <Select placeholder="教练列表">
                       {worker_data.list.map((item, i) => {return (<Option key={`worker_${i}`} value={item.id}>{item.worker_name}</Option>)})}
-  			            </Select>
+                    </Select>
                   )}
-      					</FormItem>
-      				</Col>
-      				<Col span="12">
-      					<FormItem
-      						{...f_i_l}
-      						label="注册时间"
-      					>
-                  {getFieldDecorator('subscribe_time')(
-      						  <RangePicker format="YYYY-MM-DD" />
-                  )}
-      					</FormItem>
-      				</Col>
-      				<Col span="12">
-      					<FormItem
-      						{...f_i_l}
-      						label="到期时间"
-      					>
-                  {getFieldDecorator('valid_time')(
-      						  <RangePicker format="YYYY-MM-DD" />
-                  )}
-      					</FormItem>
+                </FormItem>
               </Col>
               <Col span="20" offset="2">
-      					<FormItem style={{'textAlign': 'right'}}>
-      						<Button type="primary" htmlType="submit">搜索</Button>
+                <FormItem style={{'textAlign': 'right'}}>
+                  <Button type="primary" htmlType="submit">搜索</Button>
                   <Button style={{marginLeft: 20}} onClick={this.handleReset}>重置</Button>
-      					</FormItem>
-      				</Col>
-      			</Row>
-      		</Form>
+                </FormItem>
+              </Col>
+            </Row>
+          </Form>
       		<div>
             <Table rowKey={record => record.id} dataSource={list} columns={col} loading={loading} pagination={pagination} onChange={this.handleTableChange} />
       		</div>

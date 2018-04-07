@@ -1,10 +1,13 @@
 import { routerRedux } from 'dva/router';
-import {queryMemberConfig, queryMember, addMember, updateMember, checkinMember, findMember, queryCheckin, randomCard, queryHomeCheckin, buyCard, queryCard, transferMember, pauseMember, calcleMember, tMember, cancleMember, activeMember, queryStatisticsUser,
+import {queryMemberConfig, queryMember, addMember, updateMember, findMember, randomCard,
   body_check_query_by_id,
   body_check_add,
   body_check_update,
   recharge,
   recharge_list,
+  attend,
+  attend_list,
+  user_list,
 } from '../services/api';
 import { message } from 'antd';
 import _ from 'lodash';
@@ -27,25 +30,9 @@ export default {
       pagination: {},
     },
 
-    checkIn: {
-      list: [],
-      pagination: {},
-    },
-    homeCheckIn: {
-      list: [],
-      count: 0,
-    },
-    homeActive: 0,
-
     members: [],
     member_flag: false,
     member: {},
-
-    checkIn_list: [],
-
-    cards: [],
-
-    quickMember: [],
 
     manage_flag: false,
 
@@ -56,7 +43,12 @@ export default {
     recharge_data: {
       list: [],
       pagination: {},
-    }
+    },
+
+    attend_data: {
+      list: [],
+      pagination: [],
+    },
   },
 
   effects: {
@@ -101,7 +93,7 @@ export default {
     },
     // 获取会员列表
     *search({payload}, {call, put}) {
-      const res = yield call(queryMember, payload);
+      const res = yield call(user_list, payload);
 
       if(res.status === 0) {
         res.data.page_info.pageSize = payload.page_size;
@@ -124,34 +116,6 @@ export default {
           payload: res.data
         })
         yield payload.cb(res.data.card_id);
-      } else {
-        message.error(res.error);
-      }
-    },
-    *checkinList({payload}, {call, put}) {
-      const res = yield call(queryCheckin, payload);
-      if(res.status === 0) {
-        res.data.page_info.pageSize = payload.page_size;
-        res.data.page_info.total = res.data.count;
-        yield put({
-          type: 'setCheckinList',
-          payload: {
-            data: res.data
-          }
-        })
-      } else {
-        message.error(res.error);
-      }
-    },
-    *homeCheckinList({payload}, {call, put}) {
-      const res = yield call(queryHomeCheckin, payload);
-      if(res.status === 0) {
-        yield put({
-          type: 'setHomeCheckinList',
-          payload: {
-            data: res.data
-          }
-        })
       } else {
         message.error(res.error);
       }
@@ -197,115 +161,9 @@ export default {
         message.error(res.error);
       }
     },
-    *checkIn({payload}, {call, put}) {
-      if(payload.user_id) {
-        yield put({
-          type: 'setCheckInList',
-          payload: {items: []},
-        })
-      }
-      const res = yield call(checkinMember, payload);
-      if(res.status === 0) {
-        message.success("签到成功");
-        yield put({
-          type: 'setConfig',
-          payload: {
-            homeCheckIn: {
-              list: [],
-              count: 0,
-            },
-            homeActive: 0,
-          }
-        })
-        yield put({
-          type: 'homeCheckinList',
-          payload: {}
-        });
 
-      } else if (res.status === 771) {
-        yield put({
-          type: 'setCheckInList',
-          payload: res.data,
-        })
-      } else {
-        message.error(res.error);
-      }
-    },
-    *addCard({payload}, {call, put}) {
-      const res = yield call(buyCard, payload);
-      if(res.status === 0) {
-        message.success("添加卡类成功");
-        yield put(routerRedux.push('/member/search'));
-      } else {
-        message.error(res.error);
-      }
-    },
-    *xuCard({payload}, {call, put}) {
-      const res = yield call(buyCard, payload);
-      if(res.status === 0) {
-        message.success("续卡成功");
 
-        yield put({
-          type: 'setMember',
-          payload: {user: res.data},
-        })
-      } else {
-        mesasge.error(res.error);
-      }
-    },
-    *queryCard({payload}, {call, put}) {
-      const res = yield call(queryCard, payload);
-      if(res.status === 0) {
-        yield put({
-          type: 'setCards',
-          payload: res.data,
-        })
-      } else {
-        message.error(res.error);
-      }
-    },
-    *transfer({payload}, {call, put}) {
-      const res = yield call(transferMember, payload);
-      if(res.status === 0) {
-        message.success("会员转移成功");
-      } else {
-        message.error(res.error);
-      }
-    },
-    *tMember({payload}, {call, put}) {
-      const res = yield call(tMember, payload);
-      if(res.status === 0) {
-        message.success("会员转卡成功");
-      } else {
-        message.error(res.error);
-      }
-    },
-    *pause({payload}, {call, put}) {
-      const res = yield call(pauseMember, payload);
-      if(res.status === 0) {
-        message.success("会员暂停成功");
-
-        yield put({
-          type: 'setMember',
-          payload: {user: res.data},
-        })
-      } else {
-        message.error(res.error);
-      }
-    },
-    *calcle({payload}, {call, put}) {
-      const res = yield call(calcleMember, payload);
-      if(res.status === 0) {
-        message.success("取消会员暂停成功");
-
-        yield put({
-          type: 'setMember',
-          payload: {user: res.data},
-        })
-      } else {
-        message.error(res.error);
-      }
-    },
+   
     *quickQuery({payload}, {call, put}) {
       const res = yield call(findMember, payload);
       if(res.status === 0) {
@@ -319,18 +177,6 @@ export default {
         yield put({
           type: 'setQuickMembers',
           payload: res.data,
-        })
-      } else {
-        message.error(res.error);
-      }
-    },
-    *cancleMember({payload}, {call, put}) {
-      const res = yield call(cancleMember, payload);
-      if(res.status === 0) {
-        message.success("消卡成功");
-        yield put({
-          type: 'setMember',
-          payload: {user: res.data},
         })
       } else {
         message.error(res.error);
@@ -415,6 +261,28 @@ export default {
         message.error(res.error);
       }
     },
+
+    *attend({payload}, {call, put}) {
+      const res = yield call(attend, payload);
+
+      console.log(res);
+    },
+
+    *attend_list({payload}, {call, put}) {
+      const res = yield call(attend_list, payload);
+
+      console.log(res);
+      if(res.status === 0) {
+        res.data.page_info.pageSize = payload.page_size;
+        res.data.page_info.total = res.data.count;
+        yield put({
+          type: 'changeAttendList',
+          payload: res.data
+        });
+      } else {
+        message.error(res.error);
+      }
+    },
   },
 
   reducers: {
@@ -422,6 +290,19 @@ export default {
       return{
         ...state,
         ...payload
+      }
+    },
+    changeAttendList(state, {payload}) {
+      return {
+        ...state,
+        attend_data: {
+          list: payload.items,
+          pagination: {
+            total: payload.page_info.total,
+            pageSize: payload.page_info.pageSize,
+            current: payload.page_info.current_page,
+          }
+        },
       }
     },
     changeRechargeList(state, {payload}) {
