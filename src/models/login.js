@@ -17,34 +17,6 @@ export default {
     *login({ payload }, { call, put }) {
       // const response = yield call(fakeAccountLogin, payload);
       const response = yield call(login, payload);
-
-      // {
-      //     "status": 0,
-      //     "data": {
-      //         "operator": {
-      //             "id": 128,
-      //             "gym_id": "0002",
-      //             "login": "admin",
-      //             "identity": "f5d33bc629157a07335ec45e7f1e2289",
-      //             "operator_name": "超级测试系统管理员",
-      //             "tel": "13123456789",
-      //             "email": "hahaha@998.com",
-      //             "wechat_id": "hahaha",
-      //             "status": 0,
-      //             "qq_id": null,
-      //             "create_ts": null,
-      //             "bf_id": null,
-      //             "bf_ts": null
-      //         },
-      //         "operator_bf_info": {
-      //             "operator_id": 128,
-      //             "operator_name": "超级测试系统管理员",
-      //             "operator_type": 0
-      //         },
-      //         "token": "8200edca7136176f34e5e605641b2430"
-      //     }
-      // }
-    
       
       // Login successfully
       if (response.status === 0) {

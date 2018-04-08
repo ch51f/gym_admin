@@ -3,48 +3,51 @@ import {connect} from 'dva';
 import {Table} from 'antd';
 import {PAGE_SIZE} from '../../config';
 
+import styles from './AcesHome.less';
+
 @connect(({member, loading}) => ({
-  loading: loading.effects['member/attend_list'],
-  member_data: member.attend_data,
+	loading: loading.effects['member/attend_list'],
+	member_data: member.attend_data,
 }))
 export default class Home extends Component {
-  state = {}
+	state = {}
 
-  componentDidMount() {
-    this.query();
-  }
+	componentDidMount() {
+		this.query();
+	}
 
-  query(params = {}, target_page=1, page_size = PAGE_SIZE) {
-    const {dispatch} = this.props;
-    dispatch({
-      type: 'member/attend_list',
-      payload: {
-        ...params,
-        target_page,
-        page_size,
-      }
-    })
-  }
+	// 查询数据
+	query(params = {}, target_page=1, page_size = PAGE_SIZE) {
+		const {dispatch} = this.props;
+		dispatch({
+			type: 'member/attend_list',
+			payload: {
+				...params,
+				target_page,
+				page_size,
+			}
+		})
+	}
 
-
+	// 页码事件
 	handleTableChange = (pagination, filters, sorter) => {
-	    let {current, pageSize} = pagination;
-	    this.query({}, current, pageSize);
-	 }
+		let {current, pageSize} = pagination; 
+		this.query({}, current, pageSize);
+	}
 
 	render() {
-    const {loading, member_data} = this.props;
-    const {list, pagination} = member_data;
+		const {loading, member_data} = this.props;
+		const {list, pagination} = member_data;
 		const col = [{
 			title: '客户头像',
 			dataIndex: 'avatar',
 			key: 'avatar',
 			render: (val, record) => {
 				return (
-		          <Fragment>
-		            <img src={val} />
-		          </Fragment>
-		        )
+					<Fragment> 
+						<img src={val} /> 
+					</Fragment>
+				)
 			}
 		}, {
 			title: '客户名字',
@@ -72,10 +75,17 @@ export default class Home extends Component {
 			key: 'status',
 		}]
 		return (
-			<div>
+			<div className={styles.acesHome}>
 				<h2>今日预约客服</h2>
 				<div>
-					<Table rowKey={record => record.id} dataSource={list} columns={col} loading={loading} onChange={this.handleTableChange} />
+					<Table 
+						rowKey={record => record.id} 
+						dataSource={list} 
+						columns={col} 
+						loading={loading} 
+						onChange={this.handleTableChange} 
+						pagination={pagination}
+					/>
 				</div>
 			</div>
 		)

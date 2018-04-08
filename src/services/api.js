@@ -53,96 +53,6 @@ export async function upyun(params) {
 }
 
 
-// Acesgirl_User - 艾思会员管理列表
-export async function user_list(params){
-  params = setToken(params);
-  return requestApi(`${GYM_URL}admin/v1/acesgirl/user/list`, {
-    body: stringify(params)
-  })
-}
-
-
-
-// Acesgirl_Attend - 会员预约
-export async function attend(params){
-  params = setToken(params);
-  return requestApi(`${GYM_URL}admin/v1/acesgirl/attend/attend`, {
-    body: stringify(params)
-  })
-}
-
-// Acesgirl_Attend - 上课记录
-export async function attend_list(params){
-  params = setToken(params);
-  return requestApi(`${GYM_URL}admin/v1/acesgirl/attend/list`, {
-    body: stringify(params)
-  })
-}
-
-
-// Body_Check - 根据用户 id 获取体测数据
-export async function body_check_query_by_id(params){
-  params = setToken(params);
-  return requestApi(`${GYM_URL}admin/v1/body_check/by_user_id`, {
-    body: stringify(params)
-  })
-}
-
-// Body_Check - 添加体测数据
-export async function body_check_add(params){
-  params = setToken(params);
-  return requestApi(`${GYM_URL}admin/v1/body_check/add`, {
-    body: stringify(params)
-  })
-}
-// Body_Check - 更新体测数据
-export async function body_check_update(params){
-  params = setToken(params);
-  return requestApi(`${GYM_URL}admin/v1/body_check/update`, {
-    body: stringify(params)
-  })
-}
-
-// User - 充值
-export async function recharge(params) {
-  params = setToken(params);
-  return requestApi(`${GYM_URL}admin/v1/user/recharge`, {
-    body: stringify(params, {arrayFormat: 'repeat'})
-  })
-}
-
-
-// User - 充值记录
-export async function recharge_list(params) {
-  params = setToken(params);
-  return requestApi(`${GYM_URL}admin/v1/user/recharge/list`, {
-    body: stringify(params)
-  })
-}
-
-
-
-// 查询员工列表
-export async function worker_query(params) {
-  params = setToken(params);
-  return requestApi(`${GYM_URL}admin/v1/worker/list`, {
-    body: stringify(params)
-  })
-}
-// 添加员工列表
-export async function worker_add(params) {
-  params = setToken(params);
-  return requestApi(`${GYM_URL}admin/v1/worker/add`, {
-    body: stringify(params)
-  })
-}
-// 更新员工列表
-export async function worker_update(params) {
-  params = setToken(params);
-  return requestApi(`${GYM_URL}admin/v1/worker/update`, {
-    body: stringify(params)
-  })
-}
 
 
 // 查询会员相关配置
@@ -325,6 +235,96 @@ export async function acesgirl_lesson_buy(params) {
 export async function acesgirl_lesson_detail(params) {
   params = setToken(params);
   return requestApi(`${GYM_URL}admin/v1/acesgirl/lesson/detail`, {
+    body: stringify(params)
+  })
+}
+
+
+// Acesgirl_User - 艾思会员管理列表
+export async function user_list(params){
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/acesgirl/user/list`, {
+    body: stringify(params)
+  })
+}
+
+// Acesgirl_Attend - 会员预约
+export async function attend(params){
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/acesgirl/attend/attend`, {
+    body: stringify(params)
+  })
+}
+
+// Acesgirl_Attend - 上课记录
+export async function attend_list(params){
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/acesgirl/attend/list`, {
+    body: stringify(params)
+  })
+}
+
+
+// Body_Check - 根据用户 id 获取体测数据
+export async function body_check_query_by_id(params){
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/body_check/by_user_id`, {
+    body: stringify(params)
+  })
+}
+
+// Body_Check - 添加体测数据
+export async function body_check_add(params){
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/body_check/add`, {
+    body: stringify(params)
+  })
+}
+// Body_Check - 更新体测数据
+export async function body_check_update(params){
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/body_check/update`, {
+    body: stringify(params)
+  })
+}
+
+// User - 充值
+export async function recharge(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/user/recharge`, {
+    body: stringify(params, {arrayFormat: 'repeat'})
+  })
+}
+
+
+// User - 充值记录
+export async function recharge_list(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/user/recharge/list`, {
+    body: stringify(params)
+  })
+}
+
+
+
+// 查询员工列表
+export async function worker_query(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/worker/list`, {
+    body: stringify(params)
+  })
+}
+// 添加员工列表
+export async function worker_add(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/worker/add`, {
+    body: stringify(params)
+  })
+}
+// 更新员工列表
+export async function worker_update(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/worker/update`, {
     body: stringify(params)
   })
 }
