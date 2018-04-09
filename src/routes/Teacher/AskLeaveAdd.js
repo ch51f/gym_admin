@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
 import {connect} from 'dva';
-import {Card, Form, Input, Checkbox, Button, DatePicker, Select} from 'antd';
+import {Card, Form, Input, Checkbox, Button, DatePicker, Select, message} from 'antd';
 import moment from 'moment';
 import _ from 'lodash';
 
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import {FORM_ITEM_LAYOUT, FORM_ITEM_BUTTON, ASK_LEAVE_REASON} from '../../config';
+import {strToTime, timeToStr} from '../../utils/utils.js';
 
 const CheckboxGroup = Checkbox.Group;
 const FormItem = Form.Item;
@@ -30,22 +31,27 @@ const defaultCheckedList = [];
 
 @connect(({loading, worker}) => ({
   submitting: loading.effects['worker/addWorker'],
-  submitting_up: loading.effects['worker/updateWorker'],
 
   worker_data: worker.worker_data,
-
-  worker: worker.worker
+  working_time: worker.working_time,
 }))
 @Form.create()
 export default class Page extends Component {
   state = {
-    checkedList: [
-    ],
-    indeterminate: true,
+    checkedList: [],
+    indeterminate: false,
     checkAll: false,
   }
   componentWillMount() {
     this.queryWorker();
+    this.queryWorkingTime();
+  }
+  // 获取工作时间
+  queryWorkingTime() {
+    this.props.dispatch({
+      type: 'worker/working_time',
+      payload: {}
+    })
   }
   // 获取会籍顾问
   queryWorker() {
@@ -57,10 +63,35 @@ export default class Page extends Component {
   // 提交
   handleSubmit = (e) => {
     e.preventDefault();
-    let {imgUrl} = this.state;
+    let {checkAll, checkedList} = this.state;
     let {form, dispatch} = this.props;
     form.validateFieldsAndScroll((err, values) => {
+      console.log(values)
+      // console.log(checkedList)
+      // console.log(checkAll)
       if (!err) {
+        let params = {
+          date: values.date.format('YYYYMMDD'),
+          note: values.note,
+          teacher_id: values.teacher_id,
+          reason_type: values.reason_type,
+        };
+        if(!checkAll && checkedList.length == 0) {
+          message.warning("请选择请假时间");
+        }
+        if(checkAll) {
+          params.full_day = 1;
+        } else {
+          let [time_begins, time_ends] = [[], []];
+          for(let i = 0, item; item = checkedList[i]; i++) {
+            let temps = item.split(" - ");
+            time_begins.push(timeToStr(temps[0]))
+            time_ends.push(timeToStr(temps[1]))
+          }
+          params.time_begins = time_begins.join(',');
+          params.time_ends = time_ends.join(',');
+        }
+        console.log(params)
       }
     });
   }
@@ -81,15 +112,25 @@ export default class Page extends Component {
     });
   }
 
+  getWorkerTime() {
+    const {working_time} = this.props;
+    let arr = [];
+    for(let i = 0, item; item = working_time[i]; i++) {
+      arr.push(strToTime(item.time_begin) + " - " + strToTime(item.time_end));
+    }
+    return arr;
+  }
+
   render() {
     const {submitting, form, worker_data} = this.props;
     const {getFieldDecorator} = form;
+    const working_time_options = this.getWorkerTime();
     return(
       <PageHeaderLayout title="教练请假">
         <Card bordered={false}>
           <Form onSubmit={this.handleSubmit}>
             <FormItem {...FORM_ITEM_LAYOUT} label="教练列表">
-              {getFieldDecorator('worker_id', {
+              {getFieldDecorator('teacher_id', {
                 rules: [{
                   required: true, message: '请选择教练'
                 }]
@@ -117,10 +158,10 @@ export default class Page extends Component {
                 全天
               </Checkbox>
               <br />
-              <CheckboxGroup options={plainOptions} value={this.state.checkedList} onChange={this.onChange} />
+              <CheckboxGroup options={working_time_options} value={this.state.checkedList} onChange={this.onChange} />
             </FormItem>
             <FormItem {...FORM_ITEM_LAYOUT} label="请假原因">
-              {getFieldDecorator('reason', {
+              {getFieldDecorator('reason_type', {
                 rules: [{
                   required: true, message: '请选择请假原因'
                 }]
@@ -131,7 +172,7 @@ export default class Page extends Component {
               )}
             </FormItem>
             <FormItem {...FORM_ITEM_LAYOUT} label="请假备注">
-              {getFieldDecorator('content', {
+              {getFieldDecorator('note', {
                 initialValue: '',
               })(
                 <TextArea style={{ minHeight: 32 }} placeholder="备注" rows={4} />

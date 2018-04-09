@@ -1,5 +1,9 @@
 import {routerRedux} from 'dva/router';
-import {worker_query, worker_add, worker_update, rank_info} from '../services/api';
+import {
+	worker_query, worker_add, worker_update, 
+	rank_info, working_time_range,
+	leave_list, leave_check, leave_add, leave_cancle
+} from '../services/api';
 import {message} from 'antd';
 
 export default {
@@ -9,7 +13,11 @@ export default {
 			list: [],
 		},
 		worker: {}, 
+
 		ranks: [],
+		working_time: [],
+
+		leave_list: [],
 	},
 	effects: {
 		// 获取员工列表
@@ -65,6 +73,21 @@ export default {
 			} else {
 				message.error(res.error);
 			}
+		},
+		*working_time({payload}, {call, put}) {
+			const res = yield call(working_time_range, payload);
+			if(res.status === 0) {
+				yield put({
+					type: "set",
+					payload: {working_time: res.data},
+				})
+			} else {
+				message.error(res.error);
+			}
+		},
+		*leave_list({payload}, {call, put}) {
+			const res = yield call(leave_list, payload);
+			console.log(res);
 		}
 	}, 
 	reducers: {

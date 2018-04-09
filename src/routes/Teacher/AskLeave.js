@@ -5,7 +5,8 @@ import {Card, Table, Icon, Button, Tooltip} from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 @connect(({worker, loading}) => ({
-
+  loading: loading.effects['worker/leave_list'],
+  leave_list: worker.leave_list,
 }))
 export default class Page extends Component {
   state = {}
@@ -13,7 +14,10 @@ export default class Page extends Component {
     this.query();
   }
   query() {
-
+    this.props.dispatch({
+      type: 'worker/leave_list',
+      payload: {}
+    })
   }
   cancel() {
 
@@ -23,21 +27,34 @@ export default class Page extends Component {
     history.push('/teacher/askLeaveAdd');
   }
   render() {
-    let loading = true;
-    let list = [];
+    let {loading, leave_list} = this.props;
     const columns = [
       {
         title: '请假教练',
         dataIndex: 'worker_name',
       }, {
         title: '请假日期',
-        dataIndex: 'date',
+        dataIndex: 'date_begin',
+        render: (val, record) => {
+          if(val == record.date_end) {
+            return record.date_end;
+          } else {
+            return val + " - " + record.date_end;
+          }
+        }
       }, {
         title: '请假时间',
-        dataIndex: 'time',
+        dataIndex: 'time_begin',
+        render: (val, record) => {
+          if(val == record.time_end) {
+            return record.time_end;
+          } else {
+            return val + " - " + record.time_end;
+          }
+        }
       }, {
         title: '请假原因',
-        dataIndex: 'reason',
+        dataIndex: 'reason_type',
       }, {
         title: '备注',
         dataIndex: 'note',
@@ -60,7 +77,7 @@ export default class Page extends Component {
             <Table
               loading={loading}
               rowKey={record => record.id}
-              dataSource={list}
+              dataSource={leave_list}
               columns={columns}
               pagination={false}
             />

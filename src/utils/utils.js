@@ -220,3 +220,11 @@ export function uuid(len, radix) {
  
     return uuid.join('');
 }
+
+export function strToTime(str) {
+  return str.slice(0,2) + ":" + str.slice(2,4);
+}
+
+export function timeToStr(time) {
+  return time.split(":").join("");
+}

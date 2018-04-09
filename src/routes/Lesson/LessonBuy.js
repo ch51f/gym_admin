@@ -70,7 +70,7 @@ export default class Page extends Component {
 
     this.props.dispatch({
       type: 'lesson/detail',
-      payload: {item_id: val, show_price: 1}
+      payload: {item_id: val, show_price: 1, show_time: 1}
     })
   }
 

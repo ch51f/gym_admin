@@ -328,3 +328,43 @@ export async function worker_update(params) {
     body: stringify(params)
   })
 }
+
+
+
+// Leave - 请假记录
+export async function leave_list(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/leave/list`, {
+    body: stringify(params)
+  })
+}
+
+// Leave - 检查请假时间段
+export async function leave_check(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/leave/check`, {
+    body: stringify(params, {arrayFormat: 'repeat'})
+  })
+}
+// Leave - 添加请假记录
+export async function leave_add(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/leave/add`, {
+    body: stringify(params, {arrayFormat: 'repeat'})
+  })
+}
+// Leave - 取消请假记录
+export async function leave_cancle(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/leave/cancle`, {
+    body: stringify(params)
+  })
+}
+
+// Basic - 获取工作时间
+export async function working_time_range(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/basic/working_time_range`, {
+    body: stringify(params)
+  })
+}
