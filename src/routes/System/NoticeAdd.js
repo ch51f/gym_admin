@@ -84,7 +84,6 @@ export default class Page extends Component {
       form.setFieldsValue({content: html})
       form.setFieldsValue({content_html: html})
     }
-
   }
 
 	render() {
@@ -200,9 +199,7 @@ export default class Page extends Component {
             </FormItem>
 
             <FormItem {...FORM_ITEM_BUTTON}>
-              <Button type="primary" htmlType="submit" loading={submitting}>
-                提交
-              </Button>
+              <Button type="primary" htmlType="submit" loading={submitting}>提交</Button>
             </FormItem>
           </Form>
         </Card>

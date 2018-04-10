@@ -30,7 +30,7 @@ const plainOptions = [
 const defaultCheckedList = [];
 
 @connect(({loading, worker}) => ({
-  submitting: loading.effects['worker/addWorker'],
+  submitting: loading.effects['worker/leave_check'],
 
   worker_data: worker.worker_data,
   working_time: worker.working_time,
@@ -66,7 +66,7 @@ export default class Page extends Component {
     let {checkAll, checkedList} = this.state;
     let {form, dispatch} = this.props;
     form.validateFieldsAndScroll((err, values) => {
-      console.log(values)
+      // console.log(values)
       // console.log(checkedList)
       // console.log(checkAll)
       if (!err) {
@@ -92,6 +92,11 @@ export default class Page extends Component {
           params.time_ends = time_ends.join(',');
         }
         console.log(params)
+
+        dispatch({
+          type: 'worker/leave_check',
+          payload: params,
+        })
       }
     });
   }

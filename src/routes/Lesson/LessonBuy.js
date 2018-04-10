@@ -129,6 +129,7 @@ export default class Page extends Component {
     const users = this.getUser();
     let prices = [];
     if(detail.prices) prices = detail.prices;
+    console.log(detail)
     const {getFieldDecorator, getFieldValue} = form;
     return(
       <PageHeaderLayout title="购买课程">
@@ -170,11 +171,12 @@ export default class Page extends Component {
 
             <FormItem {...FORM_ITEM_LAYOUT} label="购买数量">
               {getFieldDecorator('count', {
+                initialValue: (detail.lesson && detail.lesson.lesson_type == 2) ? 1 : "",
                 rules: [{
                   required: true, message: '请输入数量'
                 }]
               })(
-                <InputNumber min={0} precision={0} />
+                <InputNumber min={0} precision={0} disabled={(detail.lesson && detail.lesson.lesson_type == 2) ? true : false} />
               )}
             </FormItem>
 

@@ -3,6 +3,7 @@ import {connect} from 'dva';
 import {Card, Form, Input, Button, Radio} from 'antd';
 
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import {FORM_ITEM_LAYOUT, FORM_ITEM_BUTTON} from '../../config';
 
 const FormItem = Form.Item;
 const {Group} = Radio;
@@ -56,23 +57,6 @@ export default class Page extends Component {
   render() {
   	const {form, submitting, teacher_config} = this.props;
   	const {getFieldDecorator, getFieldValue} = form;
-  	const f_i_l = {
-  		labelCol: {
-  			xs: {span: 24},
-  			sm: {span: 7},
-  		},
-  		wrapperCol: {
-  			xs: {span: 24},
-  			sm: {span: 12},
-  			md: {span: 10},
-  		},
-  	};
-  	const s_l = {
-  		wrapperCol: {
-  			xs: {span: 24, offset: 0},
-  			sm: {span: 10, offset: 7},
-  		},
-  	};
 
     return (
       <PageHeaderLayout title="体测私教">
@@ -83,7 +67,7 @@ export default class Page extends Component {
         		})(
         			<Input style={{display: 'none'}} />
         		)}
-        		<FormItem {...f_i_l} label="体测预约">
+        		<FormItem {...FORM_ITEM_LAYOUT} label="体测预约">
         			{getFieldDecorator('status', {
         				initialValue: parseInt(teacher_config.status || 0),
                 rules: [{
@@ -96,7 +80,7 @@ export default class Page extends Component {
         				</Group>
         			)}
         		</FormItem>
-        		<FormItem {...f_i_l} label="体测预约规则" help="（请在注册会员的时候分配教练）" style={{display: getFieldValue('status') == 1 ? 'none' : 'block'}}>
+        		<FormItem {...FORM_ITEM_LAYOUT} label="体测预约规则" help="（请在注册会员的时候分配教练）" style={{display: getFieldValue('status') == 1 ? 'none' : 'block'}}>
         			{getFieldDecorator('body_check_rule', {
         				initialValue: parseInt(teacher_config.body_check_rule || 0),
                 rules: [{
@@ -110,7 +94,7 @@ export default class Page extends Component {
         				</Group>
         			)}
         		</FormItem>
-        		<FormItem {...f_i_l} label="体测预约说明" style={{display: getFieldValue('status') == 1 ? 'none' : 'block'}}>
+        		<FormItem {...FORM_ITEM_LAYOUT} label="体测预约说明" style={{display: getFieldValue('status') == 1 ? 'none' : 'block'}}>
         			{getFieldDecorator('desc', {
       					initialValue: teacher_config.desc,
                 rules: [{
@@ -121,7 +105,7 @@ export default class Page extends Component {
                 <TextArea style={{ minHeight: 32 }} placeholder="请输入体测预约说明" rows={4} />
               )}
         		</FormItem>
-        		<FormItem {...f_i_l} label="私教预约规则">
+        		<FormItem {...FORM_ITEM_LAYOUT} label="私教预约规则">
         			{getFieldDecorator('teacher_rule', {
         				initialValue: parseInt(teacher_config.teacher_rule || 0),
                 rules: [{
@@ -134,7 +118,7 @@ export default class Page extends Component {
         				</Group>
         			)}
         		</FormItem>
-        		<FormItem {...s_l}>
+        		<FormItem {...FORM_ITEM_BUTTON}>
       				<Button type="primary" htmlType="submit" loading={submitting}>提交</Button>
       			</FormItem>
         	</Form>

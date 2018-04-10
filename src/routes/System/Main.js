@@ -4,6 +4,7 @@ import {Spin, Card, Form, Input, Button, Radio, Upload, Icon} from 'antd';
 
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import BraftEditor from '../../components/BraftEditor';
+import {FORM_ITEM_LAYOUT, FORM_ITEM_BUTTON} from '../../config';
 
 const FormItem = Form.Item;
 const {TextArea} = Input;
@@ -94,23 +95,6 @@ export default class Page extends Component {
   	const {getFieldDecorator} = form;
     if(!logoUrl && gym_company_config.gym_logo) this.setState({logoUrl: gym_company_config.gym_logo})
     if(!picUrl && gym_company_config.gym_cover) this.setState({picUrl: gym_company_config.gym_cover})
-  	const f_i_l = {
-  		labelCol: {
-  			xs: {span: 24},
-  			sm: {span: 7},
-  		},
-  		wrapperCol: {
-  			xs: {span: 24},
-  			sm: {span: 12},
-  			md: {span: 10},
-  		},
-  	};
-  	const s_l = {
-  		wrapperCol: {
-  			xs: {span: 24, offset: 0},
-  			sm: {span: 10, offset: 7},
-  		},
-  	};
   	const UploadLogoButton = (
   		<div>
   			<Icon type={loading_logo ? 'loading' : 'plus'} />
@@ -143,7 +127,7 @@ export default class Page extends Component {
         		})(
         			<Input style={{display: 'none'}} />
         		)}
-      			<FormItem {...f_i_l} label="俱乐部名字">
+      			<FormItem {...FORM_ITEM_LAYOUT} label="俱乐部名字">
       				{getFieldDecorator('gym_name', {
       					initialValue: gym_company_config.gym_name,
       					rules: [{
@@ -153,7 +137,7 @@ export default class Page extends Component {
       					<Input placeholder="俱乐部名字" />
       				)}
       			</FormItem>
-      			<FormItem {...f_i_l} label="俱乐部Logo" help="显示在小程序首页">
+      			<FormItem {...FORM_ITEM_LAYOUT} label="俱乐部Logo" help="显示在小程序首页">
       				<Upload
 				        name="gym_logo"
 				        listType="picture-card"
@@ -165,7 +149,7 @@ export default class Page extends Component {
 				        {logoUrl ? <img src={logoUrl} height={200} width={200} alt="" /> : UploadLogoButton}
 				      </Upload>
       			</FormItem>
-      			<FormItem {...f_i_l} label="封面配图" help="显示在小程序首页">
+      			<FormItem {...FORM_ITEM_LAYOUT} label="封面配图" help="显示在小程序首页">
       				<Upload
 				        name="gym_cover"
 				        listType="picture-card"
@@ -177,7 +161,7 @@ export default class Page extends Component {
 				        {picUrl ? <img src={picUrl} height={200} width={200} alt="" /> : UploadPicButton}
 				      </Upload>
       			</FormItem>
-      			<FormItem {...f_i_l} label="标语" help="显示在小程序首页">
+      			<FormItem {...FORM_ITEM_LAYOUT} label="标语" help="显示在小程序首页">
       				{getFieldDecorator('gym_slogan', {
       					initialValue: gym_company_config.gym_slogan,
       					rules: [{
@@ -187,7 +171,7 @@ export default class Page extends Component {
       					<Input placeholder="多个标语用“｜”隔开（会随机显示）" />
       				)}
       			</FormItem>
-      			<FormItem {...f_i_l} label="服务电话">
+      			<FormItem {...FORM_ITEM_LAYOUT} label="服务电话">
       				{getFieldDecorator('gym_tel', {
       					initialValue: gym_company_config.gym_tel,
       					rules: [{
@@ -197,7 +181,7 @@ export default class Page extends Component {
       					<Input placeholder="服务电话" />
       				)}
       			</FormItem>
-      			<FormItem {...f_i_l} label="营业时间">
+      			<FormItem {...FORM_ITEM_LAYOUT} label="营业时间">
       				{getFieldDecorator('gym_opentime', {
       					initialValue: gym_company_config.gym_opentime,
       					rules: [{
@@ -207,7 +191,7 @@ export default class Page extends Component {
       					<Input placeholder="营业时间" />
       				)}
       			</FormItem>
-      			<FormItem {...f_i_l} label="会员反馈">
+      			<FormItem {...FORM_ITEM_LAYOUT} label="会员反馈">
       				{getFieldDecorator('can_feedback', {
       					initialValue: parseInt(gym_company_config.can_feedback || 0),
                 rules: [{
@@ -220,7 +204,7 @@ export default class Page extends Component {
 		            </Group>
 		          )}
       			</FormItem>
-      			<FormItem {...f_i_l} label="俱乐部简介">
+      			<FormItem {...FORM_ITEM_LAYOUT} label="俱乐部简介">
       				{getFieldDecorator('gym_desc', {
       					initialValue: gym_company_config.gym_desc,
                 rules: [{
@@ -234,13 +218,13 @@ export default class Page extends Component {
               )}
               
       			</FormItem>
-            <FormItem {...f_i_l} label="俱乐部简介html" style={{ display: 'none' }}>
+            <FormItem {...FORM_ITEM_LAYOUT} label="俱乐部简介html" style={{ display: 'none' }}>
               {getFieldDecorator('gym_desc_html', {
               })(
                 <TextArea  />
               )}
             </FormItem>
-            <FormItem {...f_i_l} label="俱乐部地址">
+            <FormItem {...FORM_ITEM_LAYOUT} label="俱乐部地址">
               {getFieldDecorator('gym_address', {
                 initialValue: gym_company_config.gym_address,
                 rules: [{
@@ -250,7 +234,7 @@ export default class Page extends Component {
                 <TextArea style={{ minHeight: 32 }} placeholder="请输入俱乐部地址" rows={4} />
               )}
             </FormItem>
-      			<FormItem {...s_l} >
+      			<FormItem {...FORM_ITEM_BUTTON} >
       				<Button type="primary" htmlType="submit" loading={submitting}>提交</Button>
       			</FormItem>
       		</Form>

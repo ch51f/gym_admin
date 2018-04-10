@@ -3,6 +3,8 @@ import {connect} from 'dva';
 import {Card, Table, Icon, Button, Tooltip} from 'antd';
 
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import {ASK_LEAVE_REASON} from '../../config';
+import {getDateStr} from '../../utils/utils';
 
 @connect(({worker, loading}) => ({
   loading: loading.effects['worker/leave_list'],
@@ -19,8 +21,13 @@ export default class Page extends Component {
       payload: {}
     })
   }
-  cancel() {
-
+  cancel(id) {
+    this.props.dispatch({
+      type: 'worker/leave_cancle',
+      payload: {
+        item_id: id
+      }
+    })
   }
   goAddLeave() {
     let {history} = this.props;
@@ -37,7 +44,7 @@ export default class Page extends Component {
         dataIndex: 'date_begin',
         render: (val, record) => {
           if(val == record.date_end) {
-            return record.date_end;
+            return getDateStr(record.date_end);
           } else {
             return val + " - " + record.date_end;
           }
@@ -48,6 +55,8 @@ export default class Page extends Component {
         render: (val, record) => {
           if(val == record.time_end) {
             return record.time_end;
+          } else if(val == 0 && record.time_end) {
+            return "全天";
           } else {
             return val + " - " + record.time_end;
           }
@@ -55,14 +64,26 @@ export default class Page extends Component {
       }, {
         title: '请假原因',
         dataIndex: 'reason_type',
+        render: (val) => {
+          return ASK_LEAVE_REASON[val];
+        }
       }, {
         title: '备注',
         dataIndex: 'note',
+        render(val) {
+          let text =  (val && val.length > 20) ? (val.slice(0, 20) + "...") : val;
+          return (<Tooltip title={val}>{text}</Tooltip>)
+        }
       }, {
         title: '操作',
+        dataIndex: 'status',
         render: (val, record) => (
           <Fragment>
-            <a href="javascript:;" onClick={() => this.cancel(record)}>取消</a>
+            {val == 0 ?
+            <a href="javascript:;" onClick={() => this.cancel(record.id)}>取消</a>
+            :
+            <a href="javascript:;" style={{color: '#666'}}>已取消</a>
+            }
           </Fragment>
         )
       },

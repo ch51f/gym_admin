@@ -34,7 +34,6 @@ export const FORM_ITEM_LAYOUT = {
   wrapperCol: {
     xs: {span: 24}, 
     sm: {span: 12}, 
-    md: {span: 10}, 
   },
 } 
 
