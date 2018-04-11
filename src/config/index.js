@@ -1,5 +1,5 @@
 // 接口文档 https://szrdev.noark9.com/gym/doc/
-export const GYM_URL = 'https://demogym.szrdev.noark9.com/gym/api/';
+export const GYM_URL = 'https://szrdev.noark9.com/gym/api/';
 
 export const PAGE_SIZE = 10;
 
@@ -25,6 +25,7 @@ export const NOTICE_STATUS = ['正常发布', '草稿', '删除'];
 export const ASK_LEAVE_REASON = ['休息', '临时有事', '生病', '上体验课', '其他'];
 
 export const LESSON_TYPE = ['私教课', '小团体课', '训练营'];
+export const USER_LESSON_TYPE = ['预约', '取消预约', '完成', '过期未到', '教练请假'];
 
 export const FORM_ITEM_LAYOUT = {
   labelCol: {

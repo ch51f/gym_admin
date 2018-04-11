@@ -92,14 +92,14 @@ export default class Page extends Component {
       dataIndex: 'user_name',
       key: 'user_name'
     }, {
-      title: '充值金额',
+      title: '充值金额(元)',
       dataIndex: 'user_amount',
       key: 'user_amount',
       render(val) {
         return getPriceY(val)
       }
     }, {
-      title: '赠送金额',
+      title: '赠送金额(元)',
       dataIndex: 'gift_amount',
       key: 'gift_amount',
       render(val) {
@@ -117,21 +117,21 @@ export default class Page extends Component {
         return val ? moment(val * 1000).format('YYYY-MM-DD') : "-"
       }
     }, {
-      title: '累计充值',
+      title: '累计充值(元)',
       dataIndex: 'grand_user_amount',
       key: 'grand_user_amount',
       render(val) {
         return getPriceY(val)
       }
     }, {
-      title: '累计赠送',
+      title: '累计赠送(元)',
       dataIndex: 'grand_gift_amount',
       key: 'grand_gift_amount',
       render(val) {
         return getPriceY(val)
       }
     }, {
-      title: '账户余额',
+      title: '账户余额(元)',
       dataIndex: 'grand_total_amount',
       key: 'grand_total_amount',
       render(val) {
@@ -166,11 +166,11 @@ export default class Page extends Component {
                 <FormItem {...f_i_l} label="充值金额">
                   <InputGroup compact>
                     {getFieldDecorator('user_amount_from')(
-                    <Input style={{ width: 100, textAlign: 'center' }} placeholder="Minimum" /> 
+                    <Input style={{ width: 100, textAlign: 'center' }} placeholder="最小值" /> 
                     )}
                     <Input style={{ width: 30, borderLeft: 0, pointerEvents: 'none', backgroundColor: '#fff' }} placeholder="~" disabled /> 
                     {getFieldDecorator('user_amount_to')(
-                    <Input style={{ width: 100, textAlign: 'center', borderLeft: 0 }} placeholder="Maximum" />
+                    <Input style={{ width: 100, textAlign: 'center', borderLeft: 0 }} placeholder="最大值" />
                     )}
                   </InputGroup>
                 </FormItem>
@@ -179,11 +179,11 @@ export default class Page extends Component {
                 <FormItem {...f_i_l} label="账户余额">
                   <InputGroup compact>
                     {getFieldDecorator('balance_from')(
-                    <Input style={{ width: 100, textAlign: 'center' }} placeholder="Minimum" /> 
+                    <Input style={{ width: 100, textAlign: 'center' }} placeholder="最小值" /> 
                     )}
                     <Input style={{ width: 30, borderLeft: 0, pointerEvents: 'none', backgroundColor: '#fff' }} placeholder="~" disabled /> 
                     {getFieldDecorator('balance_to')(
-                    <Input style={{ width: 100, textAlign: 'center', borderLeft: 0 }} placeholder="Maximum" />
+                    <Input style={{ width: 100, textAlign: 'center', borderLeft: 0 }} placeholder="最大值" />
                     )}
                   </InputGroup>
                 </FormItem>
@@ -192,11 +192,11 @@ export default class Page extends Component {
                 <FormItem {...f_i_l} label="累计充值">
                   <InputGroup compact>
                     {getFieldDecorator('grand_amount_from')(
-                    <Input style={{ width: 100, textAlign: 'center' }} placeholder="Minimum" /> 
+                    <Input style={{ width: 100, textAlign: 'center' }} placeholder="最小值" /> 
                     )}
                     <Input style={{ width: 30, borderLeft: 0, pointerEvents: 'none', backgroundColor: '#fff' }} placeholder="~" disabled /> 
                     {getFieldDecorator('grand_amount_to')(
-                    <Input style={{ width: 100, textAlign: 'center', borderLeft: 0 }} placeholder="Maximum" />
+                    <Input style={{ width: 100, textAlign: 'center', borderLeft: 0 }} placeholder="最大值" />
                     )}
                   </InputGroup>
                 </FormItem>

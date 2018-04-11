@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from 'react';
 import { connect } from 'dva';
-import { Table, Row, Col, Card, Form, Input, Select, Button, DatePicker } from 'antd';
+import { Table, Row, Col, Card, Form, Input, Select, Button, DatePicker, Tooltip } from 'antd';
 import moment from 'moment';
 
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
@@ -55,7 +55,8 @@ export default class Page extends Component {
     })
   }
   queryLesson() {
-    this.props.dispatch({
+    const {dispatch} = this.props;
+    dispatch({
       type: 'lesson/search_list',
       payload: {}
     })
@@ -63,7 +64,7 @@ export default class Page extends Component {
   queryWorker() {
     const {dispatch} = this.props;
     dispatch({
-      type: 'manage/getWorkerList',
+      type: 'worker/getWorkerList',
       payload: {
         department: 0
       }
@@ -109,14 +110,14 @@ export default class Page extends Component {
   }
 
   goManage = (record) => {
-    const {dispatch, history} = this.props;
-    dispatch({
-      type: 'member/queryToManage',
-      payload: {
-        code: record.card_id
-      }
-    })
-    history.push('/member/manage');
+    // const {dispatch, history} = this.props;
+    // dispatch({
+    //   type: 'member/queryToManage',
+    //   payload: {
+    //     code: record.card_id
+    //   }
+    // })
+    // history.push('/member/manage');
   }
 
   render() {
@@ -179,19 +180,27 @@ export default class Page extends Component {
       title: '购买课程',
       dataIndex: 'lesson_names',
       key: 'lesson_names',
+      render(val) {
+        let text =  (val && val.length > 5) ? (val.slice(0, 5) + "...") : val; 
+        return (<Tooltip title={val}>{text}</Tooltip>) 
+      }
     }, {
       title: '私人教练',
       dataIndex: 'teacher_names',
       key: 'teacher_names',
+      render(val) {
+        let text =  (val && val.length > 5) ? (val.slice(0, 5) + "...") : val; 
+        return (<Tooltip title={val}>{text}</Tooltip>) 
+      }
     }, {
-      title: '充值总额',
+      title: '充值总额(元)',
       dataIndex: 'total_amount',
       key: 'total_amount',
       render(val) {
         return val ? getPriceY(val) : "-"
       }
     }, {
-      title: '充值余额',
+      title: '充值余额(元)',
       dataIndex: 'balance',
       key: 'balance',
       render(val) {
@@ -211,6 +220,14 @@ export default class Page extends Component {
       render(val) {
         return val ? moment(val * 1000).format('YYYY-MM-DD') : "-"
       }
+    }, {
+      title: '操作',
+      width: '100px',
+      render: (val, record) => (
+        <Fragment>
+          <a href="javascript:;" onClick={() => this.editUser(record)}>编辑</a>
+        </Fragment>
+      )
     }]
 
 
@@ -240,7 +257,7 @@ export default class Page extends Component {
                 </FormItem>
               </Col>
               <Col span="12">
-                <FormItem {...f_i_l} label="上课时间">
+                <FormItem {...f_i_l} label="注册时间">
                   {getFieldDecorator('date')(
                     <RangePicker format="YYYY-MM-DD" />
                   )}

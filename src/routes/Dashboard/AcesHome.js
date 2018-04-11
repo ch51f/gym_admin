@@ -1,7 +1,9 @@
 import React, {Component, Fragment} from 'react';
 import {connect} from 'dva';
-import {Table} from 'antd';
-import {PAGE_SIZE} from '../../config';
+import moment from 'moment';
+import {Table, Icon} from 'antd';
+import {PAGE_SIZE, USER_LESSON_TYPE} from '../../config';
+import {unix, getDateStr} from '../../utils/utils';
 
 import styles from './AcesHome.less';
 
@@ -13,7 +15,10 @@ export default class Home extends Component {
 	state = {}
 
 	componentDidMount() {
-		this.query();
+		this.query({
+			date_begin: moment().format('YYYYMMDD'),
+			date_end: moment().format('YYYYMMDD'),
+		});
 	}
 
 	// 查询数据
@@ -45,7 +50,11 @@ export default class Home extends Component {
 			render: (val, record) => {
 				return (
 					<Fragment> 
-						<img src={val} /> 
+						{val ? 
+							<img src={val} height="80" width="80" /> 
+							: 
+							<Icon type="user" style={{fontSize: '80px', color: '#999'}} />
+						}
 					</Fragment>
 				)
 			}
@@ -65,14 +74,23 @@ export default class Home extends Component {
 			title: '上课时间',
 			dataIndex: 'date',
 			key: 'date',
+			render: (val) => {
+				return val && val > 0 ? getDateStr(val) : '-';
+			}
 		}, {
 			title: '预约时间',
 			dataIndex: 'create_ts',
 			key: 'create_ts',
+			render: (val) => {
+				return val && val > 0 ? unix(val) : '-';
+			}
 		}, {
 			title: '预约状态',
 			dataIndex: 'status',
 			key: 'status',
+			render: (val) => {
+				return USER_LESSON_TYPE[val];
+			}
 		}]
 		return (
 			<div className={styles.acesHome}>

@@ -15,9 +15,7 @@ const {Option} = Select;
 @connect(({loading, worker, lesson, member}) => ({
   submitting: loading.effects['lesson/addBuy'],
 
-  member_flag: member.member_flag,
-  members: member.members,
-  member: member.member,
+  quickMember: member.quickMember,
 
   worker_data: worker.worker_data,
 
@@ -36,6 +34,12 @@ export default class Page extends Component {
     this.props.dispatch({
       type: 'lesson/set',
       payload: {detail: {}}
+    })
+    this.props.dispatch({
+      type: 'member/setConfig', 
+      payload: {
+        quickMember: [],
+      } 
     })
   }
 
@@ -74,21 +78,6 @@ export default class Page extends Component {
     })
   }
 
-  // 获取会员autoComplete数据
-  getUser = () => {
-    const {member_flag, members, member} = this.props;
-    let res = [];
-
-    if(member_flag) {
-      if(member.id) {
-        res.push(member);
-      } else {
-        res = members;
-      }
-    }
-
-    return res;
-  }
 
   handleSelect = (value) => {
     this.props.dispatch({
@@ -102,7 +91,7 @@ export default class Page extends Component {
   handleSearch = (value) => {
     if(value == "") return false;
     this.props.dispatch({
-      type: 'member/query',
+      type: 'member/quickQuery',
       payload: {
         code: value
       }
@@ -125,11 +114,10 @@ export default class Page extends Component {
   }
 
   render() {
-    let {submitting, form, worker_data, search_lists, detail} = this.props;
-    const users = this.getUser();
+    let {submitting, form, worker_data, search_lists, detail, quickMember} = this.props;
+    const users = quickMember;
     let prices = [];
     if(detail.prices) prices = detail.prices;
-    console.log(detail)
     const {getFieldDecorator, getFieldValue} = form;
     return(
       <PageHeaderLayout title="购买课程">

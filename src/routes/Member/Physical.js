@@ -14,9 +14,7 @@ const {Option} = Select;
 
   body_check: member.body_check,
 
-  member_flag: member.member_flag,
-  members: member.members,
-  member: member.member,
+  quickMember: member.quickMember,
 }))
 @Form.create()
 export default class Page extends Component {
@@ -25,23 +23,13 @@ export default class Page extends Component {
   componentWillUnmount() {
     this.props.dispatch({
       type: 'member/setConfig', 
-      payload: {body_check: {}} 
+      payload: {
+        body_check: {},
+        quickMember: [],
+      } 
     })
   }
 
-  // 获取会员autoComplete数据
-  getUser = () => {
-    const {member_flag, members, member} = this.props;
-    let res = [];
-    if(member_flag) {
-      if(member.id) {
-        res.push(member);
-      } else {
-        res = members;
-      }
-    }
-    return res;
-  }
 
   // 体测录入事件
   handleSubmit = (e) => {
@@ -79,7 +67,7 @@ export default class Page extends Component {
   handleSearch = (value) => {
     if(value == "") return false;
     this.props.dispatch({
-      type: 'member/query',
+      type: 'member/quickQuery',
       payload: {
         code: value
       }
@@ -95,9 +83,10 @@ export default class Page extends Component {
   }
 
   render() {
-    const {form, submitting_add, submitting_upd, body_check} = this.props;
+    const {form, submitting_add, submitting_upd, body_check, quickMember} = this.props;
     const {getFieldDecorator} = form;
-    const users = this.getUser();
+    console.log(quickMember)
+    const users = quickMember;
 
     // console.log(body_check)
     let submitting = body_check.user_id ? submitting_add : submitting_upd;

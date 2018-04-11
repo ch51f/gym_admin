@@ -94,7 +94,7 @@ export default class Page extends Component {
       dataIndex: 'teacher_name',
       key: 'teacher_name'
     }, {
-      title: '课程单价',
+      title: '课程单价(元)',
       dataIndex: 'lesson_price',
       key: 'lesson_price',
       render(val) {
@@ -105,7 +105,7 @@ export default class Page extends Component {
       dataIndex: ' total_count',
       key: 'total_count'
     }, {
-      title: '购买总价',
+      title: '购买总价(元)',
       dataIndex: 'user_price',
       key: 'user_price',
       render(val) {
@@ -127,7 +127,7 @@ export default class Page extends Component {
       dataIndex: 'left_count',
       key: 'left_count'
     }, {
-      title: '账户余额',
+      title: '账户余额(元)',
       dataIndex: 'balance',
       key: 'balance',
       render(val) {

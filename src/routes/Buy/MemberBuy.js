@@ -15,9 +15,7 @@ const {Option} = Select;
 @connect(({loading, worker, member}) => ({
   submitting: loading.effects['member/addCard'],
 
-  member_flag: member.member_flag,
-  members: member.members,
-  member: member.member,
+  quickMember: member.quickMember,
 
   worker_data: worker.worker_data,
 }))
@@ -25,6 +23,14 @@ export default class Page extends Component {
   state ={}
   componentWillMount() {
     this.queryWorker();
+  }
+  componentWillUnmount() {
+    this.props.dispatch({
+      type: 'member/setConfig', 
+      payload: {
+        quickMember: [],
+      } 
+    })
   }
 
   queryWorker() {
@@ -34,21 +40,6 @@ export default class Page extends Component {
     })
   }
 
-  // 获取会员autoComplete数据
-  getUser = () => {
-    const {member_flag, members, member} = this.props;
-    let res = [];
-
-    if(member_flag) {
-      if(member.id) {
-        res.push(member);
-      } else {
-        res = members;
-      }
-    }
-
-    return res;
-  }
 
   handleSubmit = (e) => {
     e.preventDefault();
@@ -124,7 +115,7 @@ export default class Page extends Component {
   handleSearch = (value) => {
     if(value == "") return false;
     this.props.dispatch({
-      type: 'member/query',
+      type: 'member/quickQuery',
       payload: {
         code: value
       }
@@ -139,9 +130,9 @@ export default class Page extends Component {
   }
 
   render() {
-    let {submitting, form, worker_data} = this.props;
+    let {submitting, form, worker_data, quickMember} = this.props;
     const {getFieldDecorator, getFieldValue} = form;
-    const users = this.getUser();
+    const users = quickMember;
 
     return(
       <PageHeaderLayout title="会员充值">

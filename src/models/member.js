@@ -49,6 +49,8 @@ export default {
       list: [],
       pagination: [],
     },
+
+    quickMember: [],
   },
 
   effects: {
@@ -120,6 +122,7 @@ export default {
         message.error(res.error);
       }
     },
+
     *query({payload}, {call, put}) {
       const res = yield call(findMember, payload);
       if(res.status === 0) {
@@ -145,7 +148,6 @@ export default {
         type: 'setConfig',
         payload: {manage_flag: true}
       })
-      console.log('aaa')
       const res = yield call(findMember, payload);
       if(res.status === 0) {
         yield put({
@@ -161,9 +163,6 @@ export default {
         message.error(res.error);
       }
     },
-
-
-   
     *quickQuery({payload}, {call, put}) {
       const res = yield call(findMember, payload);
       if(res.status === 0) {
@@ -182,30 +181,8 @@ export default {
         message.error(res.error);
       }
     },
-    *activeMember({payload}, {call, put}) {
-      const res = yield call(activeMember, payload);
-      if(res.status === 0) {
-        message.success("激活卡成功");
-        yield put({
-          type: 'setMember',
-          payload: {user: res.data},
-        })
-      } else {
-        message.error(res.error);
-      }
-    },
-    *statistics({payload}, {call, put}) {
-      const res = yield call(queryStatisticsUser, payload);
-      console.log(res);
-      if(res.status === 0) {
-        yield put({
-          type: 'setConfig',
-          payload: {statistics: res.data},
-        })
-      } else {
-        message.error(res.error);
-      }
-    },
+    
+    
     *queryBodyCheckById({payload}, {call, put}) {
       yield put({
         type: 'setConfig', 

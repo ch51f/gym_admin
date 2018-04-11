@@ -39,6 +39,14 @@ export default class Page extends Component {
       }
     })
   }
+  componentWillUnmount() {
+    this.props.dispatch({
+      type: 'manage/setConfig',
+      payload: {
+        member: {}
+      }
+    })
+  }
 
   _random = () => {
     this.props.dispatch({

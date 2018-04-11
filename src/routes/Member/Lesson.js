@@ -1,10 +1,9 @@
 import React, {Component, Fragment} from 'react';
 import { connect } from 'dva';
 import { Table, Row, Col, Card, Form, Input, Select, Button, DatePicker } from 'antd';
-import moment from 'moment';
 
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import {getGender, getAge, getDateStr} from '../../utils/utils';
+import {unix, getDateStr, getPriceY} from '../../utils/utils';
 import {CARD_STATUS, PAGE_SIZE} from '../../config';
 
 const FormItem = Form.Item;
@@ -23,14 +22,14 @@ const RangePicker = DatePicker.RangePicker;
 export default class Page extends Component {
   state = {}
   componentDidMount() {
-    this.add();
+    // this.add();
     this.queryWorker();
     this.queryLesson();
     this.query();
   }
   componentWillUnmount() {
     this.props.dispatch({
-      type: 'manage/setConfig',
+      type: 'worker/set',
       payload: {
         worker_data: {
           list: [],
@@ -50,13 +49,13 @@ export default class Page extends Component {
       type: 'member/attend',
       payload: {
         user_id: 26,
-        lesson_id: 133,
-        user_lesson_id: 131,
-        reserved_item_id: 1,
-        reserved_date: 20180501,
-        reserved_day_of_weed: 2,
-        reserved_time_begin: 2200,
-        reserved_time_end: 2300,
+        lesson_id: 135,
+        user_lesson_id: 135,
+        reserved_item_id: 135,
+        reserved_date: 20180521,
+        // reserved_day_of_weed: 2,
+        // reserved_time_begin: 1300,
+        // reserved_time_end: 1400,
       }
     })
   }
@@ -72,7 +71,8 @@ export default class Page extends Component {
     })
   }
   queryLesson() {
-    this.props.dispatch({
+    const {dispatch} = this.props;
+    dispatch({
       type: 'lesson/search_list',
       payload: {}
     })
@@ -80,10 +80,8 @@ export default class Page extends Component {
   queryWorker() {
     const {dispatch} = this.props;
     dispatch({
-      type: 'manage/getWorkerList',
-      payload: {
-        department: 0
-      }
+      type: 'worker/getWorkerList',
+      payload: {}
     })
   }
   handleTableChange = (pagination, filters, sorter) => {
@@ -112,28 +110,15 @@ export default class Page extends Component {
     this.query();
   }
 
-  editUser = (record = {}) => {
-    let {dispatch, history} = this.props;
-    dispatch({
-      type: 'member/query',
-      payload: {
-        code: record.card_id
-      }
-    })
-    console.log(record)
-
-    history.push('/member/editUser')
-  }
-
   goManage = (record) => {
-    const {dispatch, history} = this.props;
-    dispatch({
-      type: 'member/queryToManage',
-      payload: {
-        code: record.card_id
-      }
-    })
-    history.push('/member/manage');
+    // const {dispatch, history} = this.props;
+    // dispatch({
+    //   type: 'member/queryToManage',
+    //   payload: {
+    //     code: record.card_id
+    //   }
+    // })
+    // history.push('/member/manage');
   }
 
   render() {
@@ -187,18 +172,27 @@ export default class Page extends Component {
       title: '上课时间',
       dataIndex: 'date',
       key: 'date',
+      render: (val) => {
+        return val && val > 0 ? getDateStr(val) : '-';
+      }
     }, {
       title: '预约时间',
       dataIndex: 'create_ts',
       key: 'create_ts',
+      render: (val) => {
+        return val && val > 0 ? unix(val) : '-';
+      }
     }, {
       title: '购买/剩余',
       dataIndex: 'count_left_count',
       key: 'count_left_count',
     }, {
-      title: '账户余额',
+      title: '账户余额(元)',
       dataIndex: 'balance',
       key: 'balance',
+      render: (val) => {
+        return getPriceY(val);
+      }
     }]
 
 

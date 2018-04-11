@@ -15,8 +15,7 @@ const {Option} = Select;
 @connect(({loading, worker, member}) => ({
   submitting: loading.effects['member/addCard'],
 
-  member_flag: member.member_flag,
-  members: member.members,
+  quickMember: member.quickMember,
   member: member.member,
 
   worker_data: worker.worker_data,
@@ -24,8 +23,22 @@ const {Option} = Select;
 export default class Page extends Component {
   state ={}
   componentWillMount() {
+    let {history, member} = this.props;
     this.queryWorker();
+    if(!member.id) {
+      history.push('/buy/memberBuy')
+    }
   }
+  componentWillUnmount() {
+    this.props.dispatch({
+      type: 'member/setConfig', 
+      payload: {
+        quickMember: [],
+        member: {},
+      } 
+    })
+  }
+
 
   queryWorker() {
     this.props.dispatch({
@@ -34,97 +47,77 @@ export default class Page extends Component {
     })
   }
 
-  // 获取会员autoComplete数据
-  getUser = () => {
-    const {member_flag, members, member} = this.props;
-    let res = [];
-
-    if(member_flag) {
-      if(member.id) {
-        res.push(member);
-      } else {
-        res = members;
-      }
-    }
-
-    return res;
-  }
 
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       console.log(err)
       console.log(values)
-      if(!err) {
-        let params = {
-          user_id: values.member_id,
-          worker_id: values.worker_id,
-          user_amount: getPriceF(values.user_amount),
-          gift_amount: getPriceF(values.gift_count),
-        }
-         if(values.pay_method == 5) {
-          params.pay_methods = [];
+      // if(!err) {
+      //   let params = {
+      //     user_id: values.member_id,
+      //     worker_id: values.worker_id,
+      //     user_amount: getPriceF(values.user_amount),
+      //     gift_amount: getPriceF(values.gift_count),
+      //   }
+      //    if(values.pay_method == 5) {
+      //     params.pay_methods = [];
 
-          params.amounts = [];
-          params.pay_method_notes = [];
+      //     params.amounts = [];
+      //     params.pay_method_notes = [];
 
-          if(values.by_card) {
-            params.pay_methods.push(0)
-            params.pay_method_notes.push("刷卡")
-            params.amounts.push(getPriceF(values.by_card))
-          }
-          if(values.by_wechat) {
-            params.pay_methods.push(1)
-            params.pay_method_notes.push("微信")
-            params.amounts.push(getPriceF(values.by_wechat))
-          }
-          if(values.by_alipay) {
-            params.pay_methods.push(2)
-            params.pay_method_notes.push("支付宝")
-            params.amounts.push(getPriceF(values.by_alipay))
-          }
-          if(values.by_cash) {
-            params.pay_methods.push(3)
-            params.pay_method_notes.push("现金")
-            params.amounts.push(getPriceF(values.by_cash))
-          }
-          if(values.by_other) {
-            params.pay_methods.push(4)
-            params.pay_method_notes.push("其他")
-            params.amounts.push(getPriceF(values.by_cash))
-          }
-        } else if(values.pay_method == 4) {
-          params.amounts = [getPriceF(values.user_amount)];
-          params.pay_methods = [values.pay_method];
-          params.pay_method_notes = [values.by_other_txt || "其他"];
-        } else {
-          params.amounts = [getPriceF(values.user_amount)];
-          params.pay_methods = [values.pay_method];
-          params.pay_method_notes = [""];
-        }
-        this.props.dispatch({
-          type: 'member/recharge',
-          payload: {
-            ...params
-          }
-        })
-      }
+      //     if(values.by_card) {
+      //       params.pay_methods.push(0)
+      //       params.pay_method_notes.push("刷卡")
+      //       params.amounts.push(getPriceF(values.by_card))
+      //     }
+      //     if(values.by_wechat) {
+      //       params.pay_methods.push(1)
+      //       params.pay_method_notes.push("微信")
+      //       params.amounts.push(getPriceF(values.by_wechat))
+      //     }
+      //     if(values.by_alipay) {
+      //       params.pay_methods.push(2)
+      //       params.pay_method_notes.push("支付宝")
+      //       params.amounts.push(getPriceF(values.by_alipay))
+      //     }
+      //     if(values.by_cash) {
+      //       params.pay_methods.push(3)
+      //       params.pay_method_notes.push("现金")
+      //       params.amounts.push(getPriceF(values.by_cash))
+      //     }
+      //     if(values.by_other) {
+      //       params.pay_methods.push(4)
+      //       params.pay_method_notes.push("其他")
+      //       params.amounts.push(getPriceF(values.by_cash))
+      //     }
+      //   } else if(values.pay_method == 4) {
+      //     params.amounts = [getPriceF(values.user_amount)];
+      //     params.pay_methods = [values.pay_method];
+      //     params.pay_method_notes = [values.by_other_txt || "其他"];
+      //   } else {
+      //     params.amounts = [getPriceF(values.user_amount)];
+      //     params.pay_methods = [values.pay_method];
+      //     params.pay_method_notes = [""];
+      //   }
+      //   this.props.dispatch({
+      //     type: 'member/recharge',
+      //     payload: {
+      //       ...params
+      //     }
+      //   })
+      // }
     })
   }
 
   handleSelect = (value) => {
-    this.props.dispatch({
-      type: 'member/queryBodyCheckById',
-      payload: {
-        user_id: value
-      }
-    });
+    // 
   }
 
   handleSearch = (value) => {
     if(value == "") return false;
     this.props.dispatch({
-      type: 'member/query',
+      type: 'member/quickQuery',
       payload: {
         code: value
       }
@@ -139,26 +132,21 @@ export default class Page extends Component {
   }
 
   render() {
-    let {submitting, form, worker_data} = this.props;
+    let {submitting, form, worker_data, quickMember, member} = this.props;
+    console.log(member);
     const {getFieldDecorator, getFieldValue} = form;
-    const users = this.getUser();
+    const users = quickMember;
 
     return(
         <Card bordered={false}>
           <Form onSubmit={this.handleSubmit}>
+            {getFieldDecorator('item_id', {
+              initialValue: member.id,
+            })(
+              <Input style={{display: 'none'}} />
+            )}
             <FormItem {...FORM_ITEM_LAYOUT} label="会员">
-              {getFieldDecorator('member_id', {
-                rules: [{
-                  required: true, message: '请选择会员'
-                }]
-              })(
-                <AutoComplete
-                  dataSource={users.map(this.renderOption.bind(this))}
-                  onSelect={this.handleSelect.bind(this)}
-                  onSearch={this.handleSearch}
-                  placeholder="输入会员卡号 / 电话 / 名字"
-                />
-              )}
+              <Input defaultValue={`${member.user_name}（${member.card_id}，${member.gender == 'f' ? "女" : "男"}），电话：${member.tel}`} disabled={true} />
             </FormItem>
             <FormItem {...FORM_ITEM_LAYOUT} label="充值金额">
               {getFieldDecorator('user_amount', {
