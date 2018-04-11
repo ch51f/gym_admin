@@ -4,6 +4,7 @@ import { Row, Col, Form, Icon, Input, Button, Radio, DatePicker, Upload, message
 import { routerRedux } from 'dva/router';
 import moment from 'moment';
 import _ from 'lodash';
+import {dataURL2Blob} from '../../utils/dataUri2Blob';
 
 import styles from './Member.less';
 
@@ -31,10 +32,19 @@ export default class Page extends Component {
     loading: false
   };
   componentDidMount() {
+    let {video, canvas} = this.refs;
     this.props.dispatch({
       type: 'member/config',
       payload: {}
     })
+    video.addEventListener('canplay', function(ev){
+      let width = 300;
+      let height = video.videoHeight / (video.videoWidth/width);
+      video.setAttribute('width', width); 
+      video.setAttribute('height', height); 
+      canvas.setAttribute('width', width); 
+      canvas.setAttribute('height', height); 
+    }, false);
   }
   handleChange = (info) => {
     if(info.file.status === 'uploading') {
@@ -91,37 +101,20 @@ export default class Page extends Component {
     setFieldsValue({card_id})
   }
   open = () => {
+    let self = this;
     let {video, canvas} = this.refs;
+    let {dispatch} = this.props;
     let context = canvas.getContext('2d');
-    let setState = this;
     navigator.getMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMeddia || navigator.msGetUserMedia;
 
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices.getUserMedia({
         video: true, 
-        audio: true 
-      }).then(function(stream) {
-        mediaStreamTrack = typeof stream.stop === 'function' ? stream : stream.getTracks()[1]; 
-        video.src = (window.URL || window.webkitURL).createObjectURL(stream); 
-        console.log(video.src);
+        audio: false 
+      }).then(function(stream) { 
+        video.srcObject = stream;
         video.play();
-
-        context.drawImage(video, 0, 0, 300, 300);
-
-        mediaStreamTrack && mediaStreamTrack.stop();
-
-        dispatch({
-          type: 'login/upload', 
-          payload: {
-            ext: dataURL2Blob(canvas.toDataURL('image/png')).type.split('/')[1], 
-            sizes: '100_100', 
-            file: dataURL2Blob(canvas.toDataURL('image/png')), 
-            call: (img) => {
-              setState({imageUrl: img.host + img.url})
-            } 
-          } 
-        })
-
+        video.style.display = 'block';
       }).catch(function(err) {
         message.error("未找到设备！");
       })
@@ -130,32 +123,44 @@ export default class Page extends Component {
         video: true,
         audio: false
       }, function(stream) {
-        mediaStreamTrack = stream.getTracks()[0]; 
-        video.src = (window.URL || window.webkitURL).createObjectURL(stream); 
-        console.log(video);
-
-        context.drawImage(video, 0, 0, 300, 300);
+        video.srcObject = stream;
         video.play();
-
-        mediaStreamTrack && mediaStreamTrack.stop();
-
-        dispatch({
-          type: 'login/upload', 
-          payload: {
-            ext: dataURL2Blob(canvas.toDataURL('image/png')).type.split('/')[1], 
-            sizes: '100_100', 
-            file: dataURL2Blob(canvas.toDataURL('image/png')), 
-            call: (img) => {
-              setState({imageUrl: img.host + img.url})
-            } 
-          } 
-        })
+        video.style.display = 'block';
       }, function(err) {
         message.error("未找到设备！");
       });
     } else {
       message.error("该浏览器不支持调用摄像头！")
     }
+  }
+
+  up = () => {
+    let self = this;
+    let {video, canvas} = this.refs;
+    let {dispatch} = this.props;
+    let context = canvas.getContext('2d');
+
+    context.drawImage(video, 0, 0, video.width, video.height);
+
+    let stream = video.srcObject;
+    let tracks = stream.getTracks();
+
+    tracks.forEach(function(track) {
+      track.stop();
+    })
+    video.style.display = 'none';
+
+    dispatch({
+      type: 'login/upload', 
+      payload: {
+        ext: dataURL2Blob(canvas.toDataURL('image/png')).type.split('/')[1], 
+        sizes: '100_100', 
+        file: dataURL2Blob(canvas.toDataURL('image/png')), 
+        call: (img) => {
+          self.setState({imageUrl: img.host + img.url}) 
+        } 
+      } 
+    })
   }
   render() {
     const {form, communities, income_levels, user_sources, card_id, submitting} = this.props;
@@ -285,8 +290,15 @@ export default class Page extends Component {
                 >
                   摄像头拍照
                 </Button>
-                <video ref="video"></video>
-                <canvas ref="canvas"></canvas>
+                <video style={{display: 'none'}} ref="video"></video>
+                <canvas style={{display: 'none'}} ref="canvas"></canvas>
+                <br />
+                <Button
+                  type="default"
+                  onClick={this.up}
+                >
+                  上传图片
+                </Button>
               </FormItem>
             </Col>
           </Row>
