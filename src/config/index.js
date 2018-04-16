@@ -27,6 +27,8 @@ export const ASK_LEAVE_REASON = ['休息', '临时有事', '生病', '上体验�
 export const LESSON_TYPE = ['私教课', '小团体课', '训练营'];
 export const USER_LESSON_TYPE = ['预约', '取消预约', '完成', '过期未到', '教练请假'];
 
+export const MAIN_TAIN_STATUS = ['正常', '取消', '完成'];
+
 export const FORM_ITEM_LAYOUT = {
   labelCol: {
     xs: {span: 24}, 

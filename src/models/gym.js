@@ -1,4 +1,8 @@
-import {gym_get_config, gym_update_config, gym_update_teacher, gym_update_member} from '../services/api';
+import {routerRedux} from 'dva/router';
+import {
+	gym_get_config, gym_update_config, gym_update_teacher, gym_update_member,
+	maintain_list, maintain_add, maintain_done, maintain_cancle,
+} from '../services/api';
 import {message} from 'antd';
 import _ from 'lodash';
 
@@ -17,6 +21,8 @@ export default {
 
 		config_item_removes: [], 
 		card_removes: [],
+
+		main_tains: [],
 	},
 
 	effects: {
@@ -79,9 +85,70 @@ export default {
 				message.error(res.error);
 			}
 		},
+
+		// 获取维护记录
+		*mt_list({payload}, {call, put}) {
+			const res = yield call(maintain_list, payload);
+
+			if(res.status === 0) {
+				yield put({
+					type: 'set',
+					payload: {
+						main_tains: res.data,
+					}
+				})
+			} else {
+				message.error(res.error);
+			}
+		},
+
+		// 添加维护
+		*mt_add({payload}, {call, put}) {
+			const res = yield call(maintain_add, payload);
+			if(res.status === 0) {
+      			message.success('提交成功');
+				yield put(routerRedux.push('/gym/mainTain'));
+			} else {
+				message.error(res.error);
+			}
+		},
+
+		// 维护完成
+		*mt_done({payload}, {call, put}) {
+			const res = yield call(maintain_done, payload);
+			if(res.status === 0) {
+      			message.success('维护完成');
+				yield put({
+					type: 'mt_list',
+					payload: {}
+				});
+			} else {
+				message.error(res.error);
+			}
+		},
+
+		// 取消维护
+		*mt_cancle({payload}, {call, put}) {
+			const res = yield call(maintain_cancle, payload);
+			if(res.status === 0) {
+      			message.success('维护取消');
+				yield put({
+					type: 'mt_list',
+					payload: {}
+				});
+			} else {
+				message.error(res.error);
+			}
+		}
 	},
 
 	reducers: {
+		set(state, {payload}) {
+			return {
+				...state,
+				...payload,
+			}
+		},
 		resetRemove(state, {payload}) {
 			return {
 				...state,

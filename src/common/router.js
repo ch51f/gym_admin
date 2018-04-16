@@ -153,6 +153,13 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['gym', 'member'], () => import('../routes/System/Member')),
     },
 
+    '/gym/mainTain': {
+      component: dynamicWrapper(app, ['gym'], () => import('../routes/System/MainTain')),
+    },
+    '/gym/mainTainAdd': {
+      component: dynamicWrapper(app, ['gym'], () => import('../routes/System/MainTainAdd')),
+    },
+
 
 
 

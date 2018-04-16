@@ -83,6 +83,9 @@ const menuData = [
   }, {
     name: '会籍会员',
     path: 'member',
+  }, {
+    name: '系统维护记录',
+    path: 'mainTain',
   }]
 },
 {

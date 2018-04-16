@@ -368,3 +368,37 @@ export async function working_time_range(params) {
     body: stringify(params)
   })
 }
+
+
+
+// System_Config - 维护记录
+export async function maintain_list(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/system_config/maintaining_time/list`, {
+    body: stringify(params)
+  })
+}
+
+// System_Config - 添加维护记录
+export async function maintain_add(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/system_config/maintaining_time/add`, {
+    body: stringify(params)
+  })
+}
+
+// System_Config - 完成维护记录
+export async function maintain_done(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/system_config/maintaining_time/done`, {
+    body: stringify(params)
+  })
+}
+
+// System_Config - 取消维护记录
+export async function maintain_cancle(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/system_config/maintaining_time/cancle`, {
+    body: stringify(params)
+  })
+}

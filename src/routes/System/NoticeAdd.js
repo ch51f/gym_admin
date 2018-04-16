@@ -14,7 +14,9 @@ const {TextArea} = Input;
 const {Group} = Radio;
 
 @connect(({loading, system}) => ({
-  notice: system.notice
+  notice: system.notice,
+  submitting_add: system.addNotice,
+  submitting_up: system.updateNotice,
 }))
 @Form.create()
 export default class Page extends Component {
