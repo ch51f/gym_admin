@@ -43,18 +43,20 @@ export default class Page extends Component {
 			title: 'id',
 			dataIndex: 'id',
 			key: 'id',
-		}, {
-			title: '时间段类型',
-			dataIndex: 'maintaining_type',
-			key: 'maintaining_type',
-			render: (val) => {
-				if(val == 0) {
-					return "小团体课"
-				} else {
-					return "其他"
-				}
-			}
-		}, {
+		}, 
+		// {
+		// 	title: '时间段类型',
+		// 	dataIndex: 'maintaining_type',
+		// 	key: 'maintaining_type',
+		// 	render: (val) => {
+		// 		if(val == 0) {
+		// 			return "小团体课"
+		// 		} else {
+		// 			return "其他"
+		// 		}
+		// 	}
+		// }, 
+		{
 			title: '开始日期',
 			dataIndex: 'date_begin',
 			key: 'date_begin',

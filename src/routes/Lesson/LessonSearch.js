@@ -43,7 +43,14 @@ export default class Page extends Component {
   }
 
   update =(item ={}) => {
-    message.warning("未接入接口")
+    console.log(item)
+    this.props.dispatch({
+      type: 'lesson/set',
+      payload: {
+        lesson_id:  item.id
+      }
+    });
+    this.props.history.push('/lesson/lessonAdd');
   }
 
   render() {

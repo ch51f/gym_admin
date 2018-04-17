@@ -22,7 +22,7 @@ export default class Page extends Component {
 		let {form, dispatch} = this.props; 
 		form.validateFieldsAndScroll((err, values) => {
 			let params = {
-				maintaining_type: values.maintaining_type,
+				maintaining_type: 0,
 				date_begin: values.date_begin.format("YYYYMMDD"),
 				date_end: values.date_end.format("YYYYMMDD"),
 				time_begin: values.time_begin.format("HHmm"),
@@ -43,19 +43,6 @@ export default class Page extends Component {
 			<PageHeaderLayout title="新增维护">
 				<Card bordered={false}>
 					<Form onSubmit={this.handleSubmit}>
-						<FormItem {...FORM_ITEM_LAYOUT} label="类型"> 
-							{getFieldDecorator('maintaining_type', {
-								initialValue: 0, 
-								rules: [{
-									required: true, message: '请选择通知状态'
-								}] 
-							})(
-								<Select placeholder="通知状态"> 
-									<Option value={0}>小团体课</Option>
-									<Option value={999}>其他</Option> 
-								</Select> 
-							)}
-						</FormItem>
 						<FormItem {...FORM_ITEM_LAYOUT} label="开始日期"> 
 							{getFieldDecorator('date_begin', {
 								rules: [{

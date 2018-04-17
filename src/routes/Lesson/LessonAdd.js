@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'dva';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import {Card, Form, Input, Radio, TimePicker, Checkbox, AutoComplete, Button, Select, InputNumber, DatePicker, Col, Row, Upload, Icon, message} from 'antd';
+import {Spin, Card, Form, Input, Radio, TimePicker, Checkbox, AutoComplete, Button, Select, InputNumber, DatePicker, Col, Row, Upload, Icon, message} from 'antd';
 import {FORM_ITEM_LAYOUT, FORM_ITEM_BUTTON, LESSON_TYPE, LESSON_STATUS, DAY_OF_WEEK} from '../../config';
 import _ from 'lodash';
 
@@ -29,6 +29,9 @@ const defaultCheckedList = [];
 
   worker_data: worker.worker_data,
 
+  lesson_id: lesson.lesson_id,
+  detail: lesson.detail,
+
   ranks: worker.ranks,
 }))
 export default class Page extends Component {
@@ -41,8 +44,22 @@ export default class Page extends Component {
     time_box: [],
   }
   componentWillMount() {
+    let {lesson_id} = this.props;
     this.queryWorker();
     this.queryRank();
+    if(lesson_id > 0) {
+      this.props.dispatch({
+        type: 'lesson/detail',
+        payload: {item_id: lesson_id, show_price: 1, show_time: 1}
+      })
+    }
+  }
+
+  componentWillUnmount() {
+    this.props.dispatch({
+      type: 'lesson/set',
+      payload: {detail: {}}
+    })
   }
 
   queryRank() {
@@ -260,7 +277,7 @@ export default class Page extends Component {
 
   render() {
     let {imgs, flag, time_box} = this.state;
-    let {submitting, form, worker_data, ranks} = this.props;
+    let {submitting, form, worker_data, ranks, lesson_id, detail} = this.props;
     const {getFieldDecorator, getFieldValue} = form;
     console.log(ranks)
     const UploadButton = (
@@ -269,6 +286,31 @@ export default class Page extends Component {
         <div className="ant-upload-text">上传</div>
       </div>
     )
+    if(lesson_id > 0 && !detail.lesson) {
+      return(
+        <PageHeaderLayout title="购买课程">
+          <Card bordered={false}>
+            <div style={{textAlign: 'center'}}>
+              <Spin size="large" />
+            </div>
+          </Card>
+        </PageHeaderLayout>
+      )
+    }
+
+    if(imgs.length == 0) {
+      let ar = detail.lesson.covers.split(',');
+      let arr = [];
+      for(let i = 0, item; item =  ar[i]; i++) {
+        arr.push({
+          status: 'done',
+          uid: item,
+          name: item,
+          url: item
+        })
+      }
+      this.setState({imgs: arr});
+    }
 
     return(
       <PageHeaderLayout title="购买课程">
@@ -293,6 +335,7 @@ export default class Page extends Component {
             </FormItem>
             <FormItem {...FORM_ITEM_LAYOUT} label="课程名称">
               {getFieldDecorator('lesson_name', {
+                initialValue: detail.lesson ? detail.lesson.lesson_name : "",
                 rules: [{
                   required: true, message: '请选择课程名称'
                 }]
@@ -302,6 +345,7 @@ export default class Page extends Component {
             </FormItem>
             <FormItem {...FORM_ITEM_LAYOUT} label="课程教练">
               {getFieldDecorator('teacher_id', {
+                initialValue: detail.lesson ? detail.lesson.teacher_id : "",
                 rules: [{
                   required: true,
                   message: '请选择课程教练'
@@ -316,7 +360,7 @@ export default class Page extends Component {
             </FormItem>
             <FormItem {...FORM_ITEM_LAYOUT} label="课程类型">
               {getFieldDecorator('lesson_type', {
-                initialValue: 0,
+                initialValue: detail.lesson ? parseInt(detail.lesson.lesson_type) : 0,
                 rules: [{
                   required: true,
                   message: '请选择课程类型'
@@ -331,6 +375,7 @@ export default class Page extends Component {
             </FormItem>
             <FormItem {...FORM_ITEM_LAYOUT} label="有效日期" style={{display: getFieldValue('lesson_type') == 2 ? 'block' : 'none'}}>
               {getFieldDecorator('camp_lesson_valid_date', {
+                // initialValue: detail.lesson ? detail.lesson.teacher_id : "",
                 rules: [{
                   required: getFieldValue('lesson_type') == 2 ? true : false,
                   message: '请选择有效日期'
@@ -394,7 +439,13 @@ export default class Page extends Component {
               </InputGroup>
             </FormItem>
             <FormItem {...FORM_ITEM_LAYOUT} label="购买数量">
-              {getFieldDecorator('buy_types')(
+              {getFieldDecorator('buy_types', {
+                initialValue: detail.lesson ? detail.lesson.buy_types : "",
+                rules: [{
+                    required: getFieldValue('lesson_type') != 0 ? true : false,
+                    message: '请选择购买数量'
+                  }]
+              })(
                 <CheckboxGroup options={plainOptions} value={this.state.checkedList} onChange={this.onChange} />
               )}
             </FormItem>
@@ -402,7 +453,7 @@ export default class Page extends Component {
 
             <FormItem {...FORM_ITEM_LAYOUT} label="课程状态">
               {getFieldDecorator('status', {
-                initialValue: 0,
+                initialValue: detail.lesson ? parseInt(detail.lesson.status) : 0,
                 rules: [{
                   required: true, message: '请选择课程状态'
                 }]

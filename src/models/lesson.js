@@ -9,7 +9,9 @@ export default {
         lists: [], 
         search_lists: [], 
         buy_lists: [], 
-        detail: {} 
+        detail: {}, 
+        // lesson_id: -1,
+        lesson_id: 133,
     }, 
     effects: {
         // 课程列表 
