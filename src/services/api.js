@@ -197,6 +197,16 @@ export async function acesgirl_lesson_add(params) {
   })
 }
 
+// Acesgirl_Lesson - 修改课程
+export async function acesgirl_lesson_update(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/acesgirl/lesson/update`, {
+    body: stringify(params)
+  })
+}
+
+
+
 
 // Acesgirl_Lesson - 课程列表
 export async function acesgirl_lesson_list(params) {
