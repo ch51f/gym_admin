@@ -378,6 +378,16 @@ export default class Page extends Component {
                 <Input placeholder="课程名称" />
               )}
             </FormItem>
+            <FormItem {...FORM_ITEM_LAYOUT} label="课程副标题">
+              {getFieldDecorator('lesson_sub_name', {
+                initialValue: detail.lesson ? detail.lesson.lesson_sub_name : "",
+                rules: [{
+                  required: true, message: '请选择课程副标题'
+                }]
+              })(
+                <Input placeholder="课程副标题" />
+              )}
+            </FormItem>
             <FormItem {...FORM_ITEM_LAYOUT} label="课程教练">
               {getFieldDecorator('teacher_id', {
                 initialValue: detail.lesson ? detail.lesson.teacher_id : "",
@@ -487,6 +497,28 @@ export default class Page extends Component {
                   }]
               })(
                 <CheckboxGroup options={plainOptions}  onChange={this.onChange} />
+              )}
+            </FormItem>
+
+            <FormItem {...FORM_ITEM_LAYOUT} label="课程简介">
+              {getFieldDecorator('lesson_info', {
+                initialValue: detail.lesson ? detail.lesson.lesson_info : "",
+                // rules: [{
+                //   required: true, message: '请选择课程副标题'
+                // }]
+              })(
+                <TextArea placeholder="课程简介" style={{ minHeight: 32 }} />
+              )}
+            </FormItem>
+
+            <FormItem {...FORM_ITEM_LAYOUT} label=" 温馨提示">
+              {getFieldDecorator('tips', {
+                initialValue: detail.lesson ? detail.lesson.tips : "",
+                // rules: [{
+                //   required: true, message: '请选择课程副标题'
+                // }]
+              })(
+                <TextArea placeholder="温馨提示" style={{ minHeight: 32 }} />
               )}
             </FormItem>
 

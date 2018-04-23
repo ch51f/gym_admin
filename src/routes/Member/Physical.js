@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'dva';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import {Card, Form, Input, AutoComplete, Button, Select} from 'antd';
+import {Card, Form, Input, AutoComplete, Button, Select, Upload, Icon, message} from 'antd';
 import {FORM_ITEM_LAYOUT, FORM_ITEM_BUTTON} from '../../config';
 
 const AutoOption = AutoComplete.Option;
@@ -18,7 +18,11 @@ const {Option} = Select;
 }))
 @Form.create()
 export default class Page extends Component {
-  state = {}
+  state = {
+    zm: false,
+    bm: false,
+    cm: false,
+  }
   componentDidMount(){}
   componentWillUnmount() {
     this.props.dispatch({
@@ -30,6 +34,53 @@ export default class Page extends Component {
     })
   }
 
+  uploadZm = (info) => {
+    this.setState({zm: true});
+    info.call = this.callbackZm.bind(this);
+    this.props.dispatch({
+      type: 'login/upload',
+      payload: info
+    })
+  }
+
+  callbackZm(img) {
+    this.setState({
+      zm: false,
+      zmUrl: img.host + img.url,
+    })
+  }
+
+  uploadCm = (info) => {
+    this.setState({cm: true});
+    info.call = this.callbackCm.bind(this);
+    this.props.dispatch({
+      type: 'login/upload',
+      payload: info
+    })
+  }
+
+  callbackCm(img) {
+    this.setState({
+      cm: false,
+      cmUrl: img.host + img.url,
+    })
+  }
+
+  uploadBm = (info) => {
+    this.setState({bm: true});
+    info.call = this.callbackBm.bind(this);
+    this.props.dispatch({
+      type: 'login/upload',
+      payload: info
+    })
+  }
+
+  callbackBm(img) {
+    this.setState({
+      bm: false,
+      bmUrl: img.host + img.url,
+    })
+  }
 
   // 体测录入事件
   handleSubmit = (e) => {
@@ -83,6 +134,8 @@ export default class Page extends Component {
   }
 
   render() {
+    let {zmUrl, zm, cmUrl, cm, bmUrl, bm} = this.state;
+
     const {form, submitting_add, submitting_upd, body_check, quickMember} = this.props;
     const {getFieldDecorator} = form;
     console.log(quickMember)
@@ -90,6 +143,28 @@ export default class Page extends Component {
 
     // console.log(body_check)
     let submitting = body_check.user_id ? submitting_add : submitting_upd;
+
+    const UploadZmButton = (
+      <div>
+        <Icon type={zm ? 'loading' : 'plus'} />
+        <div className="ant-upload-text">上传</div>
+      </div>
+    )
+
+    const UploadCmButton = (
+      <div>
+        <Icon type={cm ? 'loading' : 'plus'} />
+        <div className="ant-upload-text">上传</div>
+      </div>
+    )
+
+    const UploadBmButton = (
+      <div>
+        <Icon type={bm ? 'loading' : 'plus'} />
+        <div className="ant-upload-text">上传</div>
+      </div>
+    )
+
     return (
       <PageHeaderLayout title="体测录入">
         <Card bordered={false}>
@@ -197,6 +272,42 @@ export default class Page extends Component {
               })(
                 <Input placeholder="小腿围" />
               )}
+            </FormItem>
+            <FormItem {...FORM_ITEM_LAYOUT} label="正面照">
+              <Upload
+                name="check_ZM"
+                listType="picture-card"
+                className="avatar-uploader"
+                showUploadList={false}
+                action="http//v0.api.upyun.com"
+                customRequest={this.uploadZm}
+              >
+                {zmUrl ? <img src={zmUrl} height={200} width={200} alt="" /> : UploadZmButton}
+              </Upload>
+            </FormItem>
+            <FormItem {...FORM_ITEM_LAYOUT} label="侧面照">
+              <Upload
+                name="check_CM"
+                listType="picture-card"
+                className="avatar-uploader"
+                showUploadList={false}
+                action="http//v0.api.upyun.com"
+                customRequest={this.uploadCm}
+              >
+                {cmUrl ? <img src={cmUrl} height={200} width={200} alt="" /> : UploadCmButton}
+              </Upload>
+            </FormItem>
+            <FormItem {...FORM_ITEM_LAYOUT} label="背面照">
+              <Upload
+                name="check_BM"
+                listType="picture-card"
+                className="avatar-uploader"
+                showUploadList={false}
+                action="http//v0.api.upyun.com"
+                customRequest={this.uploadBm}
+              >
+                {bmUrl ? <img src={bmUrl} height={200} width={200} alt="" /> : UploadBmButton}
+              </Upload>
             </FormItem>
             <FormItem {...FORM_ITEM_BUTTON}>
               <Button type="primary" htmlType="submit" loading={submitting}>
