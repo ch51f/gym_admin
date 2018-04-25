@@ -159,6 +159,9 @@ export default class Page extends Component {
           gym_id: getOperatorId(),
           item_uuid: uuid(32, 16),
           lesson_name: values.lesson_name,
+          lesson_subtitle: values.lesson_subtitle,
+          intro: values.intro,
+          remind: values.remind,
           teacher_id: values.teacher_id,
           teacher_name: this.getTeacherName(values.teacher_id),
           buy_types: values.buy_types.join(","),
@@ -379,8 +382,8 @@ export default class Page extends Component {
               )}
             </FormItem>
             <FormItem {...FORM_ITEM_LAYOUT} label="课程副标题">
-              {getFieldDecorator('lesson_sub_name', {
-                initialValue: detail.lesson ? detail.lesson.lesson_sub_name : "",
+              {getFieldDecorator('lesson_subtitle', {
+                initialValue: detail.lesson ? detail.lesson.lesson_subtitle : "",
                 rules: [{
                   required: true, message: '请选择课程副标题'
                 }]
@@ -501,8 +504,8 @@ export default class Page extends Component {
             </FormItem>
 
             <FormItem {...FORM_ITEM_LAYOUT} label="课程简介">
-              {getFieldDecorator('lesson_info', {
-                initialValue: detail.lesson ? detail.lesson.lesson_info : "",
+              {getFieldDecorator('intro', {
+                initialValue: detail.lesson ? detail.lesson.intro : "",
                 // rules: [{
                 //   required: true, message: '请选择课程副标题'
                 // }]
@@ -512,8 +515,8 @@ export default class Page extends Component {
             </FormItem>
 
             <FormItem {...FORM_ITEM_LAYOUT} label=" 温馨提示">
-              {getFieldDecorator('tips', {
-                initialValue: detail.lesson ? detail.lesson.tips : "",
+              {getFieldDecorator('remind', {
+                initialValue: detail.lesson ? detail.lesson.remind : "",
                 // rules: [{
                 //   required: true, message: '请选择课程副标题'
                 // }]

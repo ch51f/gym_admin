@@ -48,7 +48,10 @@ export default class Page extends Component {
       console.log(err);
       console.log(values);
       console.log(logoUrl);
-      if(!logoUrl) message.error("请上传封面图");
+      if(!logoUrl) {
+        message.error("请上传封面图");
+        return false;
+      }
       if(!err) {
         let params = {
           cover: logoUrl,

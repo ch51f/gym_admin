@@ -86,18 +86,33 @@ export default class Page extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const {form, dispatch, body_check} = this.props;
+    const {zmUrl, cmUrl, bmUrl} = this.state;
     form.validateFieldsAndScroll((err, values) => {
       // console.log(err, values);
+      if(!zmUrl) {
+        message.error("请上传正面照");
+        return false;
+      }
+      if(!cmUrl) {
+        message.error("请上传侧面照");
+        return false;
+      }
+      if(!bmUrl) {
+        message.error("请上传背面照");
+        return false;
+      }
       if(!err) {
+        let images = zmUrl + ',' + cmUrl + ',' + bmUrl;
+        let image_types = '1,2,3';
         if(body_check.user_id) {
           this.props.dispatch({
             type: 'member/updateBodyCheck',
-            payload: _.assign(values, {item_id: body_check.user_id})
+            payload: _.assign(values, {item_id: body_check.id}, {images, image_types})
           })
         } else {
           this.props.dispatch({
             type: 'member/addBodyCheck',
-            payload: _.assign(values)
+            payload: _.assign(values, {images, image_types})
           })
         }
       }
@@ -140,6 +155,35 @@ export default class Page extends Component {
     const {getFieldDecorator} = form;
     console.log(quickMember)
     const users = quickMember;
+    if(body_check.images && body_check.image_types) {
+
+      let imgs = body_check.images.split(',');
+      let img_types = body_check.image_types.split(',');
+      if(!zmUrl) {
+        for(let i = 0, item; item = img_types[i]; i++) {
+          console.log(item)
+          if(item == 1) {
+            console.log(imgs[i])
+            this.setState({zmUrl: imgs[i]})
+          }
+        }
+      }
+      if(!cmUrl) {
+        for(let i = 0, item; item = img_types[i]; i++) {
+          if(item == 2) {
+            this.setState({cmUrl: imgs[i]})
+          }
+        }
+      }
+      if(!bmUrl) {
+        for(let i = 0, item; item = img_types[i]; i++) {
+          if(item == 3) {
+            this.setState({bmUrl: imgs[i]})
+          }
+        }
+      }
+    }
+    console.log(bmUrl)
 
     // console.log(body_check)
     let submitting = body_check.user_id ? submitting_add : submitting_upd;
