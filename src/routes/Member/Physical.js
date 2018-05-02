@@ -247,9 +247,19 @@ export default class Page extends Component {
                 <Input placeholder="体重" />
               )}
             </FormItem>
-            <FormItem {...FORM_ITEM_LAYOUT} label="体脂">
+            <FormItem {...FORM_ITEM_LAYOUT} label="BMI">
               {getFieldDecorator('check_bmi', {
                 initialValue: body_check.check_bmi || "",
+                rules: [{
+                  required: true, message: "请输入BMI"
+                }]
+              })(
+                <Input placeholder="BMI" />
+              )}
+            </FormItem>
+            <FormItem {...FORM_ITEM_LAYOUT} label="体脂">
+              {getFieldDecorator('check_TZ', {
+                initialValue: body_check.check_TZ || "",
                 rules: [{
                   required: true, message: "请输入体脂"
                 }]
@@ -287,9 +297,19 @@ export default class Page extends Component {
                 <Input placeholder="腰围" />
               )}
             </FormItem>
+            <FormItem {...FORM_ITEM_LAYOUT} label="臀围">
+              {getFieldDecorator('check_TW', {
+                initialValue: body_check.check_TW || "",
+                rules: [{
+                  required: true, message: "请输入臀围"
+                }]
+              })(
+                <Input placeholder="臀围" />
+              )}
+            </FormItem>
             <FormItem {...FORM_ITEM_LAYOUT} label="上臂围">
-              {getFieldDecorator('check_STW', {
-                initialValue: body_check.check_STW || "",
+              {getFieldDecorator('check_SBW', {
+                initialValue: body_check.check_SBW || "",
                 rules: [{
                   required: true, message: "请输入上臂围"
                 }]
@@ -315,6 +335,36 @@ export default class Page extends Component {
                 }]
               })(
                 <Input placeholder="小腿围" />
+              )}
+            </FormItem>
+            <FormItem {...FORM_ITEM_LAYOUT} label="心率">
+              {getFieldDecorator('check_XL', {
+                initialValue: body_check.check_XL || "",
+                rules: [{
+                  required: true, message: "请输入心率"
+                }]
+              })(
+                <Input placeholder="心率" />
+              )}
+            </FormItem>
+            <FormItem {...FORM_ITEM_LAYOUT} label="平板支撑">
+              {getFieldDecorator('check_PBZC', {
+                initialValue: body_check.check_PBZC || "",
+                rules: [{
+                  required: true, message: "请输入平板支撑"
+                }]
+              })(
+                <Input placeholder="平板支撑" />
+              )}
+            </FormItem>
+            <FormItem {...FORM_ITEM_LAYOUT} label="深蹲">
+              {getFieldDecorator('check_SD', {
+                initialValue: body_check.check_SD || "",
+                rules: [{
+                  required: true, message: "请输入深蹲"
+                }]
+              })(
+                <Input placeholder="深蹲" />
               )}
             </FormItem>
             <FormItem {...FORM_ITEM_LAYOUT} label="正面照">
