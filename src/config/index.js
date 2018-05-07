@@ -1,5 +1,6 @@
 // 接口文档 https://szrdev.noark9.com/gym/doc/
 export const GYM_URL = 'https://szrdev.noark9.com/gym/api/';
+// export const GYM_URL = '/gym/api/';
 
 export const PAGE_SIZE = 10;
 

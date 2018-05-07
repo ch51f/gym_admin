@@ -95,7 +95,7 @@ export default class Page extends Component {
     let {logoUrl, logo} = this.state;
     const {form, submitting_add, submitting_up, notice} = this.props;
     const {getFieldDecorator, getFieldValue} = form;
-    const submitting = notice.id ? submitting_up : submitting_add;
+    const submitting = notice.id ? (submitting_up || logo) : (submitting_add || logo);
     let title = "添加通知";
     if(notice.id) title = "编辑通知";
     if(!logoUrl && notice.cover) this.setState({logoUrl: notice.cover});

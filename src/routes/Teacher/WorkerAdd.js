@@ -80,7 +80,7 @@ export default class Page extends Component {
     let {imgUrl, loading} = this.state;
     const {form, submitting_add, submitting_up, worker} = this.props;
     const {getFieldDecorator} = form;
-    const submitting = worker.id ? submitting_up : submitting_add;
+    const submitting = worker.id ? (submitting_up || loading) : (submitting_add || loading);
     if(!imgUrl && worker.photo) this.setState({imgUrl: worker.photo});
     const UploadButton = (
       <div>

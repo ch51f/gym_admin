@@ -105,6 +105,7 @@ export default class Page extends Component {
     let {form, card_id, member, communities, income_levels, user_sources, submitting} = this.props;
     const {getFieldDecorator} = form;
 
+    submitting = submitting || this.state.loading;
     if(card_id != "") member.card_id = card_id;
     const f_i_l = {
       labelCol: {

@@ -91,8 +91,9 @@ export default class Page extends Component {
   }
   render() {
   	let {logoUrl, picUrl, loading_logo, loading_pic} = this.state;
-  	const {form, submitting, gym_company_config} = this.props;
+  	let {form, submitting, gym_company_config} = this.props;
   	const {getFieldDecorator} = form;
+    submitting = submitting || loading_logo || loading_pic
     if(!logoUrl && gym_company_config.gym_logo) this.setState({logoUrl: gym_company_config.gym_logo})
     if(!picUrl && gym_company_config.gym_cover) this.setState({picUrl: gym_company_config.gym_cover})
   	const UploadLogoButton = (

@@ -37,6 +37,9 @@ const defaultCheckedList = [];
 }))
 export default class Page extends Component {
   state ={
+    d: false,
+
+
     flag: false,
     checkedList: ['1', '5'],
     imgs: [],
@@ -302,10 +305,10 @@ export default class Page extends Component {
   }
 
   render() {
-    let {imgs, flag, time_box} = this.state;
+    let {imgs, flag, time_box, d} = this.state;
     let {submitting_add, submitting_upd, form, worker_data, ranks, lesson_id, detail} = this.props;
     const {getFieldDecorator, getFieldValue} = form;
-    let submitting = lesson_id > 0 ? submitting_upd : submitting_add;
+    let submitting = lesson_id > 0 ? (submitting_upd || flag) : (submitting_add || flag);
     const UploadButton = (
       <div>
         <Icon type={flag ? 'loading' : 'plus'} />
@@ -324,17 +327,22 @@ export default class Page extends Component {
       )
     }
 
-    if(imgs.length == 0 && lesson_id > 0) {
+    if(imgs.length == 0 && lesson_id > 0 && detail.lesson.covers) {
       let ar = detail.lesson.covers.split(',');
       let arr = [];
-      for(let i = 0, item; item =  ar[i]; i++) {
-        arr.push({
-          status: 'done',
-          uid: item,
-          name: item,
-          url: item
-        })
+      if(ar.length > 0) {
+        for(let i = 0, item; item =  ar[i]; i++) {
+          arr.push({
+            status: 'done',
+            uid: item,
+            name: item,
+            url: item
+          })
+        }
       }
+      this.setState({imgs: arr})
+    }
+    if(lesson_id > 0 && d == false) {
       let times = [], time_id = 1;
       for(let i = 0, item; item = detail.times[i]; i++) {
         let temp = {
@@ -346,8 +354,7 @@ export default class Page extends Component {
         time_id = item.id + 1;
         times.push(temp);
       }
-      this.setState({imgs: arr, checkedList: detail.lesson.buy_types.split(','), time_box: times, id: time_id});
-
+      this.setState({d: true, checkedList: detail.lesson.buy_types.split(','), time_box: times, id: time_id});
     }
 
     return(

@@ -186,7 +186,7 @@ export default class Page extends Component {
     console.log(bmUrl)
 
     // console.log(body_check)
-    let submitting = body_check.user_id ? submitting_add : submitting_upd;
+    let submitting = body_check.user_id ? (submitting_add || zm || cm || bm) : (submitting_upd || zm || cm || bm);
 
     const UploadZmButton = (
       <div>

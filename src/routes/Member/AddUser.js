@@ -163,9 +163,10 @@ export default class Page extends Component {
     })
   }
   render() {
-    const {form, communities, income_levels, user_sources, card_id, submitting} = this.props;
+    let {form, communities, income_levels, user_sources, card_id, submitting} = this.props;
     const {getFieldDecorator} = form;
 
+    submitting = submitting || this.state.loading;
     const f_i_l = {
       labelCol: {
         sm: {span: 4},
