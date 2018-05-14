@@ -22,6 +22,7 @@ export default class Page extends Component {
 		this.props.dispatch({
 			type: 'system/getNoticeList',
 			payload: {
+				content_type: 1,
 				target_page,
 				page_size,
 			}

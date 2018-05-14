@@ -57,6 +57,7 @@ export default class Page extends Component {
           cover: logoUrl,
           title: values.title,
           status: values.status,
+          content_type: 1,
         }
         if(values.type == 1) {
           params.content_url = values.content_url;

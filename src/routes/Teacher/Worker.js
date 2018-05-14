@@ -20,6 +20,7 @@ export default class Page extends Component {
     this.props.dispatch({
       type: 'worker/getWorkerList',
       payload: {
+        department: 1,
         ...params
       }
     })

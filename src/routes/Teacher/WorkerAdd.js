@@ -36,6 +36,7 @@ export default class Page extends Component {
           gender: values.gender,
           id_card: values.id_card,
           status: values.status,
+          department: 1,
           tel: values.tel,
           worker_name: values.worker_name,
           is_private_teacher: values.is_private_teacher ? 1 : 0,
