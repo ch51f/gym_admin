@@ -184,14 +184,17 @@ export default class Page extends Component {
           let day_of_weeks = [];
           let time_begins = [];
           let time_ends = [];
+          let time_names = [];
           for(let i =0, item; item = time_box[i]; i++) {
             day_of_weeks.push(item['week'] == 0 ? 7 : item['week']);
             time_begins.push(item['begin_time'].format("HHmm"));
             time_ends.push(item['end_time'].format("HHmm"));
+            time_names.push(item['time_name']);
           }
           params['day_of_weeks'] = day_of_weeks.join(',');
           params['time_begins'] = time_begins.join(',');
           params['time_ends'] = time_ends.join(',');
+          params['time_names'] = time_names.join(',');
         }
 
 
@@ -233,6 +236,7 @@ export default class Page extends Component {
     let begin_time = getFieldValue('begin_time');
     let end_time = getFieldValue('end_time');
     let week = getFieldValue('week');
+    let time_name = getFieldValue('time_name');
 
     if(!week && week != 0) {
       message.warning("请选择星期");
@@ -251,6 +255,10 @@ export default class Page extends Component {
       message.warning("结束时间必须大于开始时间")
       return false;
     }
+    if(!time_name) {
+      message.warning("请输入名字");
+      return false;
+    }
     let {time_box, id} = this.state;
     
     let params = {
@@ -258,6 +266,7 @@ export default class Page extends Component {
       week,
       begin_time,
       end_time,
+      time_name,
     }
     time_box.push(params);
     this.setState({time_box, id: ++id});
@@ -300,7 +309,7 @@ export default class Page extends Component {
     let {lesson_id, detail} = this.props;
     console.log(item)
     return (
-      <div key={`time_${i}`}>{DAY_OF_WEEK[item.week]} {item.begin_time.format(format)} - {item.end_time.format(format)} {(lesson_id > 0 && detail.lesson.lesson_type == 2)?null : <Icon type="close" onClick={this.handleRemove.bind(this, item.id)} />}</div>
+      <div key={`time_${i}`}>{item.time_name} {DAY_OF_WEEK[item.week]} {item.begin_time.format(format)} - {item.end_time.format(format)} {(lesson_id > 0 && detail.lesson.lesson_type == 2)?null : <Icon type="close" onClick={this.handleRemove.bind(this, item.id)} />}</div>
     )
   }
 
@@ -460,6 +469,10 @@ export default class Page extends Component {
                     <Input style={{ width: 30, pointerEvents: 'none', backgroundColor: '#fff' }} placeholder="~" disabled /> 
                     {getFieldDecorator('end_time')(
                       <TimePicker format={format} style={{width: '100px'}} placeholder="结束时间" />
+                    )}
+                    <Input style={{ width: 60, pointerEvents: 'none', backgroundColor: '#fff' }} placeholder="名字：" disabled /> 
+                    {getFieldDecorator('time_name')(
+                      <Input style={{width: '100px'}}  />
                     )}
                     <Button onClick={this.addTime.bind(this)} >添加</Button>
                   </InputGroup>
