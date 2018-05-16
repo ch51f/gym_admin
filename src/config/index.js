@@ -20,6 +20,7 @@ export const CARD_UNIT = ['年', '月', '日', '次'];
 export const PAY_METHODS = ['刷卡', '支付宝', '微信', '现金', '其他'];
 
 export const LESSON_SUBSCRIBE_STATUS = ['正常', '已上完', '未上完'];
+export const LESSON_SHOW_STATUS = ['显示', '隐藏'];
 
 export const NOTICE_STATUS = ['正常发布', '草稿', '删除'];
 

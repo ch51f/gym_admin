@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'dva';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import {Spin, Card, Form, Input, Radio, TimePicker, Checkbox, AutoComplete, Button, Select, InputNumber, DatePicker, Col, Row, Upload, Icon, message} from 'antd';
-import {FORM_ITEM_LAYOUT, FORM_ITEM_BUTTON, LESSON_TYPE, LESSON_STATUS, DAY_OF_WEEK} from '../../config';
+import {FORM_ITEM_LAYOUT, FORM_ITEM_BUTTON, LESSON_TYPE, LESSON_STATUS, DAY_OF_WEEK, LESSON_SHOW_STATUS} from '../../config';
 import _ from 'lodash';
 
 import moment from 'moment';
@@ -171,6 +171,7 @@ export default class Page extends Component {
           status: values.status,
           rank_type_id: values.rank_type_id,
           rank_prices: this.getPrices(),
+          show: values.show,
         }
         if(values.lesson_type == 2 && lesson_id < 0) {
           params['camp_lesson_valid_date_begin'] = values.camp_lesson_valid_date[0].format("YYYYMMDD");
@@ -556,6 +557,20 @@ export default class Page extends Component {
                 <Select placeholder="课程状态">
                   {LESSON_STATUS.map((item, i) => {
                     return (<Option key={`LESSON_STATUS_${i}`} value={i}>{item}</Option>)
+                  })}
+                </Select>
+              )}
+            </FormItem>
+            <FormItem {...FORM_ITEM_LAYOUT} label="课程显示状态">
+              {getFieldDecorator('show', {
+                initialValue: detail.lesson ? parseInt(detail.lesson.show) : 0,
+                rules: [{
+                  required: true, message: '请选择显示状态'
+                }]
+              })(
+                <Select placeholder="课程显示状态">
+                  {LESSON_SHOW_STATUS.map((item, i) => {
+                    return (<Option key={`LESSON_SHOW_STATUS_${i}`} value={i}>{item}</Option>)
                   })}
                 </Select>
               )}
