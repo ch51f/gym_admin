@@ -4,7 +4,7 @@ export const GYM_URL = 'https://szrdev.noark9.com/gym/api/';
 
 export const PAGE_SIZE = 10;
 
-export const DAY_OF_WEEK = ['星期天', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+export const DAY_OF_WEEK = ['星期天', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期天'];
 
 export const DEPARTMENT = ['销售部', '教练部'];
 
