@@ -238,7 +238,7 @@ export default class Page extends Component {
             <FormItem {...FORM_ITEM_LAYOUT} label="充值顾问">
               {getFieldDecorator('worker_id', {
                 rules: [{
-                  required: true,
+                  // required: true,
                   message: '请选择会籍顾问'
                 }]
               })(

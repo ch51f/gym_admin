@@ -53,60 +53,60 @@ export default class Page extends Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       console.log(err)
       console.log(values)
-      // if(!err) {
-      //   let params = {
-      //     user_id: values.member_id,
-      //     worker_id: values.worker_id,
-      //     user_amount: getPriceF(values.user_amount),
-      //     gift_amount: getPriceF(values.gift_count),
-      //   }
-      //    if(values.pay_method == 5) {
-      //     params.pay_methods = [];
+      if(!err) {
+        let params = {
+          user_id: values.member_id,
+          worker_id: values.worker_id,
+          user_amount: getPriceF(values.user_amount),
+          gift_amount: getPriceF(values.gift_count),
+        }
+         if(values.pay_method == 5) {
+          params.pay_methods = [];
 
-      //     params.amounts = [];
-      //     params.pay_method_notes = [];
+          params.amounts = [];
+          params.pay_method_notes = [];
 
-      //     if(values.by_card) {
-      //       params.pay_methods.push(0)
-      //       params.pay_method_notes.push("刷卡")
-      //       params.amounts.push(getPriceF(values.by_card))
-      //     }
-      //     if(values.by_wechat) {
-      //       params.pay_methods.push(1)
-      //       params.pay_method_notes.push("微信")
-      //       params.amounts.push(getPriceF(values.by_wechat))
-      //     }
-      //     if(values.by_alipay) {
-      //       params.pay_methods.push(2)
-      //       params.pay_method_notes.push("支付宝")
-      //       params.amounts.push(getPriceF(values.by_alipay))
-      //     }
-      //     if(values.by_cash) {
-      //       params.pay_methods.push(3)
-      //       params.pay_method_notes.push("现金")
-      //       params.amounts.push(getPriceF(values.by_cash))
-      //     }
-      //     if(values.by_other) {
-      //       params.pay_methods.push(4)
-      //       params.pay_method_notes.push("其他")
-      //       params.amounts.push(getPriceF(values.by_cash))
-      //     }
-      //   } else if(values.pay_method == 4) {
-      //     params.amounts = [getPriceF(values.user_amount)];
-      //     params.pay_methods = [values.pay_method];
-      //     params.pay_method_notes = [values.by_other_txt || "其他"];
-      //   } else {
-      //     params.amounts = [getPriceF(values.user_amount)];
-      //     params.pay_methods = [values.pay_method];
-      //     params.pay_method_notes = [""];
-      //   }
-      //   this.props.dispatch({
-      //     type: 'member/recharge',
-      //     payload: {
-      //       ...params
-      //     }
-      //   })
-      // }
+          if(values.by_card) {
+            params.pay_methods.push(0)
+            params.pay_method_notes.push("刷卡")
+            params.amounts.push(getPriceF(values.by_card))
+          }
+          if(values.by_wechat) {
+            params.pay_methods.push(1)
+            params.pay_method_notes.push("微信")
+            params.amounts.push(getPriceF(values.by_wechat))
+          }
+          if(values.by_alipay) {
+            params.pay_methods.push(2)
+            params.pay_method_notes.push("支付宝")
+            params.amounts.push(getPriceF(values.by_alipay))
+          }
+          if(values.by_cash) {
+            params.pay_methods.push(3)
+            params.pay_method_notes.push("现金")
+            params.amounts.push(getPriceF(values.by_cash))
+          }
+          if(values.by_other) {
+            params.pay_methods.push(4)
+            params.pay_method_notes.push("其他")
+            params.amounts.push(getPriceF(values.by_cash))
+          }
+        } else if(values.pay_method == 4) {
+          params.amounts = [getPriceF(values.user_amount)];
+          params.pay_methods = [values.pay_method];
+          params.pay_method_notes = [values.by_other_txt || "其他"];
+        } else {
+          params.amounts = [getPriceF(values.user_amount)];
+          params.pay_methods = [values.pay_method];
+          params.pay_method_notes = [""];
+        }
+        this.props.dispatch({
+          type: 'member/recharge',
+          payload: {
+            ...params
+          }
+        })
+      }
     })
   }
 
@@ -140,7 +140,7 @@ export default class Page extends Component {
     return(
         <Card bordered={false}>
           <Form onSubmit={this.handleSubmit}>
-            {getFieldDecorator('item_id', {
+            {getFieldDecorator('member_id', {
               initialValue: member.id,
             })(
               <Input style={{display: 'none'}} />
@@ -234,7 +234,7 @@ export default class Page extends Component {
             <FormItem {...FORM_ITEM_LAYOUT} label="充值顾问">
               {getFieldDecorator('worker_id', {
                 rules: [{
-                  required: true,
+                  // required: true,
                   message: '请选择会籍顾问'
                 }]
               })(

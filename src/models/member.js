@@ -190,11 +190,18 @@ export default {
       });
       const res = yield call(body_check_query_by_id, payload);
       if(res.status === 0) {
-        if(res.data.items && res.data.items.length > 0) {
-          yield put({
-            type: 'setConfig',
-            payload: {body_check: res.data.items[0]}
-          });
+        if(res.data.items) {
+          if(res.data.items.length > 0) {
+            yield put({
+              type: 'setConfig',
+              payload: {body_check: res.data.items[0]}
+            });
+          } else {
+            yield put({
+              type: 'setConfig',
+              payload: {body_check: {}}
+            });
+          }
         }
       }
     },
