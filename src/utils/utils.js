@@ -168,6 +168,7 @@ export function getDateStr(str) {
 }
 // 时间显示格式
 export function getTimeStr(str) {
+  if(str.length == 3) str = "0" + str;
   return format(setMoment(str, 'HH:mm'), "HH:mm");
 }
 

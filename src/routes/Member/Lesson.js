@@ -3,8 +3,9 @@ import { connect } from 'dva';
 import { Table, Row, Col, Card, Form, Input, Select, Button, DatePicker } from 'antd';
 
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import {unix, getDateStr, getPriceY} from '../../utils/utils';
-import {CARD_STATUS, PAGE_SIZE} from '../../config';
+import {unix, getDateStr, getPriceY, getTimeStr, setMoment, format } from '../../utils/utils';
+import {CARD_STATUS, PAGE_SIZE, DAY_OF_WEEK_1} from '../../config';
+import moment from 'moment';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -49,10 +50,10 @@ export default class Page extends Component {
       type: 'member/attend',
       payload: {
         user_id: 26,
-        lesson_id: 135,
-        user_lesson_id: 135,
-        reserved_item_id: 135,
-        reserved_date: 20180521,
+        lesson_id: 132,
+        user_lesson_id: 146,
+        reserved_item_id: 141,
+        reserved_date: 20180526,
         // reserved_day_of_weed: 2,
         // reserved_time_begin: 1300,
         // reserved_time_end: 1400,
@@ -86,7 +87,20 @@ export default class Page extends Component {
   }
   handleTableChange = (pagination, filters, sorter) => {
     let {current, pageSize} = pagination;
-    this.query({}, current, pageSize);
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      if(!err) {
+        let params = {}
+        if(values.code) params.code = values.code;
+        if(values.teacher_id) params.teacher_id = values.teacher_id;
+        if(values.lesson_id) params.lesson_id = values.lesson_id;
+        if(values.date) {
+          params.date_begin = values.date[0].format('YYYYMMDD');
+          params.date_end = values.date[1].format('YYYYMMDD');
+        }
+
+        this.query(params, current, pageSize)
+      }
+    })
   }
   handleSubmit = (e) => {
     e.preventDefault();
@@ -170,17 +184,23 @@ export default class Page extends Component {
       key: 'teacher_name',
     }, {
       title: '上课时间',
-      dataIndex: 'date',
-      key: 'date',
-      render: (val) => {
-        return val && val > 0 ? getDateStr(val) : '-';
+      dataIndex: 'lesson_type',
+      key: 'lesson_type',
+      render: (val, record) => {
+        if(val == 2) {
+          return format(setMoment(record.date_begin)) + " 至 " + format(setMoment(record.date_end)) + "的" + DAY_OF_WEEK_1[record.day_of_week] + "的" + getTimeStr(record.time_begin) + "-" + getTimeStr(record.time_end);
+        } else {
+          return format(setMoment(record.date)) + " " + DAY_OF_WEEK_1[record.day_of_week] + "的" + getTimeStr(record.time_begin) + "-" + getTimeStr(record.time_end);
+        }
+        // return val && val > 0 ? getDateStr(val) : '-';time_begin
+        // return val ? getTimeStr(val) + "-" + getTimeStr(record.time_end) : '-'
       }
     }, {
       title: '预约时间',
       dataIndex: 'create_ts',
       key: 'create_ts',
-      render: (val) => {
-        return val && val > 0 ? unix(val) : '-';
+      render(val) {
+        return val ? moment(val * 1000).format('YYYY-MM-DD') : "-"
       }
     }, {
       title: '购买/剩余',
@@ -215,7 +235,7 @@ export default class Page extends Component {
                   })(
         						<Select placeholder="购买课程" onChange={this.change}>
                       {search_lists.map((item, i) => {
-                        return (<Option key={i} value={item.id}>{item.lesson_name}</Option>)
+                        return (<Option key={i} value={item.id}>{item.lesson_name}-{item.teacher_name}</Option>)
                       })}
                     </Select>
                   )}

@@ -8,6 +8,14 @@ import {queryMemberConfig, queryMember, addMember, updateMember, findMember, ran
   attend,
   attend_list,
   user_list,
+  checkinMember,
+  queryCheckin,
+  queryCard,
+  activeMember,
+  cancleMember,
+  pauseMember,
+  buyCard,
+  tMember,
 } from '../services/api';
 import { message } from 'antd';
 import _ from 'lodash';
@@ -33,6 +41,22 @@ export default {
     members: [],
     member_flag: false,
     member: {},
+
+    // 入场记录
+    checkIn: {
+      list: [],
+      pagination: {},
+    },
+    
+    checkIn_list: [],
+
+    cards: [],
+
+    homeCheckIn: {
+      list: [],
+      count: 0,
+    },
+    homeActive: 0,
 
     manage_flag: false,
 
@@ -263,6 +287,145 @@ export default {
           type: 'changeAttendList',
           payload: res.data
         });
+      } else {
+        message.error(res.error);
+      }
+    },
+    *checkIn({payload}, {call, put}) {
+      if(payload.user_id) {
+        yield put({
+          type: 'setCheckInList',
+          payload: {items: []},
+        })
+      }
+      const res = yield call(checkinMember, payload);
+      if(res.status === 0) {
+        message.success("签到成功");
+        yield put({
+          type: 'setConfig',
+          payload: {
+            homeCheckIn: {
+              list: [],
+              count: 0,
+            },
+            homeActive: 0,
+          }
+        })
+        // yield put({
+        //   type: 'homeCheckinList',
+        //   payload: {}
+        // });
+
+      } else if (res.status === 771) {
+        yield put({
+          type: 'setCheckInList',
+          payload: res.data,
+        })
+      } else {
+        message.error(res.error);
+      }
+    },
+
+
+    // 查询签到记录列表
+    *checkinList({payload}, {call, put}) {
+      const res = yield call(queryCheckin, payload);
+      if(res.status === 0) {
+        res.data.page_info.pageSize = payload.page_size;
+        res.data.page_info.total = res.data.count;
+        yield put({
+          type: 'setCheckinList',
+          payload: {
+            data: res.data
+          }
+        })
+      } else {
+        message.error(res.error);
+      }
+    },
+
+    // 获取会员卡
+    *queryCard({payload}, {call, put}) {
+      const res = yield call(queryCard, payload);
+      if(res.status === 0) {
+        yield put({
+          type: 'setCards',
+          payload: res.data,
+        })
+      } else {
+        message.error(res.error);
+      }
+    },
+
+    *addCard({payload}, {call, put}) {
+      const res = yield call(buyCard, payload);
+      if(res.status === 0) {
+        message.success("添加卡类成功");
+        yield put(routerRedux.push('/member/search'));
+      } else {
+        message.error(res.error);
+      }
+    },
+
+    *xuCard({payload}, {call, put}) {
+      const res = yield call(buyCard, payload);
+      if(res.status === 0) {
+        message.success("续卡成功");
+
+        yield put({
+          type: 'setMember',
+          payload: {user: res.data},
+        })
+      } else {
+        mesasge.error(res.error);
+      }
+    },
+
+    // 激活会员卡
+    *activeMember({payload}, {call, put}) {
+      const res = yield call(activeMember, payload);
+      if(res.status === 0) {
+        message.success("激活卡成功");
+        yield put({
+          type: 'setMember',
+          payload: {user: res.data},
+        })
+      } else {
+        message.error(res.error);
+      }
+    },
+    // 注销会员看
+    *cancleMember({payload}, {call, put}) {
+      const res = yield call(cancleMember, payload);
+      if(res.status === 0) {
+        message.success("消卡成功");
+        yield put({
+          type: 'setMember',
+          payload: {user: res.data},
+        })
+      } else {
+        message.error(res.error);
+      }
+    },
+    // 停卡
+    *pause({payload}, {call, put}) {
+      const res = yield call(pauseMember, payload);
+      if(res.status === 0) {
+        message.success("会员暂停成功");
+
+        yield put({
+          type: 'setMember',
+          payload: {user: res.data},
+        })
+      } else {
+        message.error(res.error);
+      }
+    },
+    // 转卡
+    *tMember({payload}, {call, put}) {
+      const res = yield call(tMember, payload);
+      if(res.status === 0) {
+        message.success("会员转卡成功");
       } else {
         message.error(res.error);
       }

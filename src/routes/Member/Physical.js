@@ -3,6 +3,7 @@ import {connect} from 'dva';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import {Card, Form, Input, AutoComplete, Button, Select, Upload, Icon, message} from 'antd';
 import {FORM_ITEM_LAYOUT, FORM_ITEM_BUTTON} from '../../config';
+import _ from 'lodash';
 
 const AutoOption = AutoComplete.Option;
 const FormItem = Form.Item;
@@ -105,9 +106,13 @@ export default class Page extends Component {
         let images = zmUrl + ',' + cmUrl + ',' + bmUrl;
         let image_types = '1,2,3';
         if(body_check.user_id) {
+          // this.props.dispatch({
+          //   type: 'member/updateBodyCheck',
+          //   payload: _.assign(values, {item_id: body_check.id}, {images, image_types})
+          // })
           this.props.dispatch({
-            type: 'member/updateBodyCheck',
-            payload: _.assign(values, {item_id: body_check.id}, {images, image_types})
+            type: 'member/addBodyCheck',
+            payload: _.assign(values, {images, image_types})
           })
         } else {
           this.props.dispatch({
@@ -121,12 +126,12 @@ export default class Page extends Component {
 
   // 获取会员体测信息
   handleSelect = (value) => {
-    this.props.dispatch({
-      type: 'member/queryBodyCheckById',
-      payload: {
-        user_id: value
-      }
-    });
+    // this.props.dispatch({
+    //   type: 'member/queryBodyCheckById',
+    //   payload: {
+    //     user_id: value
+    //   }
+    // });
   }
 
   // 会员查询

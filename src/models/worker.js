@@ -48,7 +48,7 @@ export default {
 					type: 'set',
 					payload: {worker: {}},
 				})
-				yield put(routerRedux.push('/teacher/worker'));
+				yield put(routerRedux.push('/system/worker'));
 			} else {
 				message.error(res.error);
 			}
@@ -63,7 +63,7 @@ export default {
 					type: 'set',
 					payload: {worker: {}},
 				})
-				yield put(routerRedux.push('/teacher/worker'));
+				yield put(routerRedux.push('/system/worker'));
 			} else {
 				message.error(res.error);
 			}

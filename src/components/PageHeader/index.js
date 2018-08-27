@@ -1,4 +1,5 @@
 import React, { PureComponent, createElement } from 'react';
+import QuickSign from '../QuickSign';
 import PropTypes from 'prop-types';
 import { Breadcrumb, Tabs } from 'antd';
 import classNames from 'classnames';
@@ -163,6 +164,7 @@ export default class PageHeader extends PureComponent {
             </Tabs>
           )
         }
+        <QuickSign />
       </div>
     );
   }

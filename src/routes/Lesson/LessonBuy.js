@@ -146,7 +146,7 @@ export default class Page extends Component {
               })(
                 <Select placeholder="购买课程" onChange={this.change}>
                   {search_lists.map((item, i) => {
-                    return (<Option key={i} value={item.id}>{item.lesson_name}</Option>)
+                    return (<Option key={i} value={item.id}>{item.lesson_name}-{item.teacher_name}</Option>)
                   })}
                 </Select>
               )}

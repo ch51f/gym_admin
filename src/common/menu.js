@@ -12,7 +12,13 @@ const menuData = [
     name: '添加会员',
     path: 'add',
   }, {
+    name: '签到记录',
+    path: 'checkin',
+  }, {
     name: '会员管理',
+    path: 'manage',
+  }, {
+    name: '会员查询',
     path: 'search',
   }, {
     name: '上课记录',
@@ -39,9 +45,6 @@ const menuData = [
   icon: 'form',
   path: 'teacher',
   children: [{
-    name: '教练管理',
-    path: 'worker',
-  }, {
     name: '教练请假',
     path: 'askLeave',
   }]
@@ -66,6 +69,9 @@ const menuData = [
   path: 'system',
   icon: 'setting',
   children: [{
+    name: '员工管理',
+    path: 'worker'
+  }, {
     name: '通知管理',
     path: 'noticeManage',
   }]

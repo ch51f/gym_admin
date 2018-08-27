@@ -1,11 +1,15 @@
 import React, {Component, Fragment} from 'react';
 import {connect} from 'dva';
-import {Card, Table, Icon, Button, Tooltip} from 'antd';
+import {Card, Table, Icon, Button, Tooltip, Form, Select} from 'antd';
 
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import {WORKER_TYPE, DEPARTMENT} from '../../config';
 import {getDateStr} from '../../utils/utils';
 
+const FormItem = Form.Item;
+const Option = Select.Option;
+
+@Form.create()
 @connect(({worker, loading}) => ({
   loading: loading.effects['worker/getWorkerList'],
 
@@ -20,10 +24,25 @@ export default class Page extends Component {
     this.props.dispatch({
       type: 'worker/getWorkerList',
       payload: {
-        department: 1,
+        // department: 1,
         ...params
       }
     })
+  }
+  handleSubmit = (e) => {
+    e.preventDefault();
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      if(!err) {
+        let params = {}
+        if(values.department) params.department = values.department;
+        this.query(params)
+      }
+    })
+  }
+
+  handleReset = (e) => {
+    this.props.form.resetFields();
+    this.query();
   }
   // 跳转到编辑或新增
   goAddWorker = (record = {}) => {
@@ -40,12 +59,12 @@ export default class Page extends Component {
       type: 'worker/set',
       payload: {worker: record},
     })
-    history.push('/teacher/workerAdd');
+    history.push('/system/workerAdd');
   }
   render() {
     const {loading, worker_data} = this.props;
     const {list} = worker_data;
-    console.log(list)
+    const {getFieldDecorator} = this.props.form;
     const columns = [
       {
         title: '姓名',
@@ -64,6 +83,19 @@ export default class Page extends Component {
         dataIndex: 'birthday',
         render(val) {
           return val ? getDateStr(val) : "-";
+        }
+      }, {
+        title: '部门',
+        dataIndex: 'department',
+        render(val) {
+          return DEPARTMENT[val]
+        }
+      }, {
+        title: '角色',
+        dataIndex: 'worker_type',
+        render(val) {
+          let temp = val == 99 ? 3 : val;
+          return WORKER_TYPE[temp];
         }
       }, {
         title: '教练类型',
@@ -93,12 +125,30 @@ export default class Page extends Component {
         )
       },
     ];
+    const f_i_l = {
+      labelCol: {span: 4},
+      wrapperCol: {span: 6},
+    }
     return (
       <PageHeaderLayout title="教练管理">
         <Card bordered={false}>
-          <div style={{'marginBottom': '20px', 'textAlign': 'right'}}>
-            <Button icon="plus" type="primary" onClick={() => this.goAddWorker()}>添加教练</Button>
-          </div>
+          <Form layout="horizontal" onSubmit={this.handleSubmit}>
+            <FormItem {...f_i_l} label="部门">
+              {getFieldDecorator('department')(
+                <Select placeholder="部门">
+                  <Option key={0}>销售部</Option>
+                  <Option key={1}>教练部</Option>
+                </Select>
+              )}
+            </FormItem>
+            <FormItem style={{'textAlign': 'right'}}>
+              <Button icon="plus" type="primary" onClick={() => this.goAddWorker()}>
+                新建
+              </Button>
+              <Button style={{'marginLeft': '20px'}} type="primary" htmlType="submit">搜索</Button>
+              <Button style={{marginLeft: 20}} onClick={this.handleReset}>重置</Button>
+            </FormItem>
+          </Form>
 
           <div>
             <Table

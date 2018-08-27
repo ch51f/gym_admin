@@ -103,12 +103,10 @@ export default class Page extends Component {
       flag: false,
       imgs: temp
     }
-    console.log(a);
     this.setState(a);
   }
 
   onChange = (checkedList) => {
-    console.log(checkedList)
     this.setState({
       checkedList,
     });
@@ -144,7 +142,6 @@ export default class Page extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
-      console.log(values)
       if(!err) {
         let {lesson_id} = this.props;
         let {imgs, time_box} = this.state;
@@ -166,7 +163,7 @@ export default class Page extends Component {
           intro: values.intro,
           remind: values.remind,
           teacher_id: values.teacher_id,
-          teacher_name: this.getTeacherName(values.teacher_id),
+          time_teacher: this.getTeacherName(values.teacher_id),
           buy_types: values.buy_types.join(","),
           status: values.status,
           rank_type_id: values.rank_type_id,
@@ -186,21 +183,20 @@ export default class Page extends Component {
           let time_begins = [];
           let time_ends = [];
           let time_names = [];
+          let time_teachers = [];
           for(let i =0, item; item = time_box[i]; i++) {
             day_of_weeks.push(item['week'] == 0 ? 7 : item['week']);
             time_begins.push(item['begin_time'].format("HHmm"));
             time_ends.push(item['end_time'].format("HHmm"));
             time_names.push(item['time_name']);
+            time_teachers.push(item['time_teacher']);
           }
           params['day_of_weeks'] = day_of_weeks.join(',');
           params['time_begins'] = time_begins.join(',');
           params['time_ends'] = time_ends.join(',');
           params['time_names'] = time_names.join(',');
+          params['time_teachers'] = time_teachers.join(',');
         }
-
-
-
-        console.log(params);
 
         if(lesson_id > 0) {
           params.item_id = lesson_id;
@@ -217,7 +213,7 @@ export default class Page extends Component {
           })
         }
         // covers
-        // teacher_name
+        // time_teacher
         // buy_types
         // group_lesson_user_min
         // group_lesson_user_max
@@ -238,6 +234,16 @@ export default class Page extends Component {
     let end_time = getFieldValue('end_time');
     let week = getFieldValue('week');
     let time_name = getFieldValue('time_name');
+    let time_teacher = getFieldValue('time_teacher');
+    let attender_name = "";
+
+    for(let i = 0; i < worker_data.length; i++) {
+      if(worker_data[i].id == time_teacher) {
+        attender_name = worker_data[i].worker_name;
+      }
+    }
+
+    console.log(time_teacher)
 
     if(!week && week != 0) {
       message.warning("请选择星期");
@@ -260,6 +266,10 @@ export default class Page extends Component {
       message.warning("请输入名字");
       return false;
     }
+    if(!time_teacher) {
+      message.warning("请输入教练");
+      return false;
+    }
     let {time_box, id} = this.state;
     
     let params = {
@@ -268,6 +278,8 @@ export default class Page extends Component {
       begin_time,
       end_time,
       time_name,
+      time_teacher,
+      attender_name
     }
     time_box.push(params);
     this.setState({time_box, id: ++id});
@@ -310,7 +322,7 @@ export default class Page extends Component {
     let {lesson_id, detail} = this.props;
     console.log(item)
     return (
-      <div key={`time_${i}`}>{item.time_name} {DAY_OF_WEEK[item.week]} {item.begin_time.format(format)} - {item.end_time.format(format)} {(lesson_id > 0 && detail.lesson.lesson_type == 2)?null : <Icon type="close" onClick={this.handleRemove.bind(this, item.id)} />}</div>
+      <div key={`time_${i}`}>{item.time_name} {item.attender_name} {DAY_OF_WEEK[item.week]} {item.begin_time.format(format)} - {item.end_time.format(format)} {(lesson_id > 0 && detail.lesson.lesson_type == 2)?null : <Icon type="close" onClick={this.handleRemove.bind(this, item.id)} />}</div>
     )
   }
 
@@ -360,6 +372,9 @@ export default class Page extends Component {
           week: item.day_of_week,
           begin_time: setMoment(item.time_begin, 'HHmm'),
           end_time: setMoment(item.time_begin, 'HHmm'),
+          time_name: item.time_name,
+          time_teacher: item.time_teacher,
+          attender_name: item.attender_name,
         }
         time_id = item.id + 1;
         times.push(temp);
@@ -474,6 +489,14 @@ export default class Page extends Component {
                     <Input style={{ width: 60, pointerEvents: 'none', backgroundColor: '#fff' }} placeholder="名字：" disabled /> 
                     {getFieldDecorator('time_name')(
                       <Input style={{width: '100px'}}  />
+                    )}
+                    <Input style={{ width: 60, pointerEvents: 'none', backgroundColor: '#fff' }} placeholder="教练：" disabled /> 
+                    {getFieldDecorator('time_teacher')(
+                      <Select placeholder="教练列表" style={{width: '100px'}}>
+                        {worker_data.list.map((item, i) => {
+                          return (<Option key={i} value={item.id}>{item.worker_name}</Option>)
+                        })}
+                      </Select>
                     )}
                     <Button onClick={this.addTime.bind(this)} >添加</Button>
                   </InputGroup>

@@ -90,11 +90,20 @@ export const getRouterData = (app) => {
     '/member/add/user': {
       component: dynamicWrapper(app, ['member'], () => import('../routes/Member/AddUser')),
     },
-    '/member/add/card': {
-      component: dynamicWrapper(app, ['member', 'worker'], () => import('../routes/Member/AddRecharge')),
-    },
+    // '/member/add/card': {
+    //   component: dynamicWrapper(app, ['member', 'worker'], () => import('../routes/Member/AddRecharge')),
+    // },
     '/member/search': {
       component: dynamicWrapper(app, ['member', 'worker', 'lesson'], () => import('../routes/Member/Search')),
+    },
+    '/member/checkin': {
+      component: dynamicWrapper(app, ['member'], () => import('../routes/Member/CheckIn')),
+    },
+    '/member/manage': {
+      component: dynamicWrapper(app, ['member', 'worker'], () => import('../routes/Member/Manage')),
+    },
+    '/member/add/card': {
+      component: dynamicWrapper(app, ['member', 'worker'], () => import('../routes/Member/AddCard')),
     },
 
 
@@ -107,17 +116,17 @@ export const getRouterData = (app) => {
     },
 
     // 教练管理
-    '/teacher/worker': {
-      component: dynamicWrapper(app, ['worker'], () => import('../routes/Teacher/Worker')),
+    '/system/worker': {
+      component: dynamicWrapper(app, ['member', 'worker'], () => import('../routes/Teacher/Worker')),
     },
-    '/teacher/workerAdd': {
-      component: dynamicWrapper(app, ['worker'], () => import('../routes/Teacher/WorkerAdd')),
+    '/system/workerAdd': {
+      component: dynamicWrapper(app, ['member', 'worker'], () => import('../routes/Teacher/WorkerAdd')),
     },
     '/teacher/askLeave': {
-      component: dynamicWrapper(app, ['worker'], () => import('../routes/Teacher/AskLeave')),
+      component: dynamicWrapper(app, ['member', 'worker'], () => import('../routes/Teacher/AskLeave')),
     },
     '/teacher/askLeaveAdd': {
-      component: dynamicWrapper(app, ['worker'], () => import('../routes/Teacher/AskLeaveAdd')),
+      component: dynamicWrapper(app, ['member', 'worker'], () => import('../routes/Teacher/AskLeaveAdd')),
     },
 
     // 课程管理
@@ -125,21 +134,21 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['worker', 'lesson', 'member'], () => import('../routes/Lesson/LessonBuy')),
     },
     '/lesson/lessonBuySearch': {
-      component: dynamicWrapper(app, ['worker', 'lesson'], () => import('../routes/Lesson/LessonBuySearch')),
+      component: dynamicWrapper(app, ['member', 'worker', 'lesson'], () => import('../routes/Lesson/LessonBuySearch')),
     },
     '/lesson/lessonSearch': {
-      component: dynamicWrapper(app, ['worker', 'lesson'], () => import('../routes/Lesson/LessonSearch')),
+      component: dynamicWrapper(app, ['member', 'worker', 'lesson'], () => import('../routes/Lesson/LessonSearch')),
     },
     '/lesson/lessonAdd': {
-      component: dynamicWrapper(app, ['worker', 'lesson'], () => import('../routes/Lesson/LessonAdd')),
+      component: dynamicWrapper(app, ['member', 'worker', 'lesson'], () => import('../routes/Lesson/LessonAdd')),
     },
 
     // 系统配置
     '/system/noticeManage': {
-      component: dynamicWrapper(app, ['system'], () => import('../routes/System/NoticeManage')),
+      component: dynamicWrapper(app, ['member', 'system'], () => import('../routes/System/NoticeManage')),
     },
     '/system/noticeAdd': {
-      component: dynamicWrapper(app, ['system'], () => import('../routes/System/NoticeAdd')),
+      component: dynamicWrapper(app, ['member', 'system'], () => import('../routes/System/NoticeAdd')),
     },
 
     // 系统配置
@@ -154,10 +163,10 @@ export const getRouterData = (app) => {
     },
 
     '/gym/mainTain': {
-      component: dynamicWrapper(app, ['gym'], () => import('../routes/System/MainTain')),
+      component: dynamicWrapper(app, ['member', 'gym'], () => import('../routes/System/MainTain')),
     },
     '/gym/mainTainAdd': {
-      component: dynamicWrapper(app, ['gym'], () => import('../routes/System/MainTainAdd')),
+      component: dynamicWrapper(app, ['member', 'gym'], () => import('../routes/System/MainTainAdd')),
     },
 
 

@@ -5,7 +5,7 @@ import moment from 'moment';
 import _ from 'lodash';
 
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import {FORM_ITEM_LAYOUT, FORM_ITEM_BUTTON, WORKER_STATUS} from '../../config';
+import {FORM_ITEM_LAYOUT, FORM_ITEM_BUTTON, WORKER_TYPE, DEPARTMENT, WORKER_STATUS} from '../../config';
 
 const FormItem = Form.Item;
 const {Option} = Select;
@@ -36,7 +36,8 @@ export default class Page extends Component {
           gender: values.gender,
           id_card: values.id_card,
           status: values.status,
-          department: 1,
+          department: values.department,
+          worker_type: values.worker_type,
           tel: values.tel,
           worker_name: values.worker_name,
           is_private_teacher: values.is_private_teacher ? 1 : 0,
@@ -170,6 +171,30 @@ export default class Page extends Component {
                 }]
               })(
                 <Input placeholder="身份证号" />
+              )}
+            </FormItem>
+            <FormItem {...FORM_ITEM_LAYOUT} label="所属部门">
+              {getFieldDecorator('department', {
+                initialValue: parseInt(worker.department || 0),
+                rules: [{
+                  required: true, message: '请选择所属部门'
+                }]
+              })(
+                <Select placeholder="所属部门">
+                  {DEPARTMENT.map((item, i) => {return <Option value={i} key={`department_${i}`}>{item}</Option>})}
+                </Select>
+              )}
+            </FormItem>
+            <FormItem {...FORM_ITEM_LAYOUT} label="角色">
+              {getFieldDecorator('worker_type', {
+                initialValue: parseInt(worker.worker_type || 0),
+                rules: [{
+                  required: true, message: '请选择角色'
+                }]
+              })(
+                <Select placeholder="角色">
+                  {WORKER_TYPE.map((item, i) => {return <Option value={i == 3 ? '99' : i} key={`worker_type_${i}`}>{item}</Option>})}
+                </Select>
               )}
             </FormItem>
             <FormItem {...FORM_ITEM_LAYOUT} label="教练类型">

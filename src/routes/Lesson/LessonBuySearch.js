@@ -102,7 +102,7 @@ export default class Page extends Component {
       }
     }, {
       title: '购买数量',
-      dataIndex: ' total_count',
+      dataIndex: 'total_count',
       key: 'total_count'
     }, {
       title: '购买总价(元)',
@@ -152,7 +152,7 @@ export default class Page extends Component {
                   {getFieldDecorator('lesson_id')(
                     <Select placeholder="购买课程" onChange={this.change}>
                       {search_lists.map((item, i) => {
-                        return (<Option key={i} value={item.id}>{item.lesson_name}</Option>)
+                        return (<Option key={i} value={item.id}>{item.lesson_name}-{item.teacher_name}</Option>)
                       })}
                     </Select>
                   )}

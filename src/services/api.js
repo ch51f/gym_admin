@@ -103,7 +103,78 @@ export async function randomCard(params) {
   })
 }
 
+// 会员签到
+export async function checkinMember(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/user/checkin`, {
+    body: stringify(params)
+  })
+}
 
+//签到记录
+export async function queryCheckin(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/user/checkin/list`, {
+    body: stringify(params)
+  })
+}
+
+// 购买或续购健身卡
+export async function buyCard(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/card_subscribe/buy`, {
+    body: stringify(params, {arrayFormat: 'repeat'})
+  })
+}
+
+// 获取卡类列表
+export async function queryCard(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/card/list`, {
+    body: stringify(params)
+  })
+}
+
+// 暂停会员
+export async function pauseMember(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/card_subscribe/pause`, {
+    body: stringify(params)
+  })
+}
+
+
+// 取消暂停会员
+export async function calcleMember(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/card_subscribe/pause/cancle`, {
+    body: stringify(params)
+  })
+}
+
+// 消卡
+export async function cancleMember(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/card_subscribe/cancle`, {
+    body: stringify(params)
+  })
+}
+
+// 激活卡
+export async function activeMember(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/card_subscribe/cancle/active`, {
+    body: stringify(params)
+  })
+}
+
+// 会员转卡
+export async function tMember(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/card_subscribe/transfer`, {
+    body: stringify(params)
+  })
+}
 
 
 
