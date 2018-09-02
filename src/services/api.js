@@ -176,6 +176,21 @@ export async function tMember(params) {
   })
 }
 
+// 会员转移
+export async function transferMember(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/card_subscribe/handover`, {
+    body: stringify(params, {arrayFormat: 'repeat'})
+  })
+}
+
+// 会员统计
+export async function queryStatisticsUser(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/statistics/user`, {
+    body: stringify(params)
+  })
+}
 
 
 
@@ -198,7 +213,57 @@ export async function tMember(params) {
 
 
 
+// 查询操课列表
+export async function lesson_query(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/group_lesson/list`, {
+    body: stringify(params)
+  })
+}
+// 添加操课
+export async function lesson_add(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/group_lesson/add`, {
+    body: stringify(params)
+  })
+}
+// 修改操课
+export async function lesson_update(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/group_lesson/update`, {
+    body: stringify(params)
+  })
+}
 
+
+// 反馈列表
+export async function feedback_query(params){
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/feedback/list`, {
+    body: stringify(params)
+  })
+}
+// 回复反馈
+export async function feedback_reply(params){
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/feedback/reply`, {
+    body: stringify(params)
+  })
+}
+// 添加反馈
+export async function feedback_add(params){
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/feedback/add`, {
+    body: stringify(params)
+  })
+}
+// 删除反馈
+export async function feedback_delete(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/feedback/delete`, {
+    body: stringify(params)
+  })
+}
 
 
 

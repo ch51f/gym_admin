@@ -12,7 +12,7 @@ const menuData = [
     name: '添加会员',
     path: 'add',
   }, {
-    name: '签到记录',
+    name: '入场记录',
     path: 'checkin',
   }, {
     name: '会员管理',
@@ -21,11 +21,35 @@ const menuData = [
     name: '会员查询',
     path: 'search',
   }, {
-    name: '上课记录',
-    path: 'lesson',
+    name: '会员转移',
+    path: 'transfer',
   }, {
     name: '体测录入',
     path: 'physical',
+  }, {
+    name: '会员统计',
+    path: 'statistics',
+  }]
+},
+{
+  name: '私教管理',
+  icon: 'form',
+  path: 'teacher',
+  children: [{
+    name: '上课记录',
+    path: 'lesson'
+  }, {
+    name: '购买课程',
+    path: 'lessonBuy',
+  }, {
+    name: '购课记录',
+    path: 'lessonBuySearch',
+  }, {
+    name: '课程管理',
+    path: 'lessonSearch',
+  }, {
+    name: '课程统计',
+    path: 'statistics'
   }]
 },
 {
@@ -41,39 +65,24 @@ const menuData = [
   }] 
 },
 {
-  name: '私教管理',
-  icon: 'form',
-  path: 'teacher',
-  children: [{
-    name: '教练请假',
-    path: 'askLeave',
-  }]
-},
-{
-  name: '课程管理',
-  path: 'lesson',
-  icon: 'book',
-  children: [{
-    name: '购买课程',
-    path: 'lessonBuy',
-  }, {
-    name: '购课记录',
-    path: 'lessonBuySearch',
-  }, {
-    name: '课程管理',
-    path: 'lessonSearch',
-  }]
-},
-{
   name: '后勤管理',
   path: 'system',
   icon: 'setting',
   children: [{
+    name: '教练请假',
+    path: 'askLeave'
+  }, {
+    name: '操课管理',
+    path: 'lesson'
+  }, {
     name: '员工管理',
     path: 'worker'
   }, {
     name: '通知管理',
     path: 'noticeManage',
+  }, {
+    name: '反馈管理',
+    path: 'feedback'
   }]
 },
 {

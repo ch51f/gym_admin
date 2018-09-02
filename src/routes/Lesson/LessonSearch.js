@@ -39,7 +39,7 @@ export default class Page extends Component {
     //     notice: item
     //   }
     // });
-    this.props.history.push('/lesson/lessonAdd');
+    this.props.history.push('/teacher/lessonAdd');
   }
 
   update =(item ={}) => {
@@ -50,7 +50,7 @@ export default class Page extends Component {
         lesson_id:  item.id
       }
     });
-    this.props.history.push('/lesson/lessonAdd');
+    this.props.history.push('/teacher/lessonAdd');
   }
 
   render() {

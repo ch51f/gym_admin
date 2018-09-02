@@ -16,6 +16,8 @@ import {queryMemberConfig, queryMember, addMember, updateMember, findMember, ran
   pauseMember,
   buyCard,
   tMember,
+  transferMember,
+  queryStatisticsUser,
 } from '../services/api';
 import { message } from 'antd';
 import _ from 'lodash';
@@ -430,6 +432,28 @@ export default {
         message.error(res.error);
       }
     },
+
+    *transfer({payload}, {call, put}) {
+      const res = yield call(transferMember, payload);
+      if(res.status === 0) {
+        message.success("会员转移成功");
+      } else {
+        message.error(res.error);
+      }
+    },
+
+    *statistics({payload}, {call, put}) {
+      const res = yield call(queryStatisticsUser, payload);
+      console.log(res);
+      if(res.status === 0) {
+        yield put({
+          type: 'setConfig',
+          payload: {statistics: res.data},
+        })
+      } else {
+        message.error(res.error);
+      }
+    }
   },
 
   reducers: {
