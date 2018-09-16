@@ -18,6 +18,7 @@ import {queryMemberConfig, queryMember, addMember, updateMember, findMember, ran
   tMember,
   transferMember,
   queryStatisticsUser,
+  exportUsers
 } from '../services/api';
 import { message } from 'antd';
 import _ from 'lodash';
@@ -133,6 +134,11 @@ export default {
       } else {
         message.error(res.error);
       }
+    },
+
+    //exportUsers 
+    *exportUser({payload}, {call, put}) {
+      const res = yield call(exportUsers, payload);
     },
     // 随机生成卡号
     *random({payload}, {call, put}) {

@@ -54,6 +54,17 @@ export default class Page extends Component {
       }
     })
   }
+  exportUser(params ={}, target_page=1, page_size = PAGE_SIZE) {
+    const {dispatch} = this.props;
+    dispatch({
+      type: 'member/exportUser',
+      payload: {
+        ...params,
+        target_page,
+        page_size,
+      }
+    })
+  }
   queryLesson() {
     const {dispatch} = this.props;
     dispatch({
@@ -88,6 +99,24 @@ export default class Page extends Component {
         }
 
         this.query(params)
+      }
+    })
+  }
+
+  handleExport = (e) => {
+    e.preventDefault();
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      if(!err) {
+        let params = {}
+        if(values.code) params.code = values.code;
+        if(values.lesson_id) params.lesson_id = values.lesson_id;
+        if(values.teacher_id) params.teacher_id = values.teacher_id;
+        if(values.date) {
+          params.date_begin = values.date[0].format('YYYYMMDD');
+          params.date_end = values.date[1].format('YYYYMMDD');
+        }
+
+        this.exportUser(params)
       }
     })
   }
@@ -278,6 +307,7 @@ export default class Page extends Component {
                 <FormItem style={{'textAlign': 'right'}}>
                   <Button type="primary" htmlType="submit">搜索</Button>
                   <Button style={{marginLeft: 20}} onClick={this.handleReset}>重置</Button>
+                  <Button style={{marginLeft: 20}} onClick={this.handleExport}>导出</Button>
                 </FormItem>
               </Col>
             </Row>

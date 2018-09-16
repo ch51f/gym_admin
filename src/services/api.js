@@ -192,6 +192,14 @@ export async function queryStatisticsUser(params) {
   })
 }
 
+//导出会员
+
+export async function exportUsers(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/export/card_subscribe/users`, {
+    body: stringify(params)
+  })
+}
 
 
 
