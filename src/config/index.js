@@ -50,3 +50,5 @@ export const FORM_ITEM_BUTTON = {
     sm: {span: 10, offset: 7}, 
   },
 }
+
+export const exportUsersUrl = `${GYM_URL}admin/v1/export/card_subscribe/users`;

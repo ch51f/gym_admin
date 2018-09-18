@@ -5,7 +5,8 @@ import moment from 'moment';
 
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import {getGender, getAge, getDateStr, getPriceY} from '../../utils/utils';
-import {CARD_STATUS, PAGE_SIZE} from '../../config';
+import {CARD_STATUS, PAGE_SIZE, exportUsersUrl} from '../../config';
+import {getToken, getOperatorId} from '../../utils/load';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -105,20 +106,22 @@ export default class Page extends Component {
 
   handleExport = (e) => {
     e.preventDefault();
-    this.props.form.validateFieldsAndScroll((err, values) => {
-      if(!err) {
-        let params = {}
-        if(values.code) params.code = values.code;
-        if(values.lesson_id) params.lesson_id = values.lesson_id;
-        if(values.teacher_id) params.teacher_id = values.teacher_id;
-        if(values.date) {
-          params.date_begin = values.date[0].format('YYYYMMDD');
-          params.date_end = values.date[1].format('YYYYMMDD');
-        }
+    let {export_form} = this.refs;
+    debugger;
+    // this.props.form.validateFieldsAndScroll((err, values) => {
+    //   if(!err) {
+    //     let params = {}
+    //     if(values.code) params.code = values.code;
+    //     if(values.lesson_id) params.lesson_id = values.lesson_id;
+    //     if(values.teacher_id) params.teacher_id = values.teacher_id;
+    //     if(values.date) {
+    //       params.date_begin = values.date[0].format('YYYYMMDD');
+    //       params.date_end = values.date[1].format('YYYYMMDD');
+    //     }
 
-        this.exportUser(params)
-      }
-    })
+    //     this.exportUser(params)
+    //   }
+    // })
   }
   handleReset = () => {
     this.props.form.resetFields();
@@ -312,6 +315,10 @@ export default class Page extends Component {
               </Col>
             </Row>
           </Form>
+          <form ref="export_form" action={exportUsersUrl} target="_blank" method="post">
+            <input value={getToken()} type="hidden" name="token" />
+            <input value={getOperatorId()} type="hidden" name="operator_id" />
+          </form>
       		<div>
             <Table rowKey={record => record.id} dataSource={list} columns={col} loading={loading} pagination={pagination} onChange={this.handleTableChange} />
       		</div>
