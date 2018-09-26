@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import {connect} from 'dva';
 import {Card, Form, DatePicker, Button, Row, Col, Table} from 'antd';
 import moment from 'moment';
@@ -31,6 +31,16 @@ export default class Page extends Component {
         page_size,
       }
     })
+  }
+  goManage = (record) => {
+    const {dispatch, history} = this.props;
+    dispatch({
+      type: 'member/queryToManage',
+      payload: {
+        code: record.card_id
+      }
+    })
+    history.push('/member/manage');
   }
   handleTableChange = (pagination, filters, sorter) => {
     let {current, pageSize} = pagination;
@@ -70,7 +80,14 @@ export default class Page extends Component {
     }, {
       title: '名字',
       dataIndex: 'user_name',
-      key: 'user_name'
+      key: 'user_name',
+      render: (val, record) => {
+        return (
+          <Fragment>
+            <a href="javascript:;" onClick={() => this.goManage(record)}>{val}</a>
+          </Fragment>
+        )
+      }
     }, {
       title: '性别',
       dataIndex: 'gender',

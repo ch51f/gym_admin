@@ -107,21 +107,7 @@ export default class Page extends Component {
   handleExport = (e) => {
     e.preventDefault();
     let {export_form} = this.refs;
-    debugger;
-    // this.props.form.validateFieldsAndScroll((err, values) => {
-    //   if(!err) {
-    //     let params = {}
-    //     if(values.code) params.code = values.code;
-    //     if(values.lesson_id) params.lesson_id = values.lesson_id;
-    //     if(values.teacher_id) params.teacher_id = values.teacher_id;
-    //     if(values.date) {
-    //       params.date_begin = values.date[0].format('YYYYMMDD');
-    //       params.date_end = values.date[1].format('YYYYMMDD');
-    //     }
-
-    //     this.exportUser(params)
-    //   }
-    // })
+    export_form.submit();
   }
   handleReset = () => {
     this.props.form.resetFields();
@@ -142,14 +128,14 @@ export default class Page extends Component {
   }
 
   goManage = (record) => {
-    // const {dispatch, history} = this.props;
-    // dispatch({
-    //   type: 'member/queryToManage',
-    //   payload: {
-    //     code: record.card_id
-    //   }
-    // })
-    // history.push('/member/manage');
+    const {dispatch, history} = this.props;
+    dispatch({
+      type: 'member/queryToManage',
+      payload: {
+        code: record.card_id
+      }
+    })
+    history.push('/member/manage');
   }
 
   render() {

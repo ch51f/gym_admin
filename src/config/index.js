@@ -8,7 +8,7 @@ export const PAGE_SIZE = 10;
 export const DAY_OF_WEEK = ['星期天', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期天'];
 export const DAY_OF_WEEK_1 = ['周日', '周一', '周二', '周三', '周四', '周五', '周六', '周日'];
 
-export const DEPARTMENT = ['销售部', '教练部'];
+export const DEPARTMENT = ['销售部', '教练部', '后勤部'];
 
 export const LESSON_STATUS = ['正常', '下架', '删除'];
 

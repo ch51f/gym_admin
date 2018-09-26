@@ -52,6 +52,13 @@ export async function upyun(params) {
   })
 }
 
+// 首页签到记录
+export async function queryHomeCheckin(params) {
+  params = setToken(params);
+  return requestApi(`${GYM_URL}admin/v1/user/checkin/list/home`, {
+    body: stringify(params)
+  })
+}
 
 
 

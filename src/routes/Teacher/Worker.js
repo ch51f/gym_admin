@@ -97,19 +97,21 @@ export default class Page extends Component {
           let temp = val == 99 ? 3 : val;
           return WORKER_TYPE[temp];
         }
-      }, {
-        title: '教练类型',
-        dataIndex: 'teacher_type',
-        render(val) {
-          let arr = val.split("");
-          let res = [];
-          if(arr.length > 2) {
-            if(arr[arr.length - 1] == 1) res.push("私人教练");
-            if(arr[arr.length - 2] == 1) res.push("小团体教练");
-          }
-          return res.join(",") || "-";
-        }
-      }, {
+      }, 
+      // {
+      //   title: '教练类型',
+      //   dataIndex: 'teacher_type',
+      //   render(val) {
+      //     let arr = val.split("");
+      //     let res = [];
+      //     if(arr.length > 2) {
+      //       if(arr[arr.length - 1] == 1) res.push("私人教练");
+      //       if(arr[arr.length - 2] == 1) res.push("小团体教练");
+      //     }
+      //     return res.join(",") || "-";
+      //   }
+      // }, 
+      {
         title: '简介',
         dataIndex: 'desc',
         render(val) {

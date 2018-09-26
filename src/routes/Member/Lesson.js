@@ -125,14 +125,14 @@ export default class Page extends Component {
   }
 
   goManage = (record) => {
-    // const {dispatch, history} = this.props;
-    // dispatch({
-    //   type: 'member/queryToManage',
-    //   payload: {
-    //     code: record.card_id
-    //   }
-    // })
-    // history.push('/member/manage');
+    const {dispatch, history} = this.props;
+    dispatch({
+      type: 'member/queryToManage',
+      payload: {
+        code: record.card_id
+      }
+    })
+    history.push('/member/manage');
   }
 
   render() {
@@ -206,14 +206,16 @@ export default class Page extends Component {
       title: '购买/剩余',
       dataIndex: 'count_left_count',
       key: 'count_left_count',
-    }, {
-      title: '账户余额(元)',
-      dataIndex: 'balance',
-      key: 'balance',
-      render: (val) => {
-        return getPriceY(val);
-      }
-    }]
+    }, 
+    // {
+    //   title: '账户余额(元)',
+    //   dataIndex: 'balance',
+    //   key: 'balance',
+    //   render: (val) => {
+    //     return getPriceY(val);
+    //   }
+    // }
+    ]
 
 
     return (

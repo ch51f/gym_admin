@@ -72,6 +72,10 @@ export const getRouterData = (app) => {
     },
     // 首页
     '/home': {
+      component: dynamicWrapper(app, ['member', 'checkin'], () => import('../routes/Dashboard/Home')),
+    },
+    // 私教预约
+    '/booking': {
       component: dynamicWrapper(app, ['member'], () => import('../routes/Dashboard/AcesHome')),
     },
     // 提测录入

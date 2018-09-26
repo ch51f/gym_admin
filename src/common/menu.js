@@ -5,6 +5,11 @@ const menuData = [
   path: 'home'
 }, 
 {
+  name: '私教预约',
+  icon: 'idcard',
+  path: 'booking',
+},
+{
   name: '会员管理',
   icon: 'user',
   path: 'member',
@@ -15,10 +20,10 @@ const menuData = [
     name: '入场记录',
     path: 'checkin',
   }, {
-    name: '会员管理',
+    name: '会员查询',
     path: 'manage',
   }, {
-    name: '会员查询',
+    name: '会员管理',
     path: 'search',
   }, {
     name: '会员转移',
@@ -52,18 +57,18 @@ const menuData = [
     path: 'statistics'
   }]
 },
-{
-  name: '充值管理',
-  icon: 'book',
-  path: 'buy',
-  children: [{
-    name: '会员充值',
-    path: 'memberBuy'
-  }, {
-    name: '充值记录',
-    path: 'memberBuySearch'
-  }] 
-},
+// {
+//   name: '充值管理',
+//   icon: 'book',
+//   path: 'buy',
+//   children: [{
+//     name: '会员充值',
+//     path: 'memberBuy'
+//   }, {
+//     name: '充值记录',
+//     path: 'memberBuySearch'
+//   }] 
+// },
 {
   name: '后勤管理',
   path: 'system',
@@ -98,10 +103,12 @@ const menuData = [
   }, {
     name: '会籍会员',
     path: 'member',
-  }, {
-    name: '系统维护记录',
-    path: 'mainTain',
-  }]
+  }, 
+  // {
+  //   name: '系统维护记录',
+  //   path: 'mainTain',
+  // }
+  ]
 },
 {
   name: '账户',

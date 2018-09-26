@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import {connect} from 'dva';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import {Card, Form, Row, Col, Table, Input,  Button, Select, InputNumber} from 'antd';
@@ -63,6 +63,17 @@ export default class Page extends Component {
     this.query();
   }
 
+  goManage = (record) => {
+    const {dispatch, history} = this.props;
+    dispatch({
+      type: 'member/queryToManage',
+      payload: {
+        code: record.card_id
+      }
+    })
+    history.push('/member/manage');
+  }
+
   handleTableChange = (pagination, filters, sorter) => {
     let {current, pageSize} = pagination;
     this.query({}, current, pageSize);
@@ -84,7 +95,14 @@ export default class Page extends Component {
     }, {
       title: '姓名',
       dataIndex: 'user_name',
-      key: 'user_name'
+      key: 'user_name',
+      render: (val, record) => {
+        return (
+          <Fragment>
+            <a href="javascript:;" onClick={() => this.goManage(record)}>{val}</a>
+          </Fragment>
+        )
+      }
     }, {
       title: '购买课程',
       dataIndex: 'lesson_name',
@@ -126,14 +144,16 @@ export default class Page extends Component {
       title: '剩余课时',
       dataIndex: 'left_count',
       key: 'left_count'
-    }, {
-      title: '账户余额(元)',
-      dataIndex: 'balance',
-      key: 'balance',
-      render(val) {
-        return getPriceY(val)
-      }
-    }];
+    }, 
+    // {
+    //   title: '账户余额(元)',
+    //   dataIndex: 'balance',
+    //   key: 'balance',
+    //   render(val) {
+    //     return getPriceY(val)
+    //   }
+    // }
+    ];
 
     return(
       <PageHeaderLayout title="购买记录">
