@@ -4,101 +4,101 @@ import { message } from 'antd';
 
 
 export default {
-    namespace: 'lesson', 
+    namespace: 'lesson',
     state: {
-        lists: [], 
-        search_lists: [], 
-        buy_lists: [], 
-        detail: {}, 
+        lists: [],
+        search_lists: [],
+        buy_lists: [],
+        detail: {},
         lesson_id: -1,
         // lesson_id: 132,
-    }, 
+    },
     effects: {
-        // 课程列表 
+        // 课程列表
         *lesson_list({payload}, {call, put}) {
-            const res = yield call(acesgirl_lesson_list_home, payload); 
+            const res = yield call(acesgirl_lesson_list_home, payload);
             if(res.status === 0) {
                 yield put({
-                    type: 'set', 
-                    payload: {lists: res.data} 
-                }) 
+                    type: 'set',
+                    payload: {lists: res.data}
+                })
             } else {
-                message.error(res.error); 
-            } 
-        }, 
+                message.error(res.error);
+            }
+        },
         *search_list({payload}, {call, put}) {
-            const res = yield call(acesgirl_lesson_list, payload); 
+            const res = yield call(acesgirl_lesson_list, payload);
             if(res.status === 0) {
                 yield put({
-                    type: 'set', 
-                    payload: {search_lists: res.data} 
-                }) 
+                    type: 'set',
+                    payload: {search_lists: res.data}
+                })
             } else {
-                message.error(res.error); 
-            } 
-        }, 
-        // 添加课程 
+                message.error(res.error);
+            }
+        },
+        // 添加课程
         *addLesson({payload}, {call, put}) {
-            const res = yield call(acesgirl_lesson_add, payload); 
+            const res = yield call(acesgirl_lesson_add, payload);
             if(res.status === 0) {
-                message.success("创建课程成功"); 
-                yield put(routerRedux.push('/lesson/lessonSearch')); 
+                message.success("创建课程成功");
+                yield put(routerRedux.push('/teacher/lessonSearch'));
             } else {
-                message.error(res.error, 10); 
-            } 
-        }, 
+                message.error(res.error, 10);
+            }
+        },
         // 修改课程
         *updLesson({payload}, {call, put}) {
-            const res = yield call(acesgirl_lesson_update, payload); 
+            const res = yield call(acesgirl_lesson_update, payload);
             if(res.status === 0) {
-                message.success("修改课程成功"); 
-                yield put(routerRedux.push('/lesson/lessonSearch')); 
+                message.success("修改课程成功");
+                yield put(routerRedux.push('/teacher/lessonSearch'));
             } else {
-                message.error(res.error, 10); 
-            } 
-        }, 
+                message.error(res.error, 10);
+            }
+        },
         *buy_list({payload}, {call, put}) {
-            const res = yield call(acesgirl_lesson_buy_list, payload); 
+            const res = yield call(acesgirl_lesson_buy_list, payload);
             if(res.status === 0) {
                 yield put({
-                    type: 'set', 
-                    payload: {buy_lists: res.data} 
-                }) 
+                    type: 'set',
+                    payload: {buy_lists: res.data}
+                })
             } else {
-                message.error(res.error); 
-            } 
-        }, 
+                message.error(res.error);
+            }
+        },
         *addBuy({payload}, {call, put}) {
-            const res = yield call(acesgirl_lesson_buy, payload); 
+            const res = yield call(acesgirl_lesson_buy, payload);
             if(res.status === 0) {
-                message.success("购买课程成功"); 
-                yield put(routerRedux.push('/lesson/lessonBuySearch')); 
+                message.success("购买课程成功");
+                yield put(routerRedux.push('/teacher/lessonBuySearch'));
             } else {
-                message.error(res.error, 10); 
-            } 
-        }, 
+                message.error(res.error, 10);
+            }
+        },
         *detail({payload}, {call, put}) {
             yield put({
-                type: 'set', 
-                payload: {detail: {}} 
-            }) 
-            const res = yield call(acesgirl_lesson_detail, payload); 
+                type: 'set',
+                payload: {detail: {}}
+            })
+            const res = yield call(acesgirl_lesson_detail, payload);
             if(res.status === 0) {
                 yield put({
-                    type: 'set', 
-                    payload: {detail: res.data} 
-                }) 
+                    type: 'set',
+                    payload: {detail: res.data}
+                })
             } else {
-                message.error(res.error); 
-            } 
-        } 
-    }, 
+                message.error(res.error);
+            }
+        }
+    },
     reducers: {
         set(state, {payload}) {
             return {
-                ...state, 
-                ...payload 
-            } 
-        }, 
-    }, 
+                ...state,
+                ...payload
+            }
+        },
+    },
 };

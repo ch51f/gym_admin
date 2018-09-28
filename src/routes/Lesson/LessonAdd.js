@@ -139,11 +139,21 @@ export default class Page extends Component {
     return arr.join(',');
   }
 
+  getPrices1 = () => {
+    let {ranks, form} = this.props;
+    let {getFieldValue} = form;
+    let arr = [];
+    for(let i = 0, item; item = ranks[i]; i++) {
+      arr.push(getPriceF(getFieldValue(`lesson_price`)));
+    }
+    return arr.join(',');
+  }
+
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if(!err) {
-        let {lesson_id} = this.props;
+        let {lesson_id, ranks} = this.props;
         let {imgs, time_box} = this.state;
         if(imgs.length < 1) {
           message.warning("请上传封面图");
@@ -159,15 +169,15 @@ export default class Page extends Component {
           gym_id: getOperatorId(),
           item_uuid: uuid(32, 16),
           lesson_name: values.lesson_name,
-          lesson_subtitle: values.lesson_subtitle,
+          lesson_subtitle: "",
           intro: values.intro,
           remind: values.remind,
           teacher_id: values.teacher_id,
           time_teacher: this.getTeacherName(values.teacher_id),
-          buy_types: values.buy_types.join(","),
+          buy_types: 1,
           status: values.status,
           rank_type_id: values.rank_type_id,
-          rank_prices: this.getPrices(),
+          rank_prices: this.getPrices1(),
           show: values.show,
         }
         if(values.lesson_type == 2 && lesson_id < 0) {
@@ -271,7 +281,7 @@ export default class Page extends Component {
       return false;
     }
     let {time_box, id} = this.state;
-    
+
     let params = {
       id,
       week,
@@ -294,12 +304,12 @@ export default class Page extends Component {
         if(it.rank_order == item.rank_order) {
           price = it.price / 100;
           break;
-        } 
+        }
       }
     }
     return (
-      <Col span={4} key={`rank_${i}`}> 
-        <FormItem> 
+      <Col span={4} key={`rank_${i}`}>
+        <FormItem>
           {getFieldDecorator(`price_${item.id}`, {
             initialValue: price,
           })(
@@ -331,6 +341,7 @@ export default class Page extends Component {
     let {submitting_add, submitting_upd, form, worker_data, ranks, lesson_id, detail} = this.props;
     const {getFieldDecorator, getFieldValue} = form;
     let submitting = lesson_id > 0 ? (submitting_upd || flag) : (submitting_add || flag);
+    console.log(ranks);
     const UploadButton = (
       <div>
         <Icon type={flag ? 'loading' : 'plus'} />
@@ -413,11 +424,11 @@ export default class Page extends Component {
                 <Input placeholder="课程名称" />
               )}
             </FormItem>
-            <FormItem {...FORM_ITEM_LAYOUT} label="课程副标题">
+            <FormItem {...FORM_ITEM_LAYOUT} label="课程副标题" style={{display: 'none'}}>
               {getFieldDecorator('lesson_subtitle', {
                 initialValue: detail.lesson ? detail.lesson.lesson_subtitle : "",
                 rules: [{
-                  required: true, message: '请选择课程副标题'
+                  required: false, message: '请选择课程副标题'
                 }]
               })(
                 <Input placeholder="课程副标题" />
@@ -482,15 +493,15 @@ export default class Page extends Component {
                     {getFieldDecorator('begin_time')(
                       <TimePicker format={format} style={{width: '100px'}} placeholder="开始时间" />
                     )}
-                    <Input style={{ width: 30, pointerEvents: 'none', backgroundColor: '#fff' }} placeholder="~" disabled /> 
+                    <Input style={{ width: 30, pointerEvents: 'none', backgroundColor: '#fff' }} placeholder="~" disabled />
                     {getFieldDecorator('end_time')(
                       <TimePicker format={format} style={{width: '100px'}} placeholder="结束时间" />
                     )}
-                    <Input style={{ width: 60, pointerEvents: 'none', backgroundColor: '#fff' }} placeholder="名字：" disabled /> 
+                    <Input style={{ width: 60, pointerEvents: 'none', backgroundColor: '#fff' }} placeholder="名字：" disabled />
                     {getFieldDecorator('time_name')(
                       <Input style={{width: '100px'}}  />
                     )}
-                    <Input style={{ width: 60, pointerEvents: 'none', backgroundColor: '#fff' }} placeholder="教练：" disabled /> 
+                    <Input style={{ width: 60, pointerEvents: 'none', backgroundColor: '#fff' }} placeholder="教练：" disabled />
                     {getFieldDecorator('time_teacher')(
                       <Select placeholder="教练列表" style={{width: '100px'}}>
                         {worker_data.list.map((item, i) => {
@@ -507,9 +518,19 @@ export default class Page extends Component {
               </div>
             </FormItem>
 
-
-
             <FormItem {...FORM_ITEM_LAYOUT} label="课程价格">
+              {getFieldDecorator('lesson_price', {
+                rules: [{
+                  required: true, message: '请输入课程价格'
+                }]
+              })(
+                <InputNumber min={0} precision={2} />
+              )}
+            </FormItem>
+
+
+
+            <FormItem {...FORM_ITEM_LAYOUT} label="课程价格"  style={{display: 'none'}}>
               {ranks.map((item, i) => this._renderPrice(item, i))}
             </FormItem>
             <FormItem {...FORM_ITEM_LAYOUT} label="课程人数" style={{display: getFieldValue('lesson_type') != 0 ? 'block' : 'none'}}>
@@ -521,9 +542,9 @@ export default class Page extends Component {
                     message: '请选择课程人数'
                   }]
                 })(
-                  <Input id="group_lesson_user_min" style={{ width: 100, textAlign: 'center' }} placeholder="最少" /> 
+                  <Input id="group_lesson_user_min" style={{ width: 100, textAlign: 'center' }} placeholder="最少" />
                 )}
-                <Input style={{ width: 30, borderLeft: 0, pointerEvents: 'none', backgroundColor: '#fff' }} placeholder="~" disabled /> 
+                <Input style={{ width: 30, borderLeft: 0, pointerEvents: 'none', backgroundColor: '#fff' }} placeholder="~" disabled />
                 {getFieldDecorator('group_lesson_user_max', {
                   initialValue: detail.lesson ? detail.lesson.group_lesson_user_max : "",
                   rules: [{
@@ -535,7 +556,7 @@ export default class Page extends Component {
                 )}
               </InputGroup>
             </FormItem>
-            <FormItem {...FORM_ITEM_LAYOUT} label="购买数量">
+            <FormItem {...FORM_ITEM_LAYOUT} label="购买数量"  style={{display: 'none'}}>
               {getFieldDecorator('buy_types', {
                 initialValue: detail.lesson ? detail.lesson.buy_types.split(',') : "",
                 rules: [{
