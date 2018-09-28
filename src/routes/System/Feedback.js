@@ -18,7 +18,7 @@ export default class Page extends Component {
     record: {},
     reply: '',
     is_public: '0',
-  } 
+  }
   componentWillMount() {
     this.query();
   }
@@ -35,7 +35,7 @@ export default class Page extends Component {
     this.query(current, pageSize);
   }
   goAddFeedback = () => {
-    this.props.history.push('/system/addFeedback');
+    this.props.history.push('/teacher/addFeedback');
   }
   setModal = (flag, record = {}) => {
     let params = {

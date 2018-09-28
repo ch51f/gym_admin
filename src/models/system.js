@@ -36,7 +36,7 @@ export default {
 					type: 'set',
 					payload: {notice: {}}
 				})
-				yield put(routerRedux.push('/system/noticeManage'));
+				yield put(routerRedux.push('/teacher/noticeManage'));
 			} else {
 				message.error(res.error);
 			}
@@ -50,7 +50,7 @@ export default {
 					type: 'set',
 					payload: {notice: {}}
 				})
-				yield put(routerRedux.push('/system/noticeManage'));
+				yield put(routerRedux.push('/teacher/noticeManage'));
 			} else {
 				message.error(res.error);
 			}

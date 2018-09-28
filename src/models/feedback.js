@@ -38,7 +38,7 @@ export default {
 
 			if(res.status === 0) {
 				message.success("添加反馈成功")
-				yield put(routerRedux.push('/system/feedback'));
+				yield put(routerRedux.push('/teacher/feedback'));
 			} else {
 				message.error(res.error);
 			}
@@ -57,7 +57,7 @@ export default {
 					}
 				});
 			} else {
-				message.error(res.error);				
+				message.error(res.error);
 			}
 		},
 		// 回复反馈
@@ -74,7 +74,7 @@ export default {
 					}
 				});
 			} else {
-				message.error(res.error);				
+				message.error(res.error);
 			}
 		}
 	},

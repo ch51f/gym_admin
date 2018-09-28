@@ -23,7 +23,7 @@ export default class Page extends Component {
 	state = {
     logo: false
   }
-  
+
   upload = (info) => {
     this.setState({logo: true});
     info.call = this.callback.bind(this);
@@ -169,7 +169,7 @@ export default class Page extends Component {
                   <TextArea style={{ minHeight: 32, display: 'none' }} placeholder="通知内容" rows={4} />
                 </div>
               )}
-            </FormItem> 
+            </FormItem>
             <FormItem {...FORM_ITEM_LAYOUT} label="通知内容html" style={{ display: 'none' }}>
               {getFieldDecorator('content_html', {
               })(
@@ -180,7 +180,7 @@ export default class Page extends Component {
               {getFieldDecorator('content_url', {
                 initialValue: notice.content_html,
                 rules: [{
-                  required: getFieldValue('type') == 1 ? true : false, 
+                  required: getFieldValue('type') == 1 ? true : false,
                   message: '请输入通知内容', transform: (value) => {
                     return _.trim(value);
                   }

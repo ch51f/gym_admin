@@ -59,7 +59,7 @@ export default class Page extends Component {
       type: 'worker/set',
       payload: {worker: record},
     })
-    history.push('/system/workerAdd');
+    history.push('/teacher/workerAdd');
   }
   render() {
     const {loading, worker_data} = this.props;
@@ -97,7 +97,7 @@ export default class Page extends Component {
           let temp = val == 99 ? 3 : val;
           return WORKER_TYPE[temp];
         }
-      }, 
+      },
       // {
       //   title: '教练类型',
       //   dataIndex: 'teacher_type',
@@ -110,7 +110,7 @@ export default class Page extends Component {
       //     }
       //     return res.join(",") || "-";
       //   }
-      // }, 
+      // },
       {
         title: '简介',
         dataIndex: 'desc',

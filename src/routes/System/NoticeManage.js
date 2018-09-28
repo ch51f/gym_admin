@@ -40,7 +40,7 @@ export default class Page extends Component {
 				notice: item
 			}
 		});
-		this.props.history.push('/system/noticeAdd');
+		this.props.history.push('/teacher/noticeAdd');
 	}
 	render() {
 		const {loading, notice_data} = this.props;
@@ -55,7 +55,7 @@ export default class Page extends Component {
 					<div style={{'marginBottom': '20px', 'textAlign': 'right'}}>
 						<Button icon="plus" type="primary" onClick={() => this.updateNotice()}>添加通知</Button>
 					</div>
-					<List 
+					<List
 						className={style.noticeList}
 						itemLayout="vertical"
 						size="large"

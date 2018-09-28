@@ -82,7 +82,7 @@ export const getRouterData = (app) => {
     '/member/physical': {
       component: dynamicWrapper(app, ['member'], () => import('../routes/Member/Physical')),
     },
-    '/teacher/lesson': {
+    '/teacher/lessonRecord': {
       component: dynamicWrapper(app, ['member', 'worker', 'lesson'], () => import('../routes/Member/Lesson')),
     },
     '/member/add': {
@@ -126,16 +126,16 @@ export const getRouterData = (app) => {
     },
 
     // 教练管理
-    '/system/worker': {
+    '/teacher/worker': {
       component: dynamicWrapper(app, ['member', 'worker'], () => import('../routes/Teacher/Worker')),
     },
-    '/system/workerAdd': {
+    '/teacher/workerAdd': {
       component: dynamicWrapper(app, ['member', 'worker'], () => import('../routes/Teacher/WorkerAdd')),
     },
-    '/system/askLeave': {
+    '/teacher/askLeave': {
       component: dynamicWrapper(app, ['member', 'worker'], () => import('../routes/Teacher/AskLeave')),
     },
-    '/system/askLeaveAdd': {
+    '/teacher/askLeaveAdd': {
       component: dynamicWrapper(app, ['member', 'worker'], () => import('../routes/Teacher/AskLeaveAdd')),
     },
 
@@ -157,22 +157,22 @@ export const getRouterData = (app) => {
     },
 
     // 系统配置
-    '/system/noticeManage': {
+    '/teacher/noticeManage': {
       component: dynamicWrapper(app, ['member', 'system'], () => import('../routes/System/NoticeManage')),
     },
-    '/system/noticeAdd': {
+    '/teacher/noticeAdd': {
       component: dynamicWrapper(app, ['member', 'system'], () => import('../routes/System/NoticeAdd')),
     },
-    '/system/lesson': {
+    '/teacher/lesson': {
       component: dynamicWrapper(app, ['member', 'groupLesson'], () => import('../routes/System/Lesson')),
     },
-    '/system/addLesson': {
+    '/teacher/addLesson': {
       component: dynamicWrapper(app, ['groupLesson', 'worker', 'member'], () => import('../routes/System/LessonAdd')),
     },
-    '/system/feedback': {
+    '/teacher/feedback': {
       component: dynamicWrapper(app, ['feedback', 'member'], () => import('../routes/System/Feedback')),
     },
-    '/system/addFeedback': {
+    '/teacher/addFeedback': {
       component: dynamicWrapper(app, ['feedback', 'member'], () => import('../routes/System/FeedbackAdd')),
     },
 
@@ -209,7 +209,7 @@ export const getRouterData = (app) => {
     '/exception/500': {
       component: dynamicWrapper(app, [], () => import('../routes/Exception/500')),
     },
-   
+
     '/user': {
       component: dynamicWrapper(app, [], () => import('../layouts/UserLayout')),
     },

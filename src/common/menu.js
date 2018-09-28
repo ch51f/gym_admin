@@ -3,7 +3,7 @@ const menuData = [
   name: '首页',
   icon: 'home',
   path: 'home'
-}, 
+},
 {
   name: '私教预约',
   icon: 'idcard',
@@ -42,7 +42,7 @@ const menuData = [
   path: 'teacher',
   children: [{
     name: '上课记录',
-    path: 'lesson'
+    path: 'lessonRecord'
   }, {
     name: '购买课程',
     path: 'lessonBuy',
@@ -55,25 +55,8 @@ const menuData = [
   }, {
     name: '课程统计',
     path: 'statistics'
-  }]
-},
-// {
-//   name: '充值管理',
-//   icon: 'book',
-//   path: 'buy',
-//   children: [{
-//     name: '会员充值',
-//     path: 'memberBuy'
-//   }, {
-//     name: '充值记录',
-//     path: 'memberBuySearch'
-//   }] 
-// },
-{
-  name: '后勤管理',
-  path: 'system',
-  icon: 'setting',
-  children: [{
+  },
+  {
     name: '教练请假',
     path: 'askLeave'
   }, {
@@ -90,6 +73,39 @@ const menuData = [
     path: 'feedback'
   }]
 },
+// {
+//   name: '充值管理',
+//   icon: 'book',
+//   path: 'buy',
+//   children: [{
+//     name: '会员充值',
+//     path: 'memberBuy'
+//   }, {
+//     name: '充值记录',
+//     path: 'memberBuySearch'
+//   }]
+// },
+// {
+//   name: '后勤管理',
+//   path: 'system',
+//   icon: 'setting',
+//   children: [{
+//     name: '教练请假',
+//     path: 'askLeave'
+//   }, {
+//     name: '操课管理',
+//     path: 'lesson'
+//   }, {
+//     name: '员工管理',
+//     path: 'worker'
+//   }, {
+//     name: '通知管理',
+//     path: 'noticeManage',
+//   }, {
+//     name: '反馈管理',
+//     path: 'feedback'
+//   }]
+// },
 {
   name: '系统设置',
   path: 'gym',
@@ -98,12 +114,12 @@ const menuData = [
     name: '基础配置',
     path: 'main',
   }, {
-    name: '体测私教',
+    name: '私教配置',
     path: 'teacher',
   }, {
-    name: '会籍会员',
+    name: '会籍配置',
     path: 'member',
-  }, 
+  },
   // {
   //   name: '系统维护记录',
   //   path: 'mainTain',

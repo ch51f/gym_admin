@@ -30,7 +30,7 @@ export default class Page extends Component {
       type: 'groupLesson/setLesson',
       payload: record,
     })
-  	history.push('/system/addLesson')
+  	history.push('/teacher/addLesson')
   }
 	render() {
 		const {loading, lesson_data} = this.props;

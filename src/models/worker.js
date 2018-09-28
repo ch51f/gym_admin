@@ -1,6 +1,6 @@
 import {routerRedux} from 'dva/router';
 import {
-	worker_query, worker_add, worker_update, 
+	worker_query, worker_add, worker_update,
 	rank_info, working_time_range,
 	leave_list, leave_check, leave_add, leave_cancle
 } from '../services/api';
@@ -14,7 +14,7 @@ export default {
 		worker_data: {
 			list: [],
 		},
-		worker: {}, 
+		worker: {},
 
 		ranks: [],
 		working_time: [],
@@ -48,7 +48,7 @@ export default {
 					type: 'set',
 					payload: {worker: {}},
 				})
-				yield put(routerRedux.push('/system/worker'));
+				yield put(routerRedux.push('/teacher/worker'));
 			} else {
 				message.error(res.error);
 			}
@@ -63,7 +63,7 @@ export default {
 					type: 'set',
 					payload: {worker: {}},
 				})
-				yield put(routerRedux.push('/system/worker'));
+				yield put(routerRedux.push('/teacher/worker'));
 			} else {
 				message.error(res.error);
 			}
@@ -165,7 +165,7 @@ export default {
 				message.error(res.error);
 			}
 		},
-	}, 
+	},
 	reducers: {
 		set(state, {payload}) {
 			return {
