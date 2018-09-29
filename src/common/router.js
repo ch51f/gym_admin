@@ -141,7 +141,7 @@ export const getRouterData = (app) => {
 
     // 课程管理
     '/teacher/lessonBuy': {
-      component: dynamicWrapper(app, ['worker', 'lesson', 'member'], () => import('../routes/Lesson/LessonBuy')),
+      component: dynamicWrapper(app, ['worker', 'lesson', 'member'], () => import('../routes/Lesson/LessonBuy1')),
     },
     '/teacher/lessonBuySearch': {
       component: dynamicWrapper(app, ['member', 'worker', 'lesson'], () => import('../routes/Lesson/LessonBuySearch')),

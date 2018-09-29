@@ -36,10 +36,10 @@ export default class Page extends Component {
       payload: {detail: {}}
     })
     this.props.dispatch({
-      type: 'member/setConfig', 
+      type: 'member/setConfig',
       payload: {
         quickMember: [],
-      } 
+      }
     })
   }
 
@@ -107,7 +107,7 @@ export default class Page extends Component {
 
   renderPrice(item, i) {
     return (
-      <Col span={6} key={`price_${i}`}> 
+      <Col span={6} key={`price_${i}`}>
         <Input defaultValue={`${item.price_name}:${getPriceY(item.price)}`} disabled={true}  />
       </Col>
     )
