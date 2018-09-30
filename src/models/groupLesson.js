@@ -35,7 +35,7 @@ export default {
 
 			if(res.status === 0) {
 				message.success("添加课程成功")
-				yield put(routerRedux.push('/teacher/lesson'));
+				yield put(routerRedux.push('/system/lesson'));
 			} else {
 				message.error(res.error);
 			}
@@ -46,7 +46,7 @@ export default {
 
 			if(res.status === 0) {
 				message.success("编辑课程成功")
-				yield put(routerRedux.push('/teacher/lesson'));
+				yield put(routerRedux.push('/system/lesson'));
 			} else {
 				message.error(res.error);
 			}

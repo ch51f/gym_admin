@@ -35,7 +35,7 @@ export default class Page extends Component {
     this.query(current, pageSize);
   }
   goAddFeedback = () => {
-    this.props.history.push('/teacher/addFeedback');
+    this.props.history.push('/system/addFeedback');
   }
   setModal = (flag, record = {}) => {
     let params = {

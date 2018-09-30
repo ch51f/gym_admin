@@ -108,7 +108,7 @@ export default class Page extends Component {
                   required: true, message: '请输入会员'
                 }]
               })(
-                <AutoComplete 
+                <AutoComplete
                   dataSource={dataSource.map(this.renderOption.bind(this))}
                   onSelect={this.onSelect.bind(this)}
                   onSearch={this.handleSearch}

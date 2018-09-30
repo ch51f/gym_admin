@@ -40,7 +40,7 @@ export default class Page extends Component {
 				notice: item
 			}
 		});
-		this.props.history.push('/teacher/noticeAdd');
+		this.props.history.push('/system/noticeAdd');
 	}
 	render() {
 		const {loading, notice_data} = this.props;

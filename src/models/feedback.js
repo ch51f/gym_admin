@@ -38,7 +38,7 @@ export default {
 
 			if(res.status === 0) {
 				message.success("添加反馈成功")
-				yield put(routerRedux.push('/teacher/feedback'));
+				yield put(routerRedux.push('/system/feedback'));
 			} else {
 				message.error(res.error);
 			}

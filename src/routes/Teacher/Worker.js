@@ -59,7 +59,7 @@ export default class Page extends Component {
       type: 'worker/set',
       payload: {worker: record},
     })
-    history.push('/teacher/workerAdd');
+    history.push('/system/workerAdd');
   }
   render() {
     const {loading, worker_data} = this.props;

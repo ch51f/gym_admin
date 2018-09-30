@@ -48,7 +48,7 @@ export default {
 					type: 'set',
 					payload: {worker: {}},
 				})
-				yield put(routerRedux.push('/teacher/worker'));
+				yield put(routerRedux.push('/system/worker'));
 			} else {
 				message.error(res.error);
 			}
@@ -63,7 +63,7 @@ export default {
 					type: 'set',
 					payload: {worker: {}},
 				})
-				yield put(routerRedux.push('/teacher/worker'));
+				yield put(routerRedux.push('/system/worker'));
 			} else {
 				message.error(res.error);
 			}
@@ -148,7 +148,7 @@ export default {
 			const res = yield call(leave_add, payload);
 			if(res.status === 0) {
 				message.success("请假成功")
-				yield put(routerRedux.push('/teacher/askLeave'));
+				yield put(routerRedux.push('/system/askLeave'));
 			} else {
 				message.error(res.error);
 			}

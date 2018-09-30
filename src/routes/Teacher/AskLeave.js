@@ -31,7 +31,7 @@ export default class Page extends Component {
   }
   goAddLeave() {
     let {history} = this.props;
-    history.push('/teacher/askLeaveAdd');
+    history.push('/system/askLeaveAdd');
   }
   render() {
     let {loading, leave_list} = this.props;

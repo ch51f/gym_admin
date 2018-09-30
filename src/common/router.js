@@ -126,16 +126,16 @@ export const getRouterData = (app) => {
     },
 
     // 教练管理
-    '/teacher/worker': {
+    '/system/worker': {
       component: dynamicWrapper(app, ['member', 'worker'], () => import('../routes/Teacher/Worker')),
     },
-    '/teacher/workerAdd': {
+    '/system/workerAdd': {
       component: dynamicWrapper(app, ['member', 'worker'], () => import('../routes/Teacher/WorkerAdd')),
     },
-    '/teacher/askLeave': {
+    '/system/askLeave': {
       component: dynamicWrapper(app, ['member', 'worker'], () => import('../routes/Teacher/AskLeave')),
     },
-    '/teacher/askLeaveAdd': {
+    '/system/askLeaveAdd': {
       component: dynamicWrapper(app, ['member', 'worker'], () => import('../routes/Teacher/AskLeaveAdd')),
     },
 
@@ -157,22 +157,22 @@ export const getRouterData = (app) => {
     },
 
     // 系统配置
-    '/teacher/noticeManage': {
+    '/system/noticeManage': {
       component: dynamicWrapper(app, ['member', 'system'], () => import('../routes/System/NoticeManage')),
     },
-    '/teacher/noticeAdd': {
+    '/system/noticeAdd': {
       component: dynamicWrapper(app, ['member', 'system'], () => import('../routes/System/NoticeAdd')),
     },
-    '/teacher/lesson': {
+    '/system/lesson': {
       component: dynamicWrapper(app, ['member', 'groupLesson'], () => import('../routes/System/Lesson')),
     },
-    '/teacher/addLesson': {
+    '/system/addLesson': {
       component: dynamicWrapper(app, ['groupLesson', 'worker', 'member'], () => import('../routes/System/LessonAdd')),
     },
-    '/teacher/feedback': {
+    '/system/feedback': {
       component: dynamicWrapper(app, ['feedback', 'member'], () => import('../routes/System/Feedback')),
     },
-    '/teacher/addFeedback': {
+    '/system/addFeedback': {
       component: dynamicWrapper(app, ['feedback', 'member'], () => import('../routes/System/FeedbackAdd')),
     },
 
