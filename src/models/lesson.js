@@ -8,7 +8,11 @@ export default {
     state: {
         lists: [],
         search_lists: [],
-        buy_lists: [],
+        // buy_lists: [],
+        buy_lists: {
+          lists: [],
+          pagination: {},
+        },
         detail: {},
         lesson_id: -1,
         // lesson_id: 132,
@@ -62,7 +66,14 @@ export default {
             if(res.status === 0) {
                 yield put({
                     type: 'set',
-                    payload: {buy_lists: res.data}
+                    payload: {buy_lists: {
+                      list: res.data.items ? res.data.items : res.data,
+                      pagination: {
+                        total: res.data.count || 1,
+                        pageSize: payload.page_size,
+                        current: res.data.target_page || 1,
+                      }
+                    }}
                 })
             } else {
                 message.error(res.error);

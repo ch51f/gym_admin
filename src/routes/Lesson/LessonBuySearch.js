@@ -1,19 +1,21 @@
 import React, {Component, Fragment} from 'react';
 import {connect} from 'dva';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import {Card, Form, Row, Col, Table, Input,  Button, Select, InputNumber} from 'antd';
-import {FORM_ITEM_LAYOUT, FORM_ITEM_BUTTON} from '../../config';
+import {Card, Form, Row, Col, Table, Input,  Button, Select, InputNumber, AutoComplete} from 'antd';
+import {FORM_ITEM_LAYOUT, FORM_ITEM_BUTTON, PAGE_SIZE} from '../../config';
 import {getPriceY, getPriceF} from '../../utils/utils';
 import moment from 'moment';
 
+const AutoOption = AutoComplete.Option;
 const FormItem = Form.Item;
 const {Option} = Select;
 const InputGroup = Input.Group;
 
 @Form.create()
-@connect(({loading, worker, lesson}) => ({
+@connect(({loading, worker, lesson, member}) => ({
   submitting: loading.effects['lesson/buy_list'],
 
+  quickMember: member.quickMember,
   worker_data: worker.worker_data,
 
   buy_lists: lesson.buy_lists,
@@ -27,10 +29,14 @@ export default class Page extends Component {
     this.queryLesson();
   }
 
-  query() {
+  query(params = {}, target_page=1, page_size = PAGE_SIZE) {
     this.props.dispatch({
       type: 'lesson/buy_list',
-      payload: {}
+      payload: {
+        ...params,
+        target_page,
+        page_size,
+      }
     })
   }
 
@@ -53,7 +59,23 @@ export default class Page extends Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       console.log(err, values)
       if(!err) {
-
+        let params = {}
+        if(values.count_from) {
+          params.count_from = values.count_from;
+        }
+        if(values.count_to) {
+          params.count_to = values.count_to;
+        }
+        if(values.lesson_id) {
+          params.lesson_id = values.lesson_id;
+        }
+        if(values.worker_id) {
+          params.teacher_id = values.worker_id;
+        }
+        if(values.member_id) {
+          params.user_id = values.member_id;
+        }
+        this.query(params);
       }
     })
   }
@@ -79,8 +101,36 @@ export default class Page extends Component {
     this.query({}, current, pageSize);
   }
 
+  handleSelect = (value) => {
+    this.props.dispatch({
+      type: 'member/queryBodyCheckById',
+      payload: {
+        user_id: value
+      }
+    });
+  }
+
+  handleSearch = (value) => {
+    if(value == "") return false;
+    this.props.dispatch({
+      type: 'member/quickQuery',
+      payload: {
+        code: value
+      }
+    })
+  }
+
+  renderOption(item) {
+    let txt = `${item.user_name}（${item.card_id}，${item.gender == "f" ? "女" : "男"}），电话：${item.tel}`;
+    return (
+      <AutoOption key={item.id} text={item.id}>{txt}</AutoOption>
+    )
+  }
+
   render() {
-    let {submitting, form, worker_data, buy_lists, search_lists} = this.props;
+    let {submitting, form, worker_data, buy_lists, search_lists, quickMember} = this.props;
+    const {list, pagination} = buy_lists;
+    const users = quickMember;
     const {getFieldDecorator} = form;
 
     const f_i_l = {
@@ -144,7 +194,7 @@ export default class Page extends Component {
       title: '剩余课时',
       dataIndex: 'left_count',
       key: 'left_count'
-    }, 
+    },
     // {
     //   title: '账户余额(元)',
     //   dataIndex: 'balance',
@@ -161,9 +211,15 @@ export default class Page extends Component {
           <Form layout="horizontal" onSubmit={this.handleSubmit}>
             <Row>
               <Col span="12">
-                <FormItem {...f_i_l} label="搜索会员">
-                  {getFieldDecorator('keyword')(
-                    <Input placeholder="搜索内容" />
+                <FormItem {...f_i_l} label="会员">
+                  {getFieldDecorator('member_id', {
+                  })(
+                    <AutoComplete
+                      dataSource={users.map(this.renderOption.bind(this))}
+                      onSelect={this.handleSelect.bind(this)}
+                      onSearch={this.handleSearch}
+                      placeholder="输入会员卡号 / 电话 / 名字"
+                    />
                   )}
                 </FormItem>
               </Col>
@@ -181,19 +237,23 @@ export default class Page extends Component {
               <Col span="12">
                 <FormItem {...f_i_l} label="购买数量">
                   <InputGroup compact>
-                    <Input style={{ width: 100, textAlign: 'center' }} placeholder="Minimum" /> 
-                    <Input style={{ width: 30, borderLeft: 0, pointerEvents: 'none', backgroundColor: '#fff' }} placeholder="~" disabled /> 
+                    {getFieldDecorator('count_from', {})(
+                    <Input style={{ width: 100, textAlign: 'center' }} placeholder="Minimum" />
+                    )}
+                    <Input style={{ width: 30, borderLeft: 0, pointerEvents: 'none', backgroundColor: '#fff' }} placeholder="~" disabled />
+                    {getFieldDecorator('count_to', {})(
                     <Input style={{ width: 100, textAlign: 'center', borderLeft: 0 }} placeholder="Maximum" />
+                    )}
                   </InputGroup>
                 </FormItem>
               </Col>
               <Col span="12">
                 <FormItem {...f_i_l} label="选择教练">
                   {getFieldDecorator('worker_id')(
-                    <Select placeholder="教练列表"> 
+                    <Select placeholder="教练列表">
                       {worker_data.list.map((item, i) => {
-                        return (<Option key={i} value={item.id}>{item.worker_name}</Option>) 
-                      })} 
+                        return (<Option key={i} value={item.id}>{item.worker_name}</Option>)
+                      })}
                     </Select>
                   )}
                 </FormItem>
@@ -208,7 +268,7 @@ export default class Page extends Component {
           </Form>
 
           <div>
-            <Table rowKey={record => record.id} dataSource={buy_lists} columns={col} loading={submitting} onChange={this.handleTableChange}  pagination={false} />
+            <Table rowKey={record => record.id} dataSource={list} columns={col} loading={submitting} onChange={this.handleTableChange}  pagination={pagination} />
           </div>
         </Card>
       </PageHeaderLayout>

@@ -26,7 +26,10 @@ export default class Page extends Component {
     // this.add();
     this.queryWorker();
     this.queryLesson();
-    this.query();
+    this.query({
+      date_begin: moment().format("YYYYMMDD"),
+      date_end: moment().format("YYYYMMDD")
+    });
   }
   componentWillUnmount() {
     this.props.dispatch({
@@ -206,7 +209,7 @@ export default class Page extends Component {
       title: '购买/剩余',
       dataIndex: 'count_left_count',
       key: 'count_left_count',
-    }, 
+    },
     // {
     //   title: '账户余额(元)',
     //   dataIndex: 'balance',
@@ -245,7 +248,9 @@ export default class Page extends Component {
       				</Col>
       				<Col span="12">
       					<FormItem {...f_i_l} label="上课时间">
-                  {getFieldDecorator('date')(
+                  {getFieldDecorator('date', {
+                    initialValue: [moment(), moment()]
+                  })(
       						  <RangePicker format="YYYY-MM-DD" />
                   )}
       					</FormItem>

@@ -3,7 +3,7 @@ import {connect} from 'dva';
 import {Card, Table, Icon, Button, Tooltip} from 'antd';
 
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import {ASK_LEAVE_REASON} from '../../config';
+import {ASK_LEAVE_REASON, PAGE_SIZE} from '../../config';
 import {getDateStr, strToTime} from '../../utils/utils';
 
 @connect(({worker, loading}) => ({
@@ -15,7 +15,7 @@ export default class Page extends Component {
   componentWillMount() {
     this.query();
   }
-  query() {
+  query(params = {}, target_page=1, page_size = PAGE_SIZE) {
     this.props.dispatch({
       type: 'worker/leave_list',
       payload: {}
@@ -29,12 +29,18 @@ export default class Page extends Component {
       }
     })
   }
+  handleTableChange = (pagination, filters, sorter) => {
+    let {current, pageSize} = pagination;
+    this.query({}, current, pageSize);
+  }
   goAddLeave() {
     let {history} = this.props;
     history.push('/system/askLeaveAdd');
   }
   render() {
     let {loading, leave_list} = this.props;
+    const {list, pagination} = leave_list;
+
     const columns = [
       {
         title: '请假教练',
@@ -98,9 +104,9 @@ export default class Page extends Component {
             <Table
               loading={loading}
               rowKey={record => record.id}
-              dataSource={leave_list}
+              dataSource={list}
               columns={columns}
-              pagination={false}
+              pagination={pagination}
             />
           </div>
         </Card>

@@ -19,7 +19,12 @@ export default {
 		ranks: [],
 		working_time: [],
 
-		leave_list: [],
+		// leave_list: [],
+    leave_list: {
+      list: [],
+      pagination: {}
+    },
+
 
 		check: false,
 		check_list: [],
@@ -95,7 +100,14 @@ export default {
 			if(res.status === 0) {
 				yield put({
 					type: "set",
-					payload: {leave_list: res.data},
+          payload: {leave_list: {
+                      list: res.data.items ? res.data.items : res.data,
+                      pagination: {
+                        total: res.data.count || 1,
+                        pageSize: payload.page_size,
+                        current: res.data.target_page || 1,
+                      }
+                    }}
 				})
 			} else {
 				message.error(res.error);
