@@ -1,7 +1,7 @@
 // import { routerRedux } from 'dva/router';
-import { login, upyun_sign, upyun } from '../services/api';
+import { login, upyun_sign, upyun, gym_get_config } from '../services/api';
 import { setAuthority } from '../utils/authority';
-import {setToken, setOperatorId, setOperatorName} from '../utils/load';
+import {setToken, setOperatorId, setOperatorName, setTitle} from '../utils/load';
 // import 'upyun-form';
 let location = window.location;
 export default {
@@ -36,7 +36,13 @@ export default {
         // Login success after permission changes to admin or user
         // The refresh will automatically redirect to the home page
         // yield put(routerRedux.push('/'));
-        location.reload();
+
+        const res = yield call(gym_get_config, payload);
+
+        if(res.status === 0) {
+          setTitle(res.data.gym_company_config.gym_name);
+          location.reload();
+        }
       } else {
         yield put({
           type: 'changeLoginStatus',

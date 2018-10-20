@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { Layout, Menu, Icon } from 'antd';
 import { Link } from 'dva/router';
 import styles from './index.less';
+import {getTitle} from '../../utils/load';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -203,7 +204,7 @@ export default class SiderMenu extends PureComponent {
         <div className={styles.logo} key="logo">
           <Link to="/">
             <img src={logo} alt="logo" />
-            <h1>艾思管理后台</h1>
+            <h1>{getTitle()}</h1>
           </Link>
         </div>
         <Menu

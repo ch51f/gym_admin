@@ -23,3 +23,12 @@ export function setOperatorName(operator_name) {
   return localStorage.setItem('operator_name', operator_name);
 
 }
+
+
+export function getTitle() {
+  return localStorage.getItem('title') || '';
+}
+
+export function setTitle(title) {
+	return localStorage.setItem('title', title)
+}

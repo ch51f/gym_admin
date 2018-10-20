@@ -12,6 +12,7 @@ import {queryMemberConfig, queryMember, addMember, updateMember, findMember, ran
   queryCheckin,
   queryCard,
   activeMember,
+  calcleMember,
   cancleMember,
   pauseMember,
   buyCard,
@@ -420,6 +421,19 @@ export default {
       const res = yield call(pauseMember, payload);
       if(res.status === 0) {
         message.success("会员暂停成功");
+
+        yield put({
+          type: 'setMember',
+          payload: {user: res.data},
+        })
+      } else {
+        message.error(res.error);
+      }
+    },
+    *calcle({payload}, {call, put}) {
+      const res = yield call(calcleMember, payload);
+      if(res.status === 0) {
+        message.success("取消会员暂停成功");
 
         yield put({
           type: 'setMember',

@@ -21,6 +21,12 @@ export async function login(params) {
   });
 }
 
+export async function gym_info_user(params) {
+  return requestApi(`${GYM_URL}admin/v1/basic/gym_info_user`, {
+    body: stringify(params)
+  });
+}
+
 export async function gym_info(params) {
   return requestApi(`${GYM_URL}admin/v1/basic/gym_info`, {
     body: stringify(params)

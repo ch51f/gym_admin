@@ -16,7 +16,7 @@ import Authorized from '../utils/Authorized';
 import { getMenuData } from '../common/menu';
 import logo from '../assets/logo.svg';
 
-import {getOperatorName, getOperatorId} from '../utils/load';
+import {getOperatorName, getOperatorId, getTitle} from '../utils/load';
 
 const { Content } = Layout;
 const { AuthorizedRoute } = Authorized;
@@ -101,9 +101,9 @@ class BasicLayout extends React.PureComponent {
   getPageTitle() {
     const { routerData, location } = this.props;
     const { pathname } = location;
-    let title = '艾思女子运动馆';
+    let title = getTitle();
     if (routerData[pathname] && routerData[pathname].name) {
-      title = `${routerData[pathname].name} -艾思女子运动馆`;
+      title = `${routerData[pathname].name} -${getTitle()}`;
     }
     return title;
   }
@@ -195,7 +195,7 @@ class BasicLayout extends React.PureComponent {
               links={[]}
               copyright={
                 <div>
-                  Copyright <Icon type="copyright" /> 2018 艾思女子运动馆
+                  Copyright <Icon type="copyright" /> 2018 {getTitle()}
                 </div>
               }
             />
