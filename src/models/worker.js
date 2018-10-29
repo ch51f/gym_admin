@@ -105,7 +105,7 @@ export default {
                       pagination: {
                         total: res.data.count || 1,
                         pageSize: payload.page_size,
-                        current: res.data.target_page || 1,
+                        current: res.data.page_info.current_page || 1,
                       }
                     }}
 				})

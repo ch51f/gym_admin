@@ -18,7 +18,10 @@ export default class Page extends Component {
   query(params = {}, target_page=1, page_size = PAGE_SIZE) {
     this.props.dispatch({
       type: 'worker/leave_list',
-      payload: {}
+      payload: {
+        target_page,
+        page_size,
+      }
     })
   }
   cancel(id) {
@@ -57,16 +60,16 @@ export default class Page extends Component {
         }
       }, {
         title: '请假时间',
-        dataIndex: 'time_begin',
-        render: (val, record) => {
-          if(val == record.time_end) {
-            return strToTime(record.time_end);
-          } else if(val == 0 && record.time_end) {
-            return "全天";
-          } else {
-            return strToTime(val) + " - " + strToTime(record.time_end);
-          }
-        }
+        dataIndex: 'timerange_str',
+        // render: (val, record) => {
+        //   if(val == record.time_end) {
+        //     return strToTime(record.time_end);
+        //   } else if(val == 0 && record.time_end) {
+        //     return "全天";
+        //   } else {
+        //     return strToTime(val) + " - " + strToTime(record.time_end);
+        //   }
+        // }
       }, {
         title: '请假原因',
         dataIndex: 'reason_type',
@@ -107,6 +110,7 @@ export default class Page extends Component {
               dataSource={list}
               columns={columns}
               pagination={pagination}
+              onChange={this.handleTableChange}
             />
           </div>
         </Card>
